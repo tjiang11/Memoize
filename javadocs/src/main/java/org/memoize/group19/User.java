@@ -34,7 +34,7 @@ public class User {
 	 * @return True if successful, false is error occurs.
 	 */
 	public boolean createAccount(String name, String email, String password) {
-		return false; //default
+		return true; //default
 	}
 	
 	/**
@@ -53,7 +53,7 @@ public class User {
 	 * @return True or false depending on if successfully created.
 	 */
 	public boolean createLoactionReminder(String info) {
-		return false; //default
+		return true; //default
 	}
 	
 	/**
