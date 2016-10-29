@@ -83,5 +83,10 @@ captures/
 # External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild
 
+# Additional
+.DS_Store
+.~
+
 ### Android Patch ###
 gen-external-apklibs
+
