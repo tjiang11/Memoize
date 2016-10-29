@@ -32,7 +32,8 @@ Thumbs.db
 .gradle
 build/
 */build/
-
+build.gradle
+gradle-wrapper.properties
 
 # Created by https://www.gitignore.io/api/android
 
