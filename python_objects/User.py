@@ -7,6 +7,7 @@ class User():
 		self.location_reminders = []
 		self.time_reminders = []
 		self.my_groups = []
+		self.subscriptions = Subscription()
 
 	def login(email, password):
 		return True
@@ -22,3 +23,9 @@ class User():
 
 	def create_group_event(info):
 		return True;
+
+	def subscribe_to_group(group):
+		subscriptions.subscribe_to_group(group)
+
+	def sibscribe_to_tag(tag):
+		subscriptions.sibscribe_to_tag(tag)
