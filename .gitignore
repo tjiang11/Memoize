@@ -91,3 +91,5 @@ captures/
 ### Android Patch ###
 gen-external-apklibs
 
+#Virtual environment
+venv/
