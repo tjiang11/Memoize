@@ -22,14 +22,11 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import static com.oosegroup19.memoize.R.id.textView;
-
 public class HomePageActivity extends AppCompatActivity {
     private static final String DEBUG_TAG = "HttpExample";
     private TextView textView;
-    private int PORT = 8081;
-    String test_url = "http://10.0.2.2:" + PORT + "/api/v1/hello";
+    private int PORT = 8000;
+    String test_url = "http://10.0.2.2:" + PORT + "/hello/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
