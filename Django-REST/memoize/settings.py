@@ -82,6 +82,18 @@ WSGI_APPLICATION = 'memoize.wsgi.application'
 #     }
 # }
 
+""" Reference for local postgresql setup:
+https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-14-04
+
+Install postgresql and get into the shell using psql.
+Make sure the default universal user 'postgres' has a password of 'password'
+
+Make a local postgresql database called 'memoize_db' using:
+
+CREATE DATABASE memoize_db;
+
+"""
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
