@@ -1,13 +1,13 @@
 class Reminder(object):
 
-	def _init_(self, name, description):
+	def __init__(self, name, description):
 		self.name = name;
 		self.description = description
 
 
 class L_reminder(Reminder):
 
-	def _init_(self, name, description, start_time, end_time, location):
+	def __init__(self, name, description, start_time, end_time, location):
 		super(L_reminder, self)._init_(name, description)
 		self.start_time = start_time
 		self.end_time = end_time
@@ -16,7 +16,7 @@ class L_reminder(Reminder):
 
 class T_reminder(Reminder):
 
-	def _init_(self, name, description, time):
+	def __init__(self, name, description, time):
 		super(L_reminder, self)._init_(name, description)
 		self.time - time
 

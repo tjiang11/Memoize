@@ -1,6 +1,6 @@
 class Subscription:
 
-	def _init_(self):
+	def __init__(self):
 		self.groups = []
 		self.tags = []
 
