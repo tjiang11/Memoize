@@ -3,10 +3,17 @@ from rest_framework import serializers
 from models import Event
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+# class UserSerializer(serializers.HyperlinkedModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ('url', 'username', 'email', 'groups')
+
+
+class UserSerializer(serializers.ModelSerializer):
+    events = serializers.PrimaryKeyRelatedField(many=True, queryset=Event.objects.all())
     class Meta:
         model = User
-        fields = ('url', 'username', 'email', 'groups')
+        fields = ('id', 'username', 'events')
 
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):

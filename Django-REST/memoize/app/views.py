@@ -2,32 +2,34 @@
 from django.http import HttpResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User, Group
-from rest_framework import viewsets, views, status
+from rest_framework import viewsets, views, status, generics
 from rest_framework.response import Response
 from memoize.app.models import Event
 from memoize.app.serializers import UserSerializer, GroupSerializer, EventSerializer
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
+# class UserViewSet(viewsets.ModelViewSet):
+#     """
+#     API endpoint that allows users to be viewed or edited.
+#     """
+#     queryset = User.objects.all().order_by('-date_joined')
+#     serializer_class = UserSerializer
 
 
-class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
+# class GroupViewSet(viewsets.ModelViewSet):
+#     """
+#     API endpoint that allows groups to be viewed or edited.
+#     """
+#     queryset = Group.objects.all()
+#     serializer_class = GroupSerializer
 
 
 class TestView(views.APIView):
     def get(self, request, format=None):
         return Response("Hello REST World")
 
+
+#Consider using mix-ins http://www.django-rest-framework.org/tutorial/3-class-based-views/#using-mixins
 
 class event_list(views.APIView):
     def get(self, request, format=None):
@@ -66,3 +68,13 @@ class event_detail(views.APIView):
         event = self.get_object(pk)
         event.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class UserList(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserDetail(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer

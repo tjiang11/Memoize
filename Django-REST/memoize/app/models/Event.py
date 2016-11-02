@@ -15,3 +15,9 @@ class Event(models.Model):
 	end_time = models.DateTimeField(null=True)
 	location = models.IntegerField(null=True)
 	tags = models.CharField(max_length=255)
+
+	#Change to group later.
+	owner = models.ForeignKey('auth.User', 
+		related_name='events', 
+		on_delete=models.CASCADE,
+		default=1);
