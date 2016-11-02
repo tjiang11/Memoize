@@ -2,7 +2,7 @@
 from django.http import HttpResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User, Group
-from rest_framework import viewsets, views, status, generics
+from rest_framework import viewsets, views, status, generics, permissions
 from rest_framework.response import Response
 from memoize.app.models import Event
 from memoize.app.serializers import UserSerializer, GroupSerializer, EventSerializer
@@ -32,6 +32,7 @@ class TestView(views.APIView):
 #Consider using mix-ins http://www.django-rest-framework.org/tutorial/3-class-based-views/#using-mixins
 
 class event_list(views.APIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     def get(self, request, format=None):
         events = Event.objects.all()
         serializer = EventSerializer(events, many=True)
@@ -44,8 +45,12 @@ class event_list(views.APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
 
 class event_detail(views.APIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     def get_object(self, pk):
         try:
             return Event.objects.get(pk=pk)

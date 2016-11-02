@@ -27,6 +27,7 @@ class EventSerializer(serializers.Serializer):
 	end_time = serializers.DateTimeField()
 	location = serializers.IntegerField()
 	tags = serializers.CharField(required=True, allow_blank=True)
+	owner = serializers.ReadOnlyField(source='owner.username')
 
 	def create(self, validated_data):
 		return Event.objects.create(**validated_data)
