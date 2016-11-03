@@ -6,6 +6,7 @@ from rest_framework import viewsets, views, status, generics, permissions
 from rest_framework.response import Response
 from memoize.app.models import Event
 from memoize.app.serializers import UserSerializer, GroupSerializer, EventSerializer
+from memoize.app.permissions import IsOwnerOrReadOnly
 
 
 # class UserViewSet(viewsets.ModelViewSet):
@@ -50,7 +51,7 @@ class event_list(views.APIView):
 
 
 class event_detail(views.APIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
     def get_object(self, pk):
         try:
             return Event.objects.get(pk=pk)
