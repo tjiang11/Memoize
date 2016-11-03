@@ -1,6 +1,6 @@
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 from rest_framework import serializers
-from models import Event
+from models import Event, MemGroup
 
 
 # class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -11,15 +11,24 @@ from models import Event
 
 class UserSerializer(serializers.ModelSerializer):
     events = serializers.PrimaryKeyRelatedField(many=True, queryset=Event.objects.all())
+    #groups = serializers.PrimaryKeyRelatedField(many=True, queryset=MemGroup.objects.all())
     class Meta:
         model = User
-        fields = ('id', 'username', 'events')
+        fields = ('id', 'username', 'events', 'mem_groups')
 
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Group
-        fields = ('url', 'name')
+# class GroupSerializer(serializers.HyperlinkedModelSerializer):
+#     class Meta:
+#         model = Group
+#         fields = ('url', 'name')
+
+class MemGroupSerializer(serializers.ModelSerializer):
+	#users = UserSerializer(many=True, read_only=True)
+	users = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
+	class Meta:
+		model = MemGroup
+		fields = ('id', 'name', 'description', 'users')
+
 
 class EventSerializer(serializers.Serializer):
 	name = serializers.CharField(required=True, allow_blank=False, max_length=255)
@@ -40,3 +49,9 @@ class EventSerializer(serializers.Serializer):
 		instance.tags = validated_data.get('tags', instance.tags)
 		instance.save()
 		return instance
+
+class EventSerializer(serializers.ModelSerializer):
+	owner = serializers.ReadOnlyField(source='owner.username')
+	class Meta:
+		model = Event
+		fields = ('name', 'start_time', 'end_time', 'location', 'tags', 'owner')

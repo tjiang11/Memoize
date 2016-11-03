@@ -1,11 +1,11 @@
 
 from django.http import HttpResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 from rest_framework import viewsets, views, status, generics, permissions
 from rest_framework.response import Response
-from memoize.app.models import Event
-from memoize.app.serializers import UserSerializer, GroupSerializer, EventSerializer
+from memoize.app.models import Event, MemGroup
+from memoize.app.serializers import UserSerializer, MemGroupSerializer, EventSerializer
 from memoize.app.permissions import IsOwnerOrReadOnly
 
 
@@ -74,6 +74,18 @@ class event_detail(views.APIView):
         event = self.get_object(pk)
         event.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class GroupList(generics.ListCreateAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    queryset = MemGroup.objects.all()
+    serializer_class = MemGroupSerializer
+
+
+class GroupDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    queryset = MemGroup.objects.all()
+    serializer_class = MemGroupSerializer
 
 
 class UserList(generics.ListAPIView):
