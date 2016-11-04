@@ -8,6 +8,7 @@
 # 		self.tags = tags
 
 from django.db import models
+from Group import MemGroup
 
 class Event(models.Model):
 	name = models.CharField(max_length=255)
@@ -17,7 +18,7 @@ class Event(models.Model):
 	tags = models.CharField(max_length=255)
 
 	#Change to group later.
-	owner = models.ForeignKey('auth.User', 
+	group = models.ForeignKey(MemGroup, 
 		related_name='events', 
 		on_delete=models.CASCADE,
 		default=1);
