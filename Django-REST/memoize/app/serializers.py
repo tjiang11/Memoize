@@ -52,7 +52,7 @@ class MemGroupSerializer(serializers.ModelSerializer):
 # 		return instance
 
 class EventSerializer(serializers.ModelSerializer):
-	group = serializers.ReadOnlyField(source='group.name')
+	group = serializers.ReadOnlyField(source='group.id')
 	class Meta:
 		model = Event
 		fields = ('name', 'start_time', 'end_time', 'location', 'tags', 'group')
