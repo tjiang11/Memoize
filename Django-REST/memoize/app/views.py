@@ -88,7 +88,7 @@ class GroupDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MemGroupSerializer
 
 
-class UserList(generics.ListAPIView):
+class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 

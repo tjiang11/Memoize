@@ -2,28 +2,20 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from models import Event, MemGroup
 
-
-# class UserSerializer(serializers.HyperlinkedModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ('url', 'username', 'email', 'groups')
-
-
 class UserSerializer(serializers.ModelSerializer):
-    #events = serializers.PrimaryKeyRelatedField(many=True, queryset=Event.objects.all())
-    #groups = serializers.PrimaryKeyRelatedField(many=True, queryset=MemGroup.objects.all())
     class Meta:
         model = User
-        fields = ('id', 'username', 'mem_groups', 'sub_groups')
+        fields = ('id', 'username', 'password', 'mem_groups', 'sub_groups')
+        extra_kwargs = {'password': {'write_only': True}}
 
+    def create(self, validated_data):
+        user = User.objects.create_user(username=validated_data['username'], password=validated_data['password'])
+        user.mem_groups = validated_data['mem_groups']
+        user.sub_groups = validated_data['sub_groups'] 
+        return user
 
-# class GroupSerializer(serializers.HyperlinkedModelSerializer):
-#     class Meta:
-#         model = Group
-#         fields = ('url', 'name')
 
 class MemGroupSerializer(serializers.ModelSerializer):
-	#users = UserSerializer(many=True, read_only=True)
 	admins = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
 	subscribers = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
 	events = serializers.PrimaryKeyRelatedField(many=True, queryset=Event.objects.all())
@@ -31,6 +23,11 @@ class MemGroupSerializer(serializers.ModelSerializer):
 		model = MemGroup
 		fields = ('id', 'name', 'description', 'admins', 'subscribers', 'events')
 
+class EventSerializer(serializers.ModelSerializer):
+	group = serializers.ReadOnlyField(source='group.id')
+	class Meta:
+		model = Event
+		fields = ('name', 'start_time', 'end_time', 'location', 'tags', 'group')
 
 # class EventSerializer(serializers.Serializer):
 # 	name = serializers.CharField(required=True, allow_blank=False, max_length=255)
@@ -51,9 +48,3 @@ class MemGroupSerializer(serializers.ModelSerializer):
 # 		instance.tags = validated_data.get('tags', instance.tags)
 # 		instance.save()
 # 		return instance
-
-class EventSerializer(serializers.ModelSerializer):
-	group = serializers.ReadOnlyField(source='group.id')
-	class Meta:
-		model = Event
-		fields = ('name', 'start_time', 'end_time', 'location', 'tags', 'group')
