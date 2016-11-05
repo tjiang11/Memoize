@@ -17,4 +17,4 @@ from django.db import models
 class MemGroup(models.Model):
 	name = models.CharField(max_length=255)
 	description = models.CharField(max_length=1000)
-	users = models.ManyToManyField('auth.User', related_name='mem_groups')
+	admins = models.ManyToManyField('auth.User', related_name='mem_groups')

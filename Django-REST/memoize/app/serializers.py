@@ -24,11 +24,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 class MemGroupSerializer(serializers.ModelSerializer):
 	#users = UserSerializer(many=True, read_only=True)
-	users = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
+	admins = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
 	events = serializers.PrimaryKeyRelatedField(many=True, queryset=Event.objects.all())
 	class Meta:
 		model = MemGroup
-		fields = ('id', 'name', 'description', 'users', 'events')
+		fields = ('id', 'name', 'description', 'admins', 'events')
 
 
 # class EventSerializer(serializers.Serializer):
