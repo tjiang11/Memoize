@@ -18,3 +18,4 @@ class MemGroup(models.Model):
 	name = models.CharField(max_length=255)
 	description = models.CharField(max_length=1000)
 	admins = models.ManyToManyField('auth.User', related_name='mem_groups')
+	subscribers = models.ManyToManyField('auth.User', related_name='sub_groups')

@@ -14,7 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
     #groups = serializers.PrimaryKeyRelatedField(many=True, queryset=MemGroup.objects.all())
     class Meta:
         model = User
-        fields = ('id', 'username', 'mem_groups')
+        fields = ('id', 'username', 'mem_groups', 'sub_groups')
 
 
 # class GroupSerializer(serializers.HyperlinkedModelSerializer):
@@ -25,10 +25,11 @@ class UserSerializer(serializers.ModelSerializer):
 class MemGroupSerializer(serializers.ModelSerializer):
 	#users = UserSerializer(many=True, read_only=True)
 	admins = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
+	subscribers = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
 	events = serializers.PrimaryKeyRelatedField(many=True, queryset=Event.objects.all())
 	class Meta:
 		model = MemGroup
-		fields = ('id', 'name', 'description', 'admins', 'events')
+		fields = ('id', 'name', 'description', 'admins', 'subscribers', 'events')
 
 
 # class EventSerializer(serializers.Serializer):
