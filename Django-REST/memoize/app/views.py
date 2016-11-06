@@ -96,3 +96,15 @@ class UserDetail(generics.RetrieveUpdateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnlyUser)
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
+
+class UserGroups(views.APIView):
+    def get_user(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        user = self.get_user(pk=pk)
+        serializer = MemGroupSerializer(user.sub_groups, many=True)
+        return Response(serializer.data)
