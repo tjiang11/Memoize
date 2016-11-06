@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 from rest_framework import viewsets, views, status, generics, permissions
 from rest_framework.response import Response
 from memoize.app.models import Event, MemGroup
-from memoize.app.serializers import UserSerializer, MemGroupSerializer, EventSerializer
-from memoize.app.permissions import IsOwnerOrReadOnlyEvent, IsOwnerOrReadOnlyGroup
+from memoize.app.serializers import UserSerializer, UserUpdateSerializer, MemGroupSerializer, EventSerializer
+from memoize.app.permissions import IsOwnerOrReadOnlyEvent, IsOwnerOrReadOnlyGroup, IsOwnerOrReadOnlyUser
 
 
 # class UserViewSet(viewsets.ModelViewSet):
@@ -92,7 +92,7 @@ class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-
-class UserDetail(generics.RetrieveAPIView):
+class UserDetail(generics.RetrieveUpdateAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnlyUser)
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserUpdateSerializer

@@ -14,6 +14,24 @@ class UserSerializer(serializers.ModelSerializer):
         user.sub_groups = validated_data['sub_groups'] 
         return user
 
+    # def update(self, instance, validated_data):
+    # 	instance.username = validated_data['username']
+    # 	instance.set_password(validated_data['password'])
+    # 	instance.mem_groups = validated_data['mem_groups']
+    #     instance.sub_groups = validated_data['sub_groups'] 
+    # 	instance.save()
+    # 	return instance
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'mem_groups', 'sub_groups')
+    def update(self, instance, validated_data):
+    	instance.username = validated_data['username']
+    	instance.mem_groups = validated_data['mem_groups']
+        instance.sub_groups = validated_data['sub_groups'] 
+    	instance.save()
+    	return instance
 
 class MemGroupSerializer(serializers.ModelSerializer):
 	admins = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
