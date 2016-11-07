@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from rest_framework import viewsets, views, status, generics, permissions
 from rest_framework.response import Response
 from memoize.app.models import Event, MemGroup
-from memoize.app.serializers import UserSerializer, UserUpdateSerializer, MemGroupSerializer, EventSerializer
+from memoize.app.serializers import UserSerializer, UserUpdateSerializer, MemGroupSerializer, EventSerializer, IDSerializer
 from memoize.app.permissions import IsOwnerOrReadOnlyEvent, IsOwnerOrReadOnlyGroup, IsOwnerOrReadOnlyUser
 
 
@@ -108,3 +108,13 @@ class UserGroups(views.APIView):
         user = self.get_user(pk=pk)
         serializer = MemGroupSerializer(user.sub_groups, many=True)
         return Response(serializer.data)
+
+    def post(self, request, pk, format=None):
+        serializer = IDSerializer(data=request.data)
+        if (serializer.is_valid()):
+            group = MemGroup.objects.get(pk=request.data['group_id'])
+            user = self.get_user(pk=pk)
+            user.sub_groups.add(group)
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+    

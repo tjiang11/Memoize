@@ -47,6 +47,12 @@ class EventSerializer(serializers.ModelSerializer):
 		model = Event
 		fields = ('name', 'start_time', 'end_time', 'location', 'tags', 'group')
 
+class IDSerializer(serializers.Serializer):
+ 	group_id = serializers.IntegerField(required=True)
+
+
+
+
 # class EventSerializer(serializers.Serializer):
 # 	name = serializers.CharField(required=True, allow_blank=False, max_length=255)
 # 	start_time = serializers.DateTimeField()
