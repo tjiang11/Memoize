@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from models import Event, MemGroup
+from models import Event, MemGroup, TimeReminder, LocationReminder
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -52,6 +52,10 @@ class EventSerializer(serializers.ModelSerializer):
 class IDSerializer(serializers.Serializer):
  	group_id = serializers.IntegerField(required=True)
 
+class TimeReminderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TimeReminder
+        fields = ('time', 'user')
 
 
 
