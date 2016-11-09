@@ -5,13 +5,15 @@ from models import Event, MemGroup
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'password', 'mem_groups', 'sub_groups')
+        fields = ('id', 'username', 'password', 'mem_groups', 'sub_groups', 'location_reminders', 'time_reminders')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         user = User.objects.create_user(username=validated_data['username'], password=validated_data['password'])
         user.mem_groups = validated_data['mem_groups']
-        user.sub_groups = validated_data['sub_groups'] 
+        user.sub_groups = validated_data['sub_groups']
+        user.location_reminders = validated_data['location_reminders']
+        user.time_reminders = validated_data['time_reminders']
         return user
 
     # def update(self, instance, validated_data):
