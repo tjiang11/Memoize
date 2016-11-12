@@ -1,57 +1,169 @@
 package com.oosegroup19.memoize;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.TextView;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
 public class HomePageActivity extends AppCompatActivity {
-    private static final String DEBUG_TAG = "HttpExample";
-    private TextView textView;
-    private int PORT = 8000;
-    String test_url = "http://10.0.2.2:" + PORT + "/hello/";
+
+    /*######################## Data Variables ########################*/
+    private final String CURRENTFRAGMENT = "currentFragment";
+    private User user;
+
+    /*###################### Storage Variables ######################*/
+    private SharedPreferences myPrefs;
+    private SharedPreferences.Editor peditor;
+    private String authenticationKey;
+
+    //later there will be django stuff
+
+    /*######################## View Elements ########################*/
+    private BaseFragment baseFragment;
+    private static TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+
+        //Disables landscape mode
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         //remove app title from home page
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        textView = (TextView) findViewById(R.id.textView2);
 
-        testConnection();
+        Context context = getApplicationContext();
+        myPrefs= PreferenceManager.getDefaultSharedPreferences(context);
+        peditor = myPrefs.edit();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+                Log.i("MainActivity", "Selected Tab Position: " + position);
+                if (position == 0) {
+                    baseFragment = ReminderLogFragment.newInstance(user);
+                } else if (position == 1) {
+                    baseFragment = HomePageFragment.newInstance(user);
+                } /*else if (position == 2) {
+                    baseFragment = SearchFragment.newInstance(user);
+                } else if (position == 3) {
+                    baseFragment = GroupFragment.newInstance(user);
+                } */
+
+                //Save Tab Position
+                peditor.putInt("TabPosition", position);
+                peditor.commit();
+
+                inflateAndCommitBaseFragment();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                Log.i("HomePageActivity", "Unselected Tab Position: " + tab.getPosition());
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                Log.i("HomePageActivity", "Reselected Tab Position: " + tab.getPosition());
+                if (baseFragment != null) {
+                    int position = tab.getPosition();
+                    Log.i("HomePageActivity", "Reselected Tab Position: " + position);
+                    if (position == 0) {
+                        baseFragment = ReminderLogFragment.newInstance(user);
+                    } else if (position == 1) {
+                        baseFragment = HomePageFragment.newInstance(user);
+                    } /*else if (position == 2) {
+                        baseFragment = SearchFragment.newInstance(user);
+                    } else if (position == 3) {
+                        baseFragment = GroupFragment.newInstance(user);
+                    } */
+
+                    //Save Tab Position
+                    peditor.putInt("TabPosition", position);
+                    peditor.commit();
+
+                    inflateAndCommitBaseFragment();
+                }
             }
         });
+
+        int tabPosition = myPrefs.getInt("TabPosition", 0);
+        tabLayout.getTabAt(tabPosition).select();
+
+        initiateFragment();
+
+        //replaces with lesson screen
+        //fragmentManager.beginTransaction().replace(R.id.layout, new HomePageFragment()).commit();
     }
 
+    private void initiateFragment() {
+        String currentFragment = myPrefs.getString(CURRENTFRAGMENT,"0");
+        Log.i("MainActivity", "Attempting to inflate: " + currentFragment);
+        if(currentFragment.equals("0")){
+            baseFragment = ReminderLogFragment.newInstance(user);
+        }else if(currentFragment.equals(ReminderLogFragment.FRAGMENTNAME)){
+            baseFragment = ReminderLogFragment.newInstance(user);
+        } else if(currentFragment.equals(HomePageFragment.FRAGMENTNAME)){
+            baseFragment = HomePageFragment.newInstance(user);
+        } /*else if(currentFragment.equals(RecordFragment.FRAGMENTNAME)){
+            baseFragment = RecordFragment.newInstance(user);
+        } else if(currentFragment.equals(NotificationsFragment.FRAGMENTNAME)){
+            baseFragment = NotificationsFragment.newInstance(user);
+        } else if(currentFragment.equals(SettingsFragment.FRAGMENTNAME)){
+            baseFragment = SettingsFragment.newInstance(user);
+        } else if(currentFragment.equals(SearchFragment.FRAGMENTNAME)){
+            baseFragment = SearchFragment.newInstance(user);
+        } */ else{
+            Log.e("MainActivity", "InvalidFragmentNameFound: " + currentFragment);
+        }
+
+        inflateAndCommitBaseFragment();
+    }
+
+    private void inflateAndCommitBaseFragment() {
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.frame_main, baseFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+        peditor.putString(CURRENTFRAGMENT, baseFragment.getFragmentName());
+        peditor.commit();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+
+        if(baseFragment == null){
+            peditor.putString(CURRENTFRAGMENT, "0");
+        }else {
+            Log.i("HomePageActivity", "onPause on fragment: "+baseFragment.getFragmentName());
+            peditor.putString(CURRENTFRAGMENT, baseFragment.getFragmentName());
+        }
+        peditor.putInt("TabPosition", tabLayout.getSelectedTabPosition());
+        peditor.commit();
+    }
+
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -72,77 +184,6 @@ public class HomePageActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    } */
 
-    public void testConnection() {
-        String stringUrl = test_url;
-        ConnectivityManager connMgr = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
-            new DownloadWebpageTask().execute(stringUrl);
-        } else {
-            textView.setText("No network connection available.");
-        }
-    }
-
-    private class DownloadWebpageTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... urls) {
-            Log.d(DEBUG_TAG, "test log 1");
-            // params comes from the execute() call: params[0] is the url.
-            try {
-                return downloadUrl(urls[0]);
-            } catch (IOException e) {
-                Log.d(DEBUG_TAG, e.getMessage());
-                return "Unable to retrieve web page. URL may be invalid.";
-            }
-        }
-        // onPostExecute displays the results of the AsyncTask.
-        @Override
-        protected void onPostExecute(String result) {
-            textView.setText(result);
-        }
-    }
-
-    private String downloadUrl(String myurl) throws IOException {
-        InputStream is = null;
-        // Only display the first 500 characters of the retrieved
-        // web page content.
-        int len = 500;
-
-        try {
-            URL url = new URL(myurl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            Log.d(DEBUG_TAG, "test log 2");
-            conn.setReadTimeout(10000 /* milliseconds */);
-            conn.setConnectTimeout(15000 /* milliseconds */);
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            // Starts the query
-            Log.d(DEBUG_TAG, "test log 3");
-            conn.connect();
-            Log.d(DEBUG_TAG, "test log 4");
-            int response = conn.getResponseCode();
-            Log.d(DEBUG_TAG, "The response is: " + response);
-            is = conn.getInputStream();
-
-            // Convert the InputStream into a string
-            return readIt(is, len);
-            // Makes sure that the InputStream is closed after the app is
-            // finished using it.
-        } finally {
-            if (is != null) {
-                is.close();
-            }
-        }
-    }
-
-    public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
-        Reader reader = null;
-        reader = new InputStreamReader(stream, "UTF-8");
-        char[] buffer = new char[len];
-        reader.read(buffer);
-        return new String(buffer);
-    }
 }
