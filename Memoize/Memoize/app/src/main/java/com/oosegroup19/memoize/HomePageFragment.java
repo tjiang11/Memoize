@@ -2,6 +2,7 @@ package com.oosegroup19.memoize;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -167,8 +168,10 @@ public class HomePageFragment extends BaseFragment {
         }
 
         if (fragment != null) {
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.frame_main, fragment).commit();
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_main, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         } else {
             // error in creating fragment
             Log.e("MainActivity", "Error in creating fragment");
