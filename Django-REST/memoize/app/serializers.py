@@ -13,8 +13,6 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(username=validated_data['username'], password=validated_data['password'])
         user.mem_groups = validated_data['mem_groups']
         user.sub_groups = validated_data['sub_groups']
-        user.location_reminders = validated_data['location_reminders']
-        user.time_reminders = validated_data['time_reminders']
         return user
 
     # def update(self, instance, validated_data):
