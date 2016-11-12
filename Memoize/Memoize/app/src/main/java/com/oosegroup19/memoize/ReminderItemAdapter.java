@@ -42,7 +42,7 @@ public class ReminderItemAdapter extends ArrayAdapter<ReminderItem> {
         TextView latitudeView = (TextView) lessonView.findViewById(R.id.task_latitude);
         TextView longitudeView = (TextView) lessonView.findViewById(R.id.task_longitude);
 
-        taskNameView.setText("Event Name: " + reminder.getEvent());
+        taskNameView.setText(reminder.getEvent());
         taskLocationView.setText("Event Location: " + reminder.getDescription());
 
         if (reminder instanceof LocationReminderItem) {

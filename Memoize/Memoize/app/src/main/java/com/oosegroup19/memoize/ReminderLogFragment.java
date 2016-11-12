@@ -138,10 +138,10 @@ public class ReminderLogFragment extends BaseFragment {
         //now, listview is bound to user's array data
 
         //populates the list with some dummy data
-        ReminderItem item1 = new LocationReminderItem("This is a Test Event", "a test event description!", 500, 600);
-        ReminderItem item2 = new LocationReminderItem("Cry", "an event in which copious amounts of crying occur. lol.", 600, 700);
-        ReminderItem item3 = new LocationReminderItem("Cry A Lot", "cry, redux. this is an event description for the ages.", 100, 400);
-        ReminderItem item4 = new LocationReminderItem("SADNESS", "need I say more?", 30, 20);
+        ReminderItem item1 = new LocationReminderItem("This is a Test Event", "Brody Learning Commons", 500, 600);
+        ReminderItem item2 = new LocationReminderItem("Cry", "Gilman 1st floor", 600, 700);
+        ReminderItem item3 = new LocationReminderItem("Cry A Lot", "Tuesdays and Thursdays in Shaffer 300 at 3pm", 100, 400);
+        ReminderItem item4 = new LocationReminderItem("SADNESS", "everywhere", 300, 250);
 
         aa.add(item1);
         aa.add(item2);
