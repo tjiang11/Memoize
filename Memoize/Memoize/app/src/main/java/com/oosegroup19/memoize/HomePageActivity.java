@@ -59,14 +59,14 @@ public class HomePageActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
-                Log.i("MainActivity", "Selected Tab Position: " + position);
+                Log.i("HomePageActivity", "Selected Tab Position: " + position);
                 if (position == 0) {
                     baseFragment = ReminderLogFragment.newInstance(user);
                 } else if (position == 1) {
                     baseFragment = HomePageFragment.newInstance(user);
-                } /*else if (position == 2) {
-                    baseFragment = SearchFragment.newInstance(user);
-                } else if (position == 3) {
+                } else if (position == 2) {
+                    baseFragment = NewNotificationFragment.newInstance(user);
+                } /*else if (position == 3) {
                     baseFragment = GroupFragment.newInstance(user);
                 } */
 
@@ -92,9 +92,9 @@ public class HomePageActivity extends AppCompatActivity {
                         baseFragment = ReminderLogFragment.newInstance(user);
                     } else if (position == 1) {
                         baseFragment = HomePageFragment.newInstance(user);
-                    } /*else if (position == 2) {
-                        baseFragment = SearchFragment.newInstance(user);
-                    } else if (position == 3) {
+                    } else if (position == 2) {
+                        baseFragment = NewNotificationFragment.newInstance(user);
+                    } /*else if (position == 3) {
                         baseFragment = GroupFragment.newInstance(user);
                     } */
 
@@ -125,9 +125,9 @@ public class HomePageActivity extends AppCompatActivity {
             baseFragment = ReminderLogFragment.newInstance(user);
         } else if(currentFragment.equals(HomePageFragment.FRAGMENTNAME)){
             baseFragment = HomePageFragment.newInstance(user);
-        } /*else if(currentFragment.equals(RecordFragment.FRAGMENTNAME)){
-            baseFragment = RecordFragment.newInstance(user);
-        } else if(currentFragment.equals(NotificationsFragment.FRAGMENTNAME)){
+        } else if(currentFragment.equals(NewNotificationFragment.FRAGMENTNAME)){
+            baseFragment = NewNotificationFragment.newInstance(user);
+        } /*else if(currentFragment.equals(NotificationsFragment.FRAGMENTNAME)){
             baseFragment = NotificationsFragment.newInstance(user);
         } else if(currentFragment.equals(SettingsFragment.FRAGMENTNAME)){
             baseFragment = SettingsFragment.newInstance(user);
