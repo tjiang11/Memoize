@@ -1,5 +1,7 @@
 package com.oosegroup19.memoize;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -28,6 +31,10 @@ public class HomePageActivity extends AppCompatActivity {
     private int PORT = 8000;
     String test_url = "http://10.0.2.2:" + PORT + "/hello/";
 
+
+    //Sarah's variables for moving between fragments
+    private CharSequence mTitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,12 +49,12 @@ public class HomePageActivity extends AppCompatActivity {
 
         testConnection();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        //button listener
+        Button button1 = (Button) findViewById(R.id.test_button);
+        button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                selectItem(1);
             }
         });
     }
@@ -144,5 +151,29 @@ public class HomePageActivity extends AppCompatActivity {
         char[] buffer = new char[len];
         reader.read(buffer);
         return new String(buffer);
+    }
+
+
+
+    private void selectItem(int position) {
+        // update the main content by replacing fragments
+        Fragment fragment = null;
+        switch (position) {
+            case 1:
+                mTitle = "New Lesson";
+                fragment = new ReminderLogFragment();
+                break;
+
+            default:
+                break;
+        }
+
+        if (fragment != null) {
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.layout, fragment).commit();
+        } else {
+            // error in creating fragment
+            Log.e("MainActivity", "Error in creating fragment");
+        }
     }
 }
