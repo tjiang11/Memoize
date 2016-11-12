@@ -26,19 +26,5 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="58dp"
-        android:id="@+id/textView2"
-        app:layout_anchorGravity="top|center_horizontal"
-        android:layout_gravity="center_vertical|center_horizontal" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
-        app:layout_anchorGravity="top|center_horizontal"
-        android:layout_gravity="bottom|center_horizontal"
-        android:id="@+id/test_button" />
 </android.support.design.widget.CoordinatorLayout>
 
