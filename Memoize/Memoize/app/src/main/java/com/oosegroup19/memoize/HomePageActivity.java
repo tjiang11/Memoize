@@ -35,6 +35,9 @@ public class HomePageActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //remove app title from home page
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         textView = (TextView) findViewById(R.id.textView2);
 
         testConnection();
