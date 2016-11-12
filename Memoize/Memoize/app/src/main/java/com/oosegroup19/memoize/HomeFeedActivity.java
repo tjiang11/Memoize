@@ -25,7 +25,7 @@ public class HomeFeedActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        System.out.println("wow");
+        System.out.println("Created");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_feed);
     }
