@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-
 # class Reminder(object):
 
 # 	def __init__(self, name, description):
@@ -32,6 +31,8 @@ class Reminder(models.Model):
 class LocationReminder(Reminder):
 	start_time = models.DateTimeField(null=True)
 	end_time = models.DateTimeField(null=True)
+	latitude = models.DecimalField(max_digits=8, decimal_places=5)
+	longitude = models.DecimalField(max_digits=8, decimal_places=5)
 	user = models.ForeignKey(User,
 		related_name='location_reminders',
 		on_delete=models.CASCADE,

@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from rest_framework import viewsets, views, status, generics, permissions
 from rest_framework.response import Response
 from memoize.app.models import Event, MemGroup, TimeReminder
-from memoize.app.serializers import UserSerializer, UserUpdateSerializer, MemGroupSerializer, EventSerializer, IDSerializer, TimeReminderSerializer
+from memoize.app.serializers import UserSerializer, UserUpdateSerializer, MemGroupSerializer, EventSerializer, IDSerializer, TimeReminderSerializer, LocationReminderSerializer
 from memoize.app.permissions import IsOwnerOrReadOnlyEvent, IsOwnerOrReadOnlyGroup, IsOwnerOrReadOnlyUser
 
 
@@ -116,6 +116,34 @@ class UserGroups(views.APIView):
             user.sub_groups.add(group)
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+class UserGroupsDetail(views.APIView):
+    def get_user(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+
+    def get_group(self, pk):
+        try:
+            return MemGroup.objects.get(pk=pk)
+        except MemGroup.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk_user, pk_group, format=None):
+        user = self.get_user(pk=pk_user)
+        group = self.get_group(pk=pk_group)
+        serializer = MemGroupSerializer(group)
+        if group in user.sub_groups.all():
+            return Response(serializer.data)
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request, pk_user, pk_group, format=None):
+        user = self.get_user(pk=pk_user)
+        group = self.get_group(pk=pk_group)
+        user.sub_groups.remove(group)
+        return Response()
+
     
 class UserTimeReminders(views.APIView):
     def get_user(self, pk):
@@ -135,5 +163,26 @@ class UserTimeReminders(views.APIView):
             user = self.get_user(pk=pk)
             tr = serializer.save()
             user.time_reminders.add(tr)
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+class UserLocationReminders(views.APIView):
+    def get_user(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        user = self.get_user(pk=pk)
+        serializer = LocationReminderSerializer(user.location_reminders, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, pk, format=None):
+        serializer = LocationReminderSerializer(data=request.data)
+        if (serializer.is_valid()):
+            user = self.get_user(pk=pk)
+            lr = serializer.save()
+            user.location_reminders.add(lr)
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
