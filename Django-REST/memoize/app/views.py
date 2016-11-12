@@ -102,6 +102,12 @@ class UserGroups(views.APIView):
         except User.DoesNotExist:
             raise Http404
 
+    def get_group(self, request, pk):
+        try:
+            return MemGroup.objects.get(pk=request.data['group_id'])
+        except MemGroup.DoesNotExist:
+            raise Http404
+
     def get(self, request, pk, format=None):
         user = self.get_user(pk=pk)
         serializer = MemGroupSerializer(user.sub_groups, many=True)
@@ -110,7 +116,7 @@ class UserGroups(views.APIView):
     def post(self, request, pk, format=None):
         serializer = IDSerializer(data=request.data)
         if (serializer.is_valid()):
-            group = MemGroup.objects.get(pk=request.data['group_id'])
+            group = self.get_group(request, pk)
             user = self.get_user(pk=pk)
             user.sub_groups.add(group)
             return Response(serializer.data, status.HTTP_201_CREATED)
