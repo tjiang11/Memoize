@@ -1,16 +1,16 @@
 package com.oosegroup19.memoize;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
+
 
 import java.util.ArrayList;
 
@@ -26,7 +26,7 @@ public class ReminderLogFragment extends BaseFragment {
     protected static ArrayList<ReminderItem> reminderItems;
     protected static ReminderItemAdapter aa;
 
-    //private OnFragmentInteractionListener mListener;
+    private OnFragmentInteractionListener mListener;
 
     private Context context;
     private static Cursor curse;
@@ -175,14 +175,12 @@ public class ReminderLogFragment extends BaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        /*
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-        */
     }
 
     @Override
@@ -195,5 +193,10 @@ public class ReminderLogFragment extends BaseFragment {
 
     public String getFragmentName() {
         return this.fragmentName;
+    }
+
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
     }
 }
