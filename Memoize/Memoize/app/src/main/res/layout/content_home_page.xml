@@ -11,5 +11,4 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.oosegroup19.memoize.HomePageActivity"
     tools:showIn="@layout/activity_home_page">
-
 </LinearLayout>

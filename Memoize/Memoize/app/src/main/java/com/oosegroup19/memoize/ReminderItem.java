@@ -3,7 +3,7 @@ package com.oosegroup19.memoize;
 /**
  * Created by smsukardi on 11/12/16.
  */
-public abstract class ReminderItem {
+public class ReminderItem {
     private String event;
     private String description;
 
