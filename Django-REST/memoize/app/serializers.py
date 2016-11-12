@@ -57,8 +57,10 @@ class TimeReminderSerializer(serializers.ModelSerializer):
         model = TimeReminder
         fields = ('time', 'user')
 
-
-
+class LocationReminderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LocationReminder
+        fields = ('name', 'start_time', 'end_time', 'latitude', 'longitude')
 # class EventSerializer(serializers.Serializer):
 # 	name = serializers.CharField(required=True, allow_blank=False, max_length=255)
 # 	start_time = serializers.DateTimeField()
