@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,14 +30,28 @@ import java.net.URL;
 /**
  * Created by smsukardi on 11/12/16.
  */
-public class HomePageFragment extends Fragment {
+public class HomePageFragment extends BaseFragment {
+    public final static String FRAGMENTNAME = "HomePageFragment";
+    private final String fragmentName = FRAGMENTNAME;
+
+
     private static final String DEBUG_TAG = "HttpExample";
     private TextView textView;
     private int PORT = 8000;
     String test_url = "http://10.0.2.2:" + PORT + "/hello/";
 
-    //Sarah's variables for moving between fragments
+//    //Sarah's variables for moving between fragments
     private CharSequence mTitle;
+
+    public String getFragmentName(){
+        return this.fragmentName;
+    }
+
+    public static HomePageFragment newInstance(User user) {
+        HomePageFragment fragment = new HomePageFragment();
+        // owner = user;
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +84,7 @@ public class HomePageFragment extends Fragment {
     public void testConnection() {
         String stringUrl = test_url;
         ConnectivityManager connMgr = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
+                getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             new DownloadWebpageTask().execute(stringUrl);
@@ -153,10 +168,11 @@ public class HomePageFragment extends Fragment {
 
         if (fragment != null) {
             FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.layout, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.frame_main, fragment).commit();
         } else {
             // error in creating fragment
             Log.e("MainActivity", "Error in creating fragment");
         }
     }
+
 }

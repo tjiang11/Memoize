@@ -17,7 +17,9 @@ import java.util.ArrayList;
 /**
  * Created by smsukardi on 11/12/16.
  */
-public class ReminderLogFragment extends Fragment {
+public class ReminderLogFragment extends BaseFragment {
+    public final static String FRAGMENTNAME = "ReminderLogFragment";
+    private final String fragmentName = FRAGMENTNAME;
 
     //Instance Fields
     private ListView remindersList;
@@ -33,6 +35,12 @@ public class ReminderLogFragment extends Fragment {
     //Constructor
     public ReminderLogFragment() {}
 
+    public static ReminderLogFragment newInstance(User user) {
+        ReminderLogFragment fragment = new ReminderLogFragment();
+        // owner = user;
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +51,7 @@ public class ReminderLogFragment extends Fragment {
         super.onResume();
         AppCompatActivity myActivity = (AppCompatActivity) getActivity();
         ActionBar myActionBar = myActivity.getSupportActionBar();
-        myActionBar.setTitle("Driving Logs");
+        myActionBar.setTitle("Upcoming Reminders");
         updateArray();
     }
 
@@ -183,5 +191,9 @@ public class ReminderLogFragment extends Fragment {
         /*
         mListener = null;
         */
+    }
+
+    public String getFragmentName() {
+        return this.fragmentName;
     }
 }

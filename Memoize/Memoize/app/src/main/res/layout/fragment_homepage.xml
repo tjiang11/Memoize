@@ -18,5 +18,4 @@
         android:id="@+id/test_button"
         android:layout_gravity="center_horizontal" />
 
-
 </LinearLayout>

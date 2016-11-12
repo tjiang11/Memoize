@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="8"
-            android:id="@+id/layout">
+            android:id="@+id/frame_main">
         </FrameLayout>
 
         <android.support.design.widget.TabLayout
@@ -60,7 +60,7 @@
                 android:text="Groups"/>
 
         </android.support.design.widget.TabLayout>
-        
+
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
