@@ -4,8 +4,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from rest_framework import viewsets, views, status, generics, permissions
 from rest_framework.response import Response
-from memoize.app.models import Event, MemGroup
-from memoize.app.serializers import UserSerializer, UserUpdateSerializer, MemGroupSerializer, EventSerializer
+from memoize.app.models import Event, MemGroup, TimeReminder
+from memoize.app.serializers import UserSerializer, UserUpdateSerializer, MemGroupSerializer, EventSerializer, IDSerializer, TimeReminderSerializer
 from memoize.app.permissions import IsOwnerOrReadOnlyEvent, IsOwnerOrReadOnlyGroup, IsOwnerOrReadOnlyUser
 
 
@@ -87,7 +87,6 @@ class GroupDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = MemGroup.objects.all()
     serializer_class = MemGroupSerializer
 
-
 class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -108,3 +107,33 @@ class UserGroups(views.APIView):
         user = self.get_user(pk=pk)
         serializer = MemGroupSerializer(user.sub_groups, many=True)
         return Response(serializer.data)
+
+    def post(self, request, pk, format=None):
+        serializer = IDSerializer(data=request.data)
+        if (serializer.is_valid()):
+            group = MemGroup.objects.get(pk=request.data['group_id'])
+            user = self.get_user(pk=pk)
+            user.sub_groups.add(group)
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+    
+class UserTimeReminders(views.APIView):
+    def get_user(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        user = self.get_user(pk=pk)
+        serializer = TimeReminderSerializer(user.time_reminders, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, pk, format=None):
+        serializer = TimeReminderSerializer(data=request.data)
+        if (serializer.is_valid()):
+            user = self.get_user(pk=pk)
+            tr = serializer.save()
+            user.time_reminders.add(tr)
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
