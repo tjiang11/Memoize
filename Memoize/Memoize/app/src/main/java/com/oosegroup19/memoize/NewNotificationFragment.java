@@ -1,12 +1,16 @@
 package com.oosegroup19.memoize;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ListView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +47,30 @@ public class NewNotificationFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_new_notification, container, false);
         getActivity().setTitle("Select Reminder Type");
 
+        Button timeBasedNotifsButton = (Button) view.findViewById(R.id.time_based_button);
+        Button locationBasedNotifsButton = (Button) view.findViewById(R.id.location_based_button);
+
+        timeBasedNotifsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimeBasedNotificationFragment fragment = new TimeBasedNotificationFragment();
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_main, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+
+        locationBasedNotifsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LocationBasedNotificationFragment fragment = new LocationBasedNotificationFragment();
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_main, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
         return view;
     }
 

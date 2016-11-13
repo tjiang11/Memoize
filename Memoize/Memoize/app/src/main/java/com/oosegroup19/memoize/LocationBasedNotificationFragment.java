@@ -23,7 +23,6 @@ public class LocationBasedNotificationFragment extends BaseFragment {
 
     private OnFragmentInteractionListener mListener;
 
-
     public String getFragmentName(){
         return this.fragmentName;
     }
