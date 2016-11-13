@@ -1,8 +1,7 @@
-package com.oosegroup19.memoize;
+package com.oosegroup19.memoize.layout;
 
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,29 +9,37 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
+
+import com.oosegroup19.memoize.R;
+import com.oosegroup19.memoize.structures.User;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link NewNotificationFragment.OnFragmentInteractionListener} interface
+ * {@link LocationBasedNotificationFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link NewNotificationFragment#newInstance} factory method to
+ * Use the {@link LocationBasedNotificationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewNotificationFragment extends BaseFragment {
-    public final static String FRAGMENTNAME = "NewNotificationFragment";
+public class LocationBasedNotificationFragment extends BaseFragment {
+    public final static String FRAGMENTNAME = "LocationBasedNotificationFragment";
     private final String fragmentName = FRAGMENTNAME;
 
     private OnFragmentInteractionListener mListener;
 
-    //Constructor
-    public NewNotificationFragment() {}
+    public String getFragmentName(){
+        return this.fragmentName;
+    }
 
-    public static NewNotificationFragment newInstance(User user) {
-        NewNotificationFragment fragment = new NewNotificationFragment();
+    public static LocationBasedNotificationFragment newInstance(User user) {
+        LocationBasedNotificationFragment fragment = new LocationBasedNotificationFragment();
         // owner = user;
         return fragment;
+    }
+
+    public LocationBasedNotificationFragment() {
+        // Required empty public constructor
     }
 
     @Override
@@ -44,16 +51,18 @@ public class NewNotificationFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_new_notification, container, false);
-        getActivity().setTitle("Select Reminder Type");
+        View view = inflater.inflate(R.layout.fragment_location_based_notification, container, false);
+        getActivity().setTitle("Testing2");
 
-        Button timeBasedNotifsButton = (Button) view.findViewById(R.id.time_based_button);
-        Button locationBasedNotifsButton = (Button) view.findViewById(R.id.location_based_button);
+        Button chooseHopkinsLocationsButton = (Button) view.findViewById(R.id.choose_hopkins_loc_button);
+        Button locationBasedNotifsButton = (Button) view.findViewById(R.id.drop_pin_button);
+        Button saveButton = (Button) view.findViewById(R.id.save_button_location_based_notif);
 
-        timeBasedNotifsButton.setOnClickListener(new View.OnClickListener() {
+
+        chooseHopkinsLocationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimeBasedNotificationFragment fragment = new TimeBasedNotificationFragment();
+                HopkinsLocationsFragment fragment = new HopkinsLocationsFragment();
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame_main, fragment);
                 fragmentTransaction.addToBackStack(null);
@@ -61,16 +70,6 @@ public class NewNotificationFragment extends BaseFragment {
             }
         });
 
-        locationBasedNotifsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LocationBasedNotificationFragment fragment = new LocationBasedNotificationFragment();
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.frame_main, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-        });
         return view;
     }
 
@@ -104,9 +103,5 @@ public class NewNotificationFragment extends BaseFragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    public String getFragmentName() {
-        return this.fragmentName;
     }
 }

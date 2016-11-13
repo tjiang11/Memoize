@@ -1,4 +1,4 @@
-package com.oosegroup19.memoize;
+package com.oosegroup19.memoize.structures;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.oosegroup19.memoize.R;
 
 import java.util.ArrayList;
 

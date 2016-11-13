@@ -1,4 +1,4 @@
-package com.oosegroup19.memoize;
+package com.oosegroup19.memoize.layout;
 
 import android.app.Fragment;
 

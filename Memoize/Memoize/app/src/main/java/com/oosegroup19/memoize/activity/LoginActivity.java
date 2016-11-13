@@ -1,7 +1,9 @@
-package com.oosegroup19.memoize;
+package com.oosegroup19.memoize.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.oosegroup19.memoize.R;
 
 public class LoginActivity extends AppCompatActivity {
 

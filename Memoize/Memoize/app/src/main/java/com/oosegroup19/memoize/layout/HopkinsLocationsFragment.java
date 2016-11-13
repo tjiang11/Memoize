@@ -1,4 +1,4 @@
-package com.oosegroup19.memoize;
+package com.oosegroup19.memoize.layout;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -13,6 +13,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.util.Log;
+
+import com.oosegroup19.memoize.structures.HopkinsLocationAdapter;
+import com.oosegroup19.memoize.structures.HopkinsLocationItem;
+import com.oosegroup19.memoize.R;
+import com.oosegroup19.memoize.structures.User;
 
 import java.util.ArrayList;
 

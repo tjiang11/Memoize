@@ -1,7 +1,6 @@
-package com.oosegroup19.memoize;
+package com.oosegroup19.memoize.layout;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -11,11 +10,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.oosegroup19.memoize.R;
+import com.oosegroup19.memoize.structures.User;
 
 import java.io.IOException;
 import java.io.InputStream;

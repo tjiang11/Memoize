@@ -1,4 +1,4 @@
-package com.oosegroup19.memoize;
+package com.oosegroup19.memoize.structures;
 
 /**
  * Created by smsukardi on 11/12/16.
