@@ -10,7 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -84,10 +86,19 @@ public class HopkinsLocationsFragment extends BaseFragment {
 
         updateArray();
 
-        /*
-        remindersList.setLongClickable(true);
+        hopkinsLocationsList.setLongClickable(true);
 
-        remindersList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        hopkinsLocationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i("HopkinsLocationFrag", String.valueOf(id));
+
+                //TODO: Pass the LocationItem back to the parent so that it can be saved via
+                //TODO: POST request in LocationBasedNotificationFragment
+            }
+        });
+    /*
+        hopkinsLocationsList.setOnClickListener(new View.OnClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> listView, View view,
                                            int pos, long id) {
@@ -135,7 +146,7 @@ public class HopkinsLocationsFragment extends BaseFragment {
                 return true;
             }
         });
-        */
+    */
 
 
         //now, listview is bound to user's array data
