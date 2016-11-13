@@ -140,16 +140,32 @@ public class HopkinsLocationsFragment extends BaseFragment {
 
         //now, listview is bound to user's array data
 
-        //populates the list with some dummy data
-        HopkinsLocationItem item1 = new HopkinsLocationItem("AMR 1", "amr1", 500, 600);
-        HopkinsLocationItem item2 = new HopkinsLocationItem("Barnes and Noble", "barnesandnoble", 600, 700);
-        HopkinsLocationItem item3 = new HopkinsLocationItem("Brody Learning Commons", "brody", 100, 400);
-        HopkinsLocationItem item4 = new HopkinsLocationItem("Gilman Hall", "gilman", 300, 250);
+        //TODO: Actually put in the correct GPS coordinates
+        HopkinsLocationItem item1 = new HopkinsLocationItem("AMR I", "amr1", 500, 600);
+        HopkinsLocationItem item2 = new HopkinsLocationItem("AMR II", "amr2", 100, 0);
+        HopkinsLocationItem item3 = new HopkinsLocationItem("Barnes and Noble", "barnesandnoble", 600, 700);
+        HopkinsLocationItem item4 = new HopkinsLocationItem("Brody Learning Commons", "brody", 100, 400);
+        HopkinsLocationItem item5 = new HopkinsLocationItem("Charles Commons", "commons", 400, 400);
+        HopkinsLocationItem item6 = new HopkinsLocationItem("Gilman Hall", "gilman", 300, 250);
+        HopkinsLocationItem item7 = new HopkinsLocationItem("Hackerman Hall", "hackerman", 300, 250);
+        HopkinsLocationItem item8 = new HopkinsLocationItem("Interfaith Center", "interfaithcenter", 400, 400);
+        HopkinsLocationItem item9 = new HopkinsLocationItem("Malone Hall", "malone", 300, 250);
+        HopkinsLocationItem item10 = new HopkinsLocationItem("Hackerman Hall", "mattin", 300, 250);
+        HopkinsLocationItem item11 = new HopkinsLocationItem("Milton S. Eisenhower Library", "mse", 300, 250);
+        HopkinsLocationItem item12 = new HopkinsLocationItem("Shaffer Hall", "shaffer", 300, 250);
 
         aa.add(item1);
         aa.add(item2);
         aa.add(item3);
         aa.add(item4);
+        aa.add(item5);
+        aa.add(item6);
+        aa.add(item7);
+        aa.add(item8);
+        aa.add(item9);
+        aa.add(item10);
+        aa.add(item11);
+        aa.add(item12);
 
         return view;
     }

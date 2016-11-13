@@ -1,6 +1,7 @@
 package com.oosegroup19.memoize;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,10 @@ public class HopkinsLocationAdapter extends ArrayAdapter<HopkinsLocationItem> {
 
         locationNameView.setText(locationItem.getLocationName());
 
-        int resId = getContext().getResources().getIdentifier("@drawable/" + locationItem.getImageRef(), null, null);
+        String str = "@drawable/" + locationItem.getImageRef();
+        Log.i("HopkinsLocationAdapter", str);
+
+        int resId = getContext().getResources().getIdentifier(locationItem.getImageRef(), "drawable", getContext().getPackageName());
         locationImageView.setImageResource(resId);
 
         return hopkinsLocationView;
