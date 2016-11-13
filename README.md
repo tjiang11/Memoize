@@ -3,7 +3,20 @@
 ## Premise:
 
 ## To Install:
-* //TODO
+
+* Navigate to the Django-REST folder
+* Create and activate virtual environment.
+* pip install -r "requirements.txt"
+* Setup postgresql. Create database with name "memoize_db". Set superuser as "postgres" and password as "password".
+	* CREATE DATABASE memoize_db;
+	* CREATE USER postgres WITH PASSWORD "password";
+	* GRANT ALL PRIVELEGES ON DATABASE "memoize_db" to postgres;
+* Perform initial migrations.
+	* python manage.py makemigrations
+	* python manage.py migrate
+* Run the server (python manage.py runserver).
+
+* We are currently working on an automated build setup.
 
 ## Components:
 * Frontend:
