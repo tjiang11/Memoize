@@ -1,11 +1,11 @@
 # MEMOIZE
 
-# Premise:
+## Premise:
 
-# To Install:
+## To Install:
 * //TODO
 
-# Components:
+## Components:
 * Frontend:
     * Java
     * Android Studio
@@ -14,7 +14,7 @@
     * Django
     * PostgreSQL
        
-# Built By:
+## Built By:
 Tony Jiang (tjiang11@jhu.edu)
 Mariya Kazachkova (mkazach1@jhu.edu)
 Sarah Sukardi (smsukardi@jhu.edu)    
