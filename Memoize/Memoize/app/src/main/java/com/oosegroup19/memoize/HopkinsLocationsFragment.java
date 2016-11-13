@@ -92,61 +92,14 @@ public class HopkinsLocationsFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.i("HopkinsLocationFrag", String.valueOf(id));
+//                Log.i("HopkinsLocationFrag", )
+                HopkinsLocationItem value = (HopkinsLocationItem) parent.getItemAtPosition(position);
+                Log.i("HopkinsLocationFrag", value.getLocationName());
 
                 //TODO: Pass the LocationItem back to the parent so that it can be saved via
                 //TODO: POST request in LocationBasedNotificationFragment
             }
         });
-    /*
-        hopkinsLocationsList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> listView, View view,
-                                           int pos, long id) {
-                Cursor curse = dbAdapt.getAllItems();
-                curse.move(curse.getCount() - (int) id);    //reverse chronological order :D
-                //extract hours
-                //String hours = data.drivingLogData.get(pos).get("title");
-                //hours = hours.substring(prefix.length(), hours.length());
-                String hours = curse.getString(1);
-                //extract date
-                //String date = data.drivingLogData.get(pos).get("subtitle");
-                String date = curse.getString(2);
-                String lighting = curse.getString(3);
-                String lesson = curse.getString(4);
-                String weather = curse.getString(5);
-
-                //show popup to edit log item
-                EditDialog popUp = new EditDialog(getActivity(), DrivingLogFragment.this, curse.getLong(0));
-                popUp.setHours(hours);
-                popUp.setDate(date);
-
-                if (lesson.charAt(0) == 'R') { //residential
-                    popUp.setLesson(0);
-                } else if (lesson.charAt(0) == 'C') { //commercial
-                    popUp.setLesson(1);
-                } else {    //highway
-                    popUp.setLesson(2);
-                }
-
-                if (lighting.equalsIgnoreCase("Day")) {
-                    popUp.setLighting(0);
-                } else { //Night
-                    popUp.setLighting(1);
-                }
-
-                if (weather.charAt(0) == 'C') { //clear
-                    popUp.setWeather(0);
-                } else if (weather.charAt(0) == 'R') { //rainy
-                    popUp.setWeather(1);
-                } else {    //snow/ice
-                    popUp.setWeather(2);
-                }
-
-                popUp.show();
-                return true;
-            }
-        });
-    */
 
 
         //now, listview is bound to user's array data
@@ -182,19 +135,6 @@ public class HopkinsLocationsFragment extends BaseFragment {
     }
 
     public void updateArray() {
-        /*
-        curse = dbAdapt.getAllItems();
-        listItems.clear();
-        if (curse.moveToFirst())
-            do {
-                ReminderItem result = new ReminderItem(curse.getString(1), curse.getString(2),
-                        curse.getString(3), curse.getString(4),
-                        curse.getString(5));
-                ReminderItem.add(0, result);  // puts in reverse order
-            } while (curse.moveToNext());
-
-        aa.notifyDataSetChanged();
-        */
     }
 
     @Override
