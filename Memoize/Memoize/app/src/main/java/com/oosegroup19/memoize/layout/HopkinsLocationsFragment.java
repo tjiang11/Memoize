@@ -91,8 +91,6 @@ public class HopkinsLocationsFragment extends BaseFragment {
 
         updateArray();
 
-        hopkinsLocationsList.setLongClickable(true);
-
         hopkinsLocationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -101,8 +99,7 @@ public class HopkinsLocationsFragment extends BaseFragment {
                 HopkinsLocationItem value = (HopkinsLocationItem) parent.getItemAtPosition(position);
                 Log.i("HopkinsLocationFrag", value.getLocationName());
 
-                //TODO: Pass the LocationItem back to the parent so that it can be saved via
-                //TODO: POST request in LocationBasedNotificationFragment
+                //TODO: Pass the LocationItem back to the parent so that it can be saved via POST request in LocationBasedNotificationFragment
             }
         });
 
@@ -172,7 +169,6 @@ public class HopkinsLocationsFragment extends BaseFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }

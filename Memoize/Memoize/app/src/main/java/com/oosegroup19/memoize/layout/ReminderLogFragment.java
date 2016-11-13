@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 
@@ -87,6 +88,16 @@ public class ReminderLogFragment extends BaseFragment {
 
         updateArray();
 
+        remindersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                LocationReminderItem locReminderItem = (LocationReminderItem) parent.getItemAtPosition(position);
+
+                //TODO: Send item to ReminderDetailFragment
+
+
+            }
+        });
         /*
         remindersList.setLongClickable(true);
 
@@ -200,7 +211,6 @@ public class ReminderLogFragment extends BaseFragment {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }
