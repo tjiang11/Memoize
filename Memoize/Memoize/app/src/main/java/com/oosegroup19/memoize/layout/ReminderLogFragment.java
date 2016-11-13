@@ -1,5 +1,6 @@
 package com.oosegroup19.memoize.layout;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -58,7 +59,7 @@ public class ReminderLogFragment extends BaseFragment {
         super.onResume();
         AppCompatActivity myActivity = (AppCompatActivity) getActivity();
         ActionBar myActionBar = myActivity.getSupportActionBar();
-        myActionBar.setTitle("Upcoming Reminders");
+//        myActionBar.setTitle("Upcoming Reminders");
         updateArray();
     }
 
@@ -94,7 +95,11 @@ public class ReminderLogFragment extends BaseFragment {
                 LocationReminderItem locReminderItem = (LocationReminderItem) parent.getItemAtPosition(position);
 
                 //TODO: Send item to ReminderDetailFragment
-
+                ReminderDetailFragment fragment = ReminderDetailFragment.newInstance(locReminderItem);
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_main, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
 
             }
         });
@@ -155,10 +160,10 @@ public class ReminderLogFragment extends BaseFragment {
         //now, listview is bound to user's array data
 
         //populates the list with some dummy data
-        ReminderItem item1 = new LocationReminderItem("This is a Test Event", "Brody Learning Commons", 500, 600);
-        ReminderItem item2 = new LocationReminderItem("Cry", "Gilman 1st floor", 600, 700);
-        ReminderItem item3 = new LocationReminderItem("Cry A Lot", "Tuesdays and Thursdays in Shaffer 300 at 3pm", 100, 400);
-        ReminderItem item4 = new LocationReminderItem("SADNESS", "everywhere", 300, 250);
+        ReminderItem item1 = new LocationReminderItem("This is a Test Event", "Brody Learning Commons", "In which there are profuse amounts of testing done by some hardworking OOSE students!", 500, 600);
+        ReminderItem item2 = new LocationReminderItem("Cry", "Gilman 1st floor", "Lots and lots of tears as they say.", 600, 700);
+        ReminderItem item3 = new LocationReminderItem("Cry A Lot", "Tuesdays and Thursdays in Shaffer 300 at 3pm", "Sadness abounds on the dark, dreary campus of Johns Hopkins University. It's a depressing place.", 100, 400);
+        ReminderItem item4 = new LocationReminderItem("SADNESS", "everywhere", "Really. Sadness. It's EVERYWHERE here. Do not go to this school!!! WARNING!!!!", 300, 250);
 
         aa.add(item1);
         aa.add(item2);

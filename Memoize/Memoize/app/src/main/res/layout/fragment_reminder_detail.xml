@@ -24,7 +24,7 @@
 
     <TextView
         android:id="@+id/task_description_detail"
-        android:layout_height="100dp"
+        android:layout_height="120dp"
         android:layout_width="match_parent"
         android:layout_gravity="fill"
         android:paddingLeft="10dp"
@@ -35,12 +35,26 @@
         android:paddingBottom="5dp" />
 
     <TextView
-        android:id="@+id/task_latitude"
+        android:id="@+id/task_location_detail"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:text="Task_Latitude"
+        android:text="Task_Location"
+        android:textSize="18dp"
+        android:textColor="#000000"
+        android:paddingBottom="5dp"
+        android:gravity="right"
+        android:layout_gravity="left"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/task_latitude_or_start_time"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="Task_Latitude/Task_Start_Time"
         android:textSize="18dp"
         android:textColor="#000000"
         android:paddingBottom="5dp"
@@ -48,12 +62,12 @@
         android:layout_gravity="left" />
 
     <TextView
-        android:id="@+id/task_longitude"
+        android:id="@+id/task_longitude_or_end_time"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:text="Task_Longitude"
+        android:text="Task_Longitude/Task_End_Time"
         android:textSize="18dp"
         android:textColor="#000000"
         android:paddingBottom="5dp"

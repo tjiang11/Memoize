@@ -70,6 +70,7 @@ public class LocationBasedNotificationFragment extends BaseFragment {
             }
         });
 
+        //TODO: Implement savebutton and pushing info to database
         return view;
     }
 
