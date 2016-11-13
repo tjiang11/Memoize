@@ -1,4 +1,4 @@
-package com.oosegroup19.memoize;
+package com.oosegroup19.memoize.layout;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -11,6 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+
+import com.oosegroup19.memoize.structures.LocationReminderItem;
+import com.oosegroup19.memoize.R;
+import com.oosegroup19.memoize.structures.ReminderItem;
+import com.oosegroup19.memoize.structures.ReminderItemAdapter;
+import com.oosegroup19.memoize.structures.User;
 
 import java.util.ArrayList;
 
@@ -66,7 +72,7 @@ public class ReminderLogFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_reminder_log, container, false);
-        getActivity().setTitle("Locations");
+        getActivity().setTitle("Reminder Log");
 
         // dbAdapt = new ListDatabaseAdapter(getActivity());
         // dbAdapt.open();

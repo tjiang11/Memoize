@@ -1,6 +1,5 @@
-package com.oosegroup19.memoize;
+package com.oosegroup19.memoize.activity;
 
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,8 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.oosegroup19.memoize.R;
+import com.oosegroup19.memoize.structures.User;
+import com.oosegroup19.memoize.layout.BaseFragment;
+import com.oosegroup19.memoize.layout.HomePageFragment;
+import com.oosegroup19.memoize.layout.NewNotificationFragment;
+import com.oosegroup19.memoize.layout.ReminderLogFragment;
 
 public class HomePageActivity extends AppCompatActivity {
 
