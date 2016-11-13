@@ -44,9 +44,6 @@ public class HopkinsLocationAdapter extends ArrayAdapter<HopkinsLocationItem> {
 
         locationNameView.setText(locationItem.getLocationName());
 
-        String str = "@drawable/" + locationItem.getImageRef();
-        Log.i("HopkinsLocationAdapter", str);
-
         int resId = getContext().getResources().getIdentifier(locationItem.getImageRef(), "drawable", getContext().getPackageName());
         locationImageView.setImageResource(resId);
 
