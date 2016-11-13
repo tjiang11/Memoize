@@ -27,13 +27,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/event_name_locationbased"
-        android:hint="Event Name" />
+        android:hint="Event Name"
+        android:gravity="left|bottom" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/event_location_locationbased"
-        android:hint="Event Location Name" />
+        android:hint="Event Location Name"
+        android:gravity="left|bottom" />
 
     <EditText
         android:layout_width="match_parent"
