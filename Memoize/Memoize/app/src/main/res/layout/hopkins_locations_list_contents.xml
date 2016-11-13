@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Location Text"
-                android:id="@+id/textView3"
+                android:id="@+id/hopkins_location_name"
                 android:layout_marginLeft="20dp"
                 android:textSize="22dp"
                 android:textStyle="bold"
@@ -38,7 +38,7 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:id="@+id/imageView"
+                android:id="@+id/hopkins_location_image"
                 android:src="@drawable/blank"/>
         </RelativeLayout>
 

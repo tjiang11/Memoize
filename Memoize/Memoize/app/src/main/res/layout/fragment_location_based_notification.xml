@@ -56,14 +56,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Choose from Hopkins Locations"
-        android:id="@+id/button3"
+        android:id="@+id/choose_hopkins_loc_button"
         android:layout_gravity="center_horizontal" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Drop Pin"
-        android:id="@+id/button4"
+        android:id="@+id/drop_pin_button"
         android:layout_gravity="center_horizontal" />
 
     <Button
@@ -71,7 +71,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save"
-        android:id="@+id/button5"
+        android:id="@+id/save_button_location_based_notif"
         android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

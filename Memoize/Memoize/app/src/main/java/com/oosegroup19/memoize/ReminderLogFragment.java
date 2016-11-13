@@ -186,9 +186,7 @@ public class ReminderLogFragment extends BaseFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        /*
-        mListener = null;
-        */
+        /* mListener = null;*/
     }
 
     public String getFragmentName() {

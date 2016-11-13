@@ -1,5 +1,6 @@
 package com.oosegroup19.memoize;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 
 /**
@@ -48,6 +50,22 @@ public class LocationBasedNotificationFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_location_based_notification, container, false);
         getActivity().setTitle("Testing2");
+
+        Button chooseHopkinsLocationsButton = (Button) view.findViewById(R.id.choose_hopkins_loc_button);
+        Button locationBasedNotifsButton = (Button) view.findViewById(R.id.drop_pin_button);
+        Button saveButton = (Button) view.findViewById(R.id.save_button_location_based_notif);
+
+
+        chooseHopkinsLocationsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HopkinsLocationsFragment fragment = new HopkinsLocationsFragment();
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_main, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
 
         return view;
     }
