@@ -15,6 +15,6 @@
     * PostgreSQL
        
 ## Built By:
-Tony Jiang (tjiang11@jhu.edu)
-Mariya Kazachkova (mkazach1@jhu.edu)
+Tony Jiang (tjiang11@jhu.edu)  
+Mariya Kazachkova (mkazach1@jhu.edu)  
 Sarah Sukardi (smsukardi@jhu.edu)    
