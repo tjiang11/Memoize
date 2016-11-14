@@ -8,8 +8,8 @@ public class TimeReminderItem extends ReminderItem {
     private int startTime;
     private int endTime;
 
-    public TimeReminderItem(String event, String description, int startTime, int endTime) {
-        super(event, description);
+    public TimeReminderItem(String event, String location, String description, int startTime, int endTime) {
+        super(event, location, description);
         this.startTime = startTime;
         this.endTime = endTime;
     }

@@ -23,12 +23,26 @@ from django.contrib.auth.models import User
 # 		self.time - time
 
 class Reminder(models.Model):
+	"""Allows user to create a reminder.
+
+   	Args:
+   		name: the name of the reminder.
+   	"""
 	name = models.CharField(max_length=255)
 
 	class Meta:
 		abstract = True
 
 class LocationReminder(Reminder):
+	"""Represents a location based reminder.
+
+   	Args:
+   		start_time: when the reminder should start being tracked for.
+   		end_time: when the reminder should no longer be tracked for.
+   		latitude: used for location of reminder.
+   		longitude: used for location of reminder.
+   		user: the user that created the reminder.
+   	"""
 	start_time = models.DateTimeField(null=True)
 	end_time = models.DateTimeField(null=True)
 	latitude = models.DecimalField(max_digits=8, decimal_places=5)
@@ -39,6 +53,12 @@ class LocationReminder(Reminder):
 		default=1)
 
 class TimeReminder(Reminder):
+	"""Represents a time based reminder.
+
+   	Args:
+   		time: when the reminder should go off.
+   		user: the user that created the reminder.
+   	"""
 	time = models.DateTimeField(null=True)
 	user = models.ForeignKey(User,
 		related_name='time_reminders',

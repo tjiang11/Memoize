@@ -27,11 +27,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/event_name_locationbased"
-        android:hint="Event Name" />
+        android:hint="Event Name"
+        android:gravity="left|bottom" />
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="125dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/event_location_locationbased"
+        android:hint="Event Location Name"
+        android:gravity="left|bottom" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="105dp"
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/event_description_locationbased"
@@ -44,7 +52,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Location"
         android:id="@+id/locTextView"
-        android:paddingTop="10dp"
+        android:paddingTop="5dp"
         android:textSize="25dp"
         android:gravity="center"
         android:paddingBottom="0dp"
@@ -67,7 +75,7 @@
         android:layout_gravity="center_horizontal" />
 
     <Button
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save"
