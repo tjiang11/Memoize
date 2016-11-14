@@ -1,16 +1,21 @@
 package com.oosegroup19.memoize.activity;
 
 import android.app.FragmentTransaction;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import com.oosegroup19.memoize.MyLocationListener;
 import com.oosegroup19.memoize.R;
 import com.oosegroup19.memoize.structures.User;
 import com.oosegroup19.memoize.layout.BaseFragment;
@@ -28,6 +33,11 @@ public class HomePageActivity extends AppCompatActivity {
     private SharedPreferences myPrefs;
     private SharedPreferences.Editor peditor;
     private String authenticationKey;
+
+    /*###################### Location Variables ######################*/
+    private LocationManager locationManager = null;
+    private LocationListener locationListener = null;
+
 
     //later there will be django stuff
 
@@ -54,6 +64,22 @@ public class HomePageActivity extends AppCompatActivity {
         myPrefs= PreferenceManager.getDefaultSharedPreferences(context);
         peditor = myPrefs.edit();
 
+
+        //Get current GPS location
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean gpsStatus = false;
+        gpsStatus = isGpsOn();
+
+        if (isGpsOn()) {
+            locationListener = new MyLocationListener(context);
+
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+        } else {
+            Log.i("HomePageActivity", "GPS is offline");
+        }
+
+
+        //Stuff for initializing bottom bar for tabbing between fragments
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -146,6 +172,13 @@ public class HomePageActivity extends AppCompatActivity {
         fragmentTransaction.commit();
         peditor.putString(CURRENTFRAGMENT, baseFragment.getFragmentName());
         peditor.commit();
+    }
+
+    private boolean isGpsOn() {
+        ContentResolver contentResolver = getBaseContext().getContentResolver();
+        boolean gpsStatus = Settings.Secure.isLocationProviderEnabled(contentResolver, LocationManager.GPS_PROVIDER);
+
+        return gpsStatus;
     }
 
     @Override
