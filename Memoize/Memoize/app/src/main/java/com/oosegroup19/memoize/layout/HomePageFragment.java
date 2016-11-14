@@ -36,7 +36,7 @@ public class HomePageFragment extends BaseFragment {
     private static final String DEBUG_TAG = "HttpExample";
     private TextView textView;
     private int PORT = 8000;
-    String test_url = "http://10.0.2.2:" + PORT + "/hello/";
+    String test_url = "http://10.0.3.2:" + PORT + "/hello/";
 
 //    //Sarah's variables for moving between fragments
     private CharSequence mTitle;

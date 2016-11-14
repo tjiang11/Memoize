@@ -1,5 +1,6 @@
 package com.oosegroup19.memoize.layout;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.location.Location;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.oosegroup19.memoize.R;
@@ -58,6 +60,10 @@ public class ReminderDetailFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_reminder_detail, container, false);
 
+        // TODO: Figure out why doesn't this work?
+        // Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        // toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+
         TextView taskName = (TextView) view.findViewById(R.id.task_name_detail);
         TextView taskLocation = (TextView) view.findViewById(R.id.task_location_detail);
         TextView taskDescription = (TextView) view.findViewById(R.id.task_description_detail);
@@ -77,6 +83,19 @@ public class ReminderDetailFragment extends BaseFragment {
             latitudeOrStartTime.setText("Start Time: " + String.valueOf(temp.getStartTime()));
             latitudeOrStartTime.setText("End Time: " + String.valueOf(temp.getEndTime()));
         }
+
+        ImageButton backButton = (ImageButton) view.findViewById(R.id.back_button);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ReminderLogFragment fragment = new ReminderLogFragment();
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_main, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
 
         return view;
     }
