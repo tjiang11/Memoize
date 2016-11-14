@@ -15,6 +15,14 @@
 from django.db import models
 
 class MemGroup(models.Model):
+	"""Creates a group (triggered by user wanting to create a group).
+
+	Args:
+	  	name: the name of the group being created.
+	  	description: an optional description of the group.
+	  	admins: users that are admins to this group
+	  	subscribers: users that are subscribed to this group.   
+    """
 	name = models.CharField(max_length=255)
 	description = models.CharField(max_length=1000)
 	admins = models.ManyToManyField('auth.User', related_name='mem_groups')
