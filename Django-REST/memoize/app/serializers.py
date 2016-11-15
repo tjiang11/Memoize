@@ -52,7 +52,7 @@ class IDSerializer(serializers.Serializer):
 class TimeReminderSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimeReminder
-        fields = ('time', 'user')
+        fields = ('name', 'time')
 
 class LocationReminderSerializer(serializers.ModelSerializer):
     class Meta:
