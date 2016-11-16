@@ -14,7 +14,7 @@
 * Setup postgresql. Create database with name "memoize_db". Set superuser as "postgres" and password as "password".
 	* CREATE DATABASE memoize_db;
 	* CREATE USER postgres WITH PASSWORD "password";
-	* GRANT ALL PRIVELEGES ON DATABASE "memoize_db" to postgres;
+	* GRANT ALL PRIVILEGES ON DATABASE "memoize_db" to postgres;
 * Perform initial migrations.
 	* python manage.py makemigrations
 	* python manage.py migrate
