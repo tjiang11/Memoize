@@ -34,11 +34,11 @@ class tests(APITestCase):
 		#data = {"username": "test3@jhu.edu", "password": "PaSsWoRd3",  "mem_groups": [], "sub_groups": []}
 		#response = self.client.post('/users/', data, format='json')
 		response = make_test_user(self)
-		data3 = {"time": "1996-12-05T06:32:00", "name": "buy food"}
+		data3 = {"time": "1996-12-05T06:32:00", "name": "buy food", "description": "descripto patronum", "location_descriptor": "Hogwarts school of oose"}
 		response = self.client.post('/users/3/timereminders/', data3, format='json')
 
 		response = self.client.get('/users/3/timereminders/', {}, format = 'json')
-		self.assertEqual(response.content, '[{"name":"buy food","time":"1996-12-05T06:32:00Z"}]')
+		self.assertEqual(response.content, '[{"name":"buy food","description":"descripto patronum","location_descriptor":"Hogwarts school of oose","time":"1996-12-05T06:32:00Z"}]')
 		self.assertEqual(response.status_code, 200)
 
 
