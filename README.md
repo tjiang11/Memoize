@@ -1,4 +1,6 @@
-# MEMOIZE
+# MEMOIZE [![Build Status](https://travis-ci.com/jhu-oose/2016-group-19.svg?token=pxuwgYspjAfqr5xt35A6&branch=master)](https://travis-ci.com/jhu-oose/2016-group-19)
+
+
 
 ## Premise:
 
