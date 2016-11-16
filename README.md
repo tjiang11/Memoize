@@ -1,4 +1,6 @@
-# MEMOIZE
+# MEMOIZE [![Build Status](https://travis-ci.com/jhu-oose/2016-group-19.svg?token=pxuwgYspjAfqr5xt35A6&branch=master)](https://travis-ci.com/jhu-oose/2016-group-19)
+
+
 
 ## Premise:
 
@@ -6,11 +8,13 @@
 
 * Navigate to the Django-REST folder
 * Create and activate virtual environment.
-* pip install -r "requirements.txt"
+* `brew install postgresql`
+* `pip install -r "requirements.txt"`
+* Install postgres.app (for mac), available at http://postgresapp.com/; a blue elephant should show up on the top of your toolbar.
 * Setup postgresql. Create database with name "memoize_db". Set superuser as "postgres" and password as "password".
 	* CREATE DATABASE memoize_db;
 	* CREATE USER postgres WITH PASSWORD "password";
-	* GRANT ALL PRIVELEGES ON DATABASE "memoize_db" to postgres;
+	* GRANT ALL PRIVILEGES ON DATABASE "memoize_db" to postgres;
 * Perform initial migrations.
 	* python manage.py makemigrations
 	* python manage.py migrate
