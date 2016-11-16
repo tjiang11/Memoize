@@ -44,7 +44,7 @@ class EventSerializer(serializers.ModelSerializer):
 	group = serializers.ReadOnlyField(source='group.id')
 	class Meta:
 		model = Event
-		fields = ('name', 'start_time', 'end_time', 'location', 'tags', 'group')
+		fields = ('name', 'description', 'location_descriptor', 'start_time', 'end_time', 'longitude', 'latitude', 'tags', 'group')
 
 class IDSerializer(serializers.Serializer):
  	group_id = serializers.IntegerField(required=True)

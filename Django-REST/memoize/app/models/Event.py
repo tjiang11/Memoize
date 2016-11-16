@@ -21,9 +21,15 @@ class Event(models.Model):
    		group: the group that this event belongs to.
    	"""
 	name = models.CharField(max_length=255)
-	start_time = models.DateTimeField(auto_now_add=True)
-	end_time = models.DateTimeField(null=True)
-	location = models.IntegerField(null=True)
+	description = models.CharField(max_length=1000)
+	location_descriptor = models.CharField(max_length=255)
+	start_time = models.DateTimeField(null=False)
+	end_time = models.DateTimeField(null=False)
+
+	#Change to PostGIS PointField
+	latitude = models.DecimalField(max_digits=8, decimal_places=5)
+	longitude = models.DecimalField(max_digits=8, decimal_places=5)
+	
 	tags = models.CharField(max_length=255)
 
 	#Change to group later.

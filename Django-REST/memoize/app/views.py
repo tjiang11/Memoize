@@ -87,6 +87,8 @@ class GroupDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MemGroupSerializer
 
 class GroupEvents(views.APIView):
+    serializer_class = EventSerializer
+
     def get_group(self, request, pk):
         try:
             return MemGroup.objects.get(pk=pk)
