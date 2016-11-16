@@ -8,6 +8,7 @@
 
 * Navigate to the Django-REST folder
 * Create and activate virtual environment.
+* brew install postgresql
 * pip install -r "requirements.txt"
 * Setup postgresql. Create database with name "memoize_db". Set superuser as "postgres" and password as "password".
 	* CREATE DATABASE memoize_db;
