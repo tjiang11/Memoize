@@ -135,13 +135,14 @@ class UserGroupsDetail(views.APIView):
         except MemGroup.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk_user, pk_group, format=None):
-        user = self.get_user(pk=pk_user)
-        group = self.get_group(pk=pk_group)
-        serializer = MemGroupSerializer(group)
-        if group in user.sub_groups.all():
-            return Response(serializer.data)
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    #Not necessary. Make a request to groups/:id instead.
+    # def get(self, request, pk_user, pk_group, format=None):
+    #     user = self.get_user(pk=pk_user)
+    #     group = self.get_group(pk=pk_group)
+    #     serializer = MemGroupSerializer(group)
+    #     if group in user.sub_groups.all():
+    #         return Response(serializer.data)
+    #     return Response(status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, pk_user, pk_group, format=None):
         user = self.get_user(pk=pk_user)
