@@ -10,6 +10,7 @@
 * Create and activate virtual environment.
 * `brew install postgresql`
 * `pip install -r "requirements.txt"`
+* Install postgres.app (for mac), available at http://postgresapp.com/; a blue elephant should show up on the top of your toolbar.
 * Setup postgresql. Create database with name "memoize_db". Set superuser as "postgres" and password as "password".
 	* CREATE DATABASE memoize_db;
 	* CREATE USER postgres WITH PASSWORD "password";
