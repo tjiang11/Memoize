@@ -29,6 +29,8 @@ class Reminder(models.Model):
    		name: the name of the reminder.
    	"""
 	name = models.CharField(max_length=255)
+	description = models.CharField(max_length=1000)
+	location_descriptor = models.CharField(max_length=255)
 
 	class Meta:
 		abstract = True
@@ -43,8 +45,8 @@ class LocationReminder(Reminder):
    		longitude: used for location of reminder.
    		user: the user that created the reminder.
    	"""
-	start_time = models.DateTimeField(null=True)
-	end_time = models.DateTimeField(null=True)
+	start_time = models.TimeField(null=False)
+	end_time = models.TimeField(null=False)
 	latitude = models.DecimalField(max_digits=8, decimal_places=5)
 	longitude = models.DecimalField(max_digits=8, decimal_places=5)
 	user = models.ForeignKey(User,
@@ -59,7 +61,7 @@ class TimeReminder(Reminder):
    		time: when the reminder should go off.
    		user: the user that created the reminder.
    	"""
-	time = models.DateTimeField(null=True)
+	time = models.DateTimeField(null=False)
 	user = models.ForeignKey(User,
 		related_name='time_reminders',
 		on_delete=models.CASCADE,
