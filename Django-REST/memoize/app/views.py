@@ -86,6 +86,28 @@ class GroupDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = MemGroup.objects.all()
     serializer_class = MemGroupSerializer
 
+class GroupEvents(views.APIView):
+    def get_group(self, request, pk):
+        try:
+            return MemGroup.objects.get(pk=pk)
+        except MemGroup.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        group = self.get_group(request, pk)
+        serializer = EventSerializer(group.events, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, pk, format=None):
+        group = self.get_group(request, pk)
+        serializer = EventSerializer(data=request.data)
+        if (serializer.is_valid()):
+            event = serializer.save()
+            group.events.add(event)
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        
+
 class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer

@@ -12,4 +12,5 @@ urlpatterns = [
 	url(r'^users/(?P<pk>[0-9]+)/locationreminders/$', views.UserLocationReminders.as_view()), 
 	url(r'^groups/$', views.GroupList.as_view()),
 	url(r'^groups/(?P<pk>[0-9]+)/$', views.GroupDetail.as_view()),
+	url(r'^groups/(?P<pk>[0-9]+)/events/$', views.GroupEvents.as_view()),
 ]
