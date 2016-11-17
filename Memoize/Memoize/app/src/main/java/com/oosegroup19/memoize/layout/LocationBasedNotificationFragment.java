@@ -12,9 +12,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.oosegroup19.memoize.R;
 import com.oosegroup19.memoize.structures.User;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 
@@ -71,11 +77,15 @@ public class LocationBasedNotificationFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_location_based_notification, container, false);
         getActivity().setTitle("Testing2");
 
-        Button chooseHopkinsLocationsButton = (Button) view.findViewById(R.id.choose_hopkins_loc_button);
+        final Button chooseHopkinsLocationsButton = (Button) view.findViewById(R.id.choose_hopkins_loc_button);
         Button locationBasedNotifsButton = (Button) view.findViewById(R.id.drop_pin_button);
         Button saveButton = (Button) view.findViewById(R.id.save_button_location_based_notif);
 
-        TextView eventLocationNameField = (TextView) view.findViewById(R.id.event_location_locationbased);
+        final TextView eventNameField = (TextView) view.findViewById(R.id.event_name_locationbased);
+        final TextView eventLocationNameField = (TextView) view.findViewById(R.id.event_location_locationbased);
+        final TextView eventDescriptionField = (TextView) view.findViewById(R.id.event_description_locationbased);
+        final TextView eventStartTimeField = (TextView) view.findViewById(R.id.start_time_box_location);
+        final TextView eventEndTimeField = (TextView) view.findViewById(R.id.end_time_box_location);
 
         eventLocationNameField.setText(locationName);
 
@@ -96,8 +106,30 @@ public class LocationBasedNotificationFragment extends BaseFragment {
                 if (!fieldsFilled()) {
                     makeFailureToast();
                 } else {
-                    //make api call to create a new event!
 
+                    //make api call to create a new event!
+                    AndroidNetworking.post("http://10.0.2.2:8000/users/1/locationreminders/")
+                            .addBodyParameter("name", eventNameField.getText().toString())
+                            .addBodyParameter("description", eventDescriptionField.getText().toString())
+                            .addBodyParameter("location_descriptor", eventLocationNameField.getText().toString())
+                            .addBodyParameter("start_time", eventStartTimeField.getText().toString())
+                            .addBodyParameter("end_time", eventEndTimeField.getText().toString())
+                            .addBodyParameter("longitude", String.valueOf(eventLongitude))
+                            .addBodyParameter("latitude", String.valueOf(eventLatitude))
+                            .build()
+                            .getAsJSONObject(new JSONObjectRequestListener() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    Log.i("tag", "Success");
+                                    Log.i("tag", response.toString());
+                                }
+
+                                @Override
+                                public void onError(ANError anError) {
+                                    Log.e("tag", "noooooo");
+                                    Log.e("tag", anError.getMessage());
+                                }
+                            });
 
                     NewNotificationFragment fragment = new NewNotificationFragment();
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();

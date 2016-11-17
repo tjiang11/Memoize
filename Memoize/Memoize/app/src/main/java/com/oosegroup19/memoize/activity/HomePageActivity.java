@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import com.androidnetworking.AndroidNetworking;
 import com.oosegroup19.memoize.MyLocationListener;
 import com.oosegroup19.memoize.R;
 import com.oosegroup19.memoize.structures.User;
@@ -60,6 +61,9 @@ public class HomePageActivity extends AppCompatActivity {
 
 
         Context context = getApplicationContext();
+
+        AndroidNetworking.initialize(context);
+
         myPrefs= PreferenceManager.getDefaultSharedPreferences(context);
         peditor = myPrefs.edit();
 
