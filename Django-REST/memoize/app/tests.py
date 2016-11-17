@@ -22,6 +22,8 @@ class tests(APITestCase):
 		response = make_test_user(self)
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+
+		client.login(username='test1@jhu.edu', password='PaSsWoRd1')
 		reponse = self.client.get('/users/', format='json')
 		#print reponse
 		#print response.status_code
@@ -47,6 +49,20 @@ class tests(APITestCase):
 		response = self.client.post('/users/3/locationreminders/', data, format='json')
 		self.assertEqual(response.content, '{"name":"buy food","description":"descripto patronum","location_descriptor":"Hogwarts school of oose","start_time":"10:45:00","end_time":"11:45:00","latitude":"1.00000","longitude":"1.00000"}')
 		self.assertEqual(response.status_code, 201) 
+
+	def test_group(self): #will need to be modified when we add authentication!
+		data = {
+		    "name": "test group",
+		    "description": "this is a test group",
+		    "admins": [],
+		    "subscribers": [],
+		    "events": []
+		}
+		response = self.client.post('/groups/', data, format='json')
+		self.assertEqual(response.status_code, 201)
+		self.assertEqual(response.content, '{"id":1,"name":"test group","description":"this is a test group","admins":[],"subscribers":[],"events":[]}')
+
+	
 
 def make_test_user(self):
 	global count

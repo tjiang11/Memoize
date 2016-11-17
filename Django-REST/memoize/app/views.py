@@ -32,7 +32,7 @@ class TestView(views.APIView):
 #Consider using mix-ins http://www.django-rest-framework.org/tutorial/3-class-based-views/#using-mixins
 
 class event_list(views.APIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+   # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     def get(self, request, format=None):
         events = Event.objects.all()
         serializer = EventSerializer(events, many=True)
@@ -50,7 +50,7 @@ class event_list(views.APIView):
 
 
 class event_detail(views.APIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnlyEvent)
+   # permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnlyEvent)
     def get_object(self, pk):
         try:
             return Event.objects.get(pk=pk)
@@ -76,13 +76,13 @@ class event_detail(views.APIView):
 
 
 class GroupList(generics.ListCreateAPIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+   # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = MemGroup.objects.all()
     serializer_class = MemGroupSerializer
 
 
 class GroupDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnlyGroup)
+    #permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnlyGroup)
     queryset = MemGroup.objects.all()
     serializer_class = MemGroupSerializer
 
@@ -115,7 +115,7 @@ class UserList(generics.ListCreateAPIView):
     serializer_class = UserSerializer
 
 class UserDetail(generics.RetrieveUpdateAPIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnlyUser)
+   # permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnlyUser)
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
 
