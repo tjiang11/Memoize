@@ -39,6 +39,8 @@ public class HomePageActivity extends AppCompatActivity {
     private LocationManager locationManager = null;
     private LocationListener locationListener = null;
 
+    private int PORT = 8000;
+    private String baseURL = "http://10.0.2.2:" + PORT;
 
     //later there will be django stuff
     /*######################## View Elements ########################*/

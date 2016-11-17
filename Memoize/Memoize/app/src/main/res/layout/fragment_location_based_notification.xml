@@ -58,14 +58,16 @@
         android:layout_height="wrap_content"
         android:id="@+id/event_name_locationbased"
         android:hint="Event Name"
-        android:gravity="left|bottom" />
+        android:gravity="left|bottom"
+        android:textSize="15dp" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/event_location_locationbased"
         android:hint="Event Location Name"
-        android:gravity="left|bottom" />
+        android:gravity="left|bottom"
+        android:textSize="15dp" />
 
     <EditText
         android:layout_width="match_parent"
@@ -74,7 +76,8 @@
         android:ems="10"
         android:id="@+id/event_description_locationbased"
         android:gravity="bottom|left"
-        android:hint="Event Description (optional)" />
+        android:hint="Event Description (optional)"
+        android:textSize="15dp" />
 
 
     <EditText
@@ -83,7 +86,8 @@
         android:ems="10"
         android:id="@+id/start_time_box_location"
         android:layout_gravity="center_horizontal"
-        android:hint="Start Time" />
+        android:hint="Start Time"
+        android:textSize="15dp" />
 
     <EditText
         android:layout_width="match_parent"
@@ -91,7 +95,8 @@
         android:ems="10"
         android:id="@+id/end_time_box_location"
         android:layout_gravity="center_horizontal"
-        android:hint="End Time" />
+        android:hint="End Time"
+        android:textSize="15dp" />
 
     <Button
         android:layout_width="wrap_content"

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
@@ -40,6 +41,8 @@ public class LocationBasedNotificationFragment extends BaseFragment {
     private static double eventLongitude = -1;
     private static String locationName = "";
 
+    private int PORT = 8000;
+    private String baseURL = "http://10.0.2.2:" + PORT;
 
     public String getFragmentName(){
         return this.fragmentName;
@@ -103,12 +106,13 @@ public class LocationBasedNotificationFragment extends BaseFragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!fieldsFilled()) {
-                    makeFailureToast();
+                if (eventNameField.getText().toString().equals("") || eventLocationNameField.getText().toString().equals("")
+                        || eventStartTimeField.getText().equals("") || eventEndTimeField.getText().equals("")) {
+                    makeFailureToast("One or more of your fields has not been filled.");
                 } else {
 
                     //make api call to create a new event!
-                    AndroidNetworking.post("http://10.0.2.2:8000/users/1/locationreminders/")
+                    AndroidNetworking.post(baseURL + "/users/1/locationreminders/")
                             .addBodyParameter("name", eventNameField.getText().toString())
                             .addBodyParameter("description", eventDescriptionField.getText().toString())
                             .addBodyParameter("location_descriptor", eventLocationNameField.getText().toString())
@@ -128,6 +132,8 @@ public class LocationBasedNotificationFragment extends BaseFragment {
                                 public void onError(ANError anError) {
                                     Log.e("tag", "noooooo");
                                     Log.e("tag", anError.getMessage());
+                                    makeFailureToast("Your Notification could not be saved to the database. Please try again with " +
+                                            "a more secure connection.");
                                 }
                             });
 
@@ -140,16 +146,19 @@ public class LocationBasedNotificationFragment extends BaseFragment {
             }
         });
 
-        //TODO: Implement savebutton and pushing info to database
         return view;
     }
 
     public boolean fieldsFilled() {
+
         return true;
     }
 
-    public void makeFailureToast() {
-        Log.i("LocationBasedNotificationFragment", "failure to save event");
+    public void makeFailureToast(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        Log.i("LocationBasedNotifFrag", "failure to save event");
+
+
     }
 
     @Override
