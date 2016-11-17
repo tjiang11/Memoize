@@ -94,7 +94,6 @@ public class HomePageFragment extends BaseFragment {
     private class DownloadWebpageTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
-            Log.d(DEBUG_TAG, "test log 1");
             // params comes from the execute() call: params[0] is the url.
             try {
                 return downloadUrl(urls[0]);

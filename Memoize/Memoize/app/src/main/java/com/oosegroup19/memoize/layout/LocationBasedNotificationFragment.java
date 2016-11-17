@@ -96,7 +96,9 @@ public class LocationBasedNotificationFragment extends BaseFragment {
                 if (!fieldsFilled()) {
                     makeFailureToast();
                 } else {
-                    //make api call to save event!
+                    //make api call to create a new event!
+
+
                     NewNotificationFragment fragment = new NewNotificationFragment();
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.frame_main, fragment);
