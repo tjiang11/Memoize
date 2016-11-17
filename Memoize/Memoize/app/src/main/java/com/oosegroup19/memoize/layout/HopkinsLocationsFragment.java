@@ -1,5 +1,6 @@
 package com.oosegroup19.memoize.layout;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -97,6 +98,11 @@ public class HopkinsLocationsFragment extends BaseFragment {
                 HopkinsLocationItem value = (HopkinsLocationItem) parent.getItemAtPosition(position);
                 Log.i("HopkinsLocationFrag", value.getLocationName());
 
+                LocationBasedNotificationFragment fragment = LocationBasedNotificationFragment.newInstance(value.getLocationName(), value.getLatitude(), value.getLongitude());
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_main, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
                 //TODO: Pass the LocationItem back to the parent so that it can be saved via POST request in LocationBasedNotificationFragment
             }
         });

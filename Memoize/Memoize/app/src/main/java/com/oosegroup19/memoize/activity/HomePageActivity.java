@@ -40,7 +40,6 @@ public class HomePageActivity extends AppCompatActivity {
 
 
     //later there will be django stuff
-
     /*######################## View Elements ########################*/
     private BaseFragment baseFragment;
     private static TabLayout tabLayout;
@@ -109,7 +108,9 @@ public class HomePageActivity extends AppCompatActivity {
                     baseFragment = NewNotificationFragment.newInstance(user);
                 } /*else if (position == 3) {
                     baseFragment = GroupFragment.newInstance(user);
-                } */
+                } */ else {
+                    baseFragment = ReminderLogFragment.newInstance(user);
+                }
 
                 //Save Tab Position
                 peditor.putInt("TabPosition", position);
