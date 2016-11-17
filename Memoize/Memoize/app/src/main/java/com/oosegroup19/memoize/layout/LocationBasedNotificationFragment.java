@@ -108,7 +108,7 @@ public class LocationBasedNotificationFragment extends BaseFragment {
             public void onClick(View v) {
                 if (eventNameField.getText().toString().equals("") || eventLocationNameField.getText().toString().equals("")
                         || eventStartTimeField.getText().equals("") || eventEndTimeField.getText().equals("")) {
-                    makeFailureToast("One or more of your fields has not been filled.");
+                    makeToast("One or more of your fields has not been filled.");
                 } else {
 
                     //make api call to create a new event!
@@ -124,24 +124,28 @@ public class LocationBasedNotificationFragment extends BaseFragment {
                             .getAsJSONObject(new JSONObjectRequestListener() {
                                 @Override
                                 public void onResponse(JSONObject response) {
+                                    //TODO: Make sure this works when connected to the server; that is, that the toast is there for the appropriate
+                                    //amount of time even when it transitions to the home fragment.
+                                    makeToast("Your notification has been successfully created!");
                                     Log.i("tag", "Success");
                                     Log.i("tag", response.toString());
+
+                                    //Go back to home fragment
+                                    NewNotificationFragment fragment = new NewNotificationFragment();
+                                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                                    fragmentTransaction.replace(R.id.frame_main, fragment);
+                                    fragmentTransaction.addToBackStack(null);
+                                    fragmentTransaction.commit();
                                 }
 
                                 @Override
                                 public void onError(ANError anError) {
                                     Log.e("tag", "noooooo");
                                     Log.e("tag", anError.getMessage());
-                                    makeFailureToast("Your Notification could not be saved to the database. Please try again with " +
+                                    makeToast("Your Notification could not be saved to the database. Please try again with " +
                                             "a more secure connection.");
                                 }
                             });
-
-                    NewNotificationFragment fragment = new NewNotificationFragment();
-                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.frame_main, fragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
                 }
             }
         });
@@ -149,16 +153,8 @@ public class LocationBasedNotificationFragment extends BaseFragment {
         return view;
     }
 
-    public boolean fieldsFilled() {
-
-        return true;
-    }
-
-    public void makeFailureToast(String message) {
+    public void makeToast(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-        Log.i("LocationBasedNotifFrag", "failure to save event");
-
-
     }
 
     @Override
