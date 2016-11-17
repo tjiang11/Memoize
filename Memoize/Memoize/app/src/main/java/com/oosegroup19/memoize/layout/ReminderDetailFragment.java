@@ -81,7 +81,7 @@ public class ReminderDetailFragment extends BaseFragment {
         } else if (reminderItem instanceof TimeReminderItem) {
             TimeReminderItem temp = (TimeReminderItem) reminderItem;
             latitudeOrStartTime.setText("Start Time: " + String.valueOf(temp.getStartTime()));
-            latitudeOrStartTime.setText("End Time: " + String.valueOf(temp.getEndTime()));
+            longitudeOrEndTime.setText("");
         }
 
         ImageButton backButton = (ImageButton) view.findViewById(R.id.back_button);

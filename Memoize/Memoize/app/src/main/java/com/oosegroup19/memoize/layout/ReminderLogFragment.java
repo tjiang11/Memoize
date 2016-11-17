@@ -161,10 +161,10 @@ public class ReminderLogFragment extends BaseFragment {
         //now, listview is bound to user's array data
 
         //populates the list with some dummy data
-        ReminderItem item1 = new LocationReminderItem("This is a Test Event", "Brody Learning Commons", "In which there are profuse amounts of testing done by some hardworking OOSE students!", 500, 600);
-        ReminderItem item2 = new LocationReminderItem("Cry", "Gilman 1st floor", "Lots and lots of tears as they say.", 600, 700);
-        ReminderItem item3 = new LocationReminderItem("Cry A Lot", "Tuesdays and Thursdays in Shaffer 300 at 3pm", "Sadness abounds on the dark, dreary campus of Johns Hopkins University. It's a depressing place.", 100, 400);
-        ReminderItem item4 = new LocationReminderItem("SADNESS", "everywhere", "Really. Sadness. It's EVERYWHERE here. Do not go to this school!!! WARNING!!!!", 300, 250);
+        ReminderItem item1 = new LocationReminderItem("This is a Test Event", "Brody Learning Commons", "In which there are profuse amounts of testing done by some hardworking OOSE students!", "3:00pm", "5:00pm", 500, 600);
+        ReminderItem item2 = new LocationReminderItem("Cry", "Gilman 1st floor", "Lots and lots of tears as they say.", "3:00pm", "5:00pm", 600, 700);
+        ReminderItem item3 = new LocationReminderItem("Cry A Lot", "Tuesdays and Thursdays in Shaffer 300 at 3pm", "Sadness abounds on the dark, dreary campus of Johns Hopkins University. It's a depressing place.", "4:00pm", "5:00pm", 100, 400);
+        ReminderItem item4 = new LocationReminderItem("SADNESS", "everywhere", "Really. Sadness. It's EVERYWHERE here. Do not go to this school!!! WARNING!!!!", "5:00pm", "6:00pm", 300, 250);
 
         aa.add(item1);
         aa.add(item2);

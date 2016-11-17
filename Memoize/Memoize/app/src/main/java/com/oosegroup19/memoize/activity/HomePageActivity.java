@@ -66,6 +66,7 @@ public class HomePageActivity extends AppCompatActivity {
 
 
         //Get current GPS location
+        //http://rdcworld-android.blogspot.in/2012/01/get-current-location-coordinates-city.html
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean gpsStatus = false;
         gpsStatus = isGpsOn();
@@ -73,6 +74,7 @@ public class HomePageActivity extends AppCompatActivity {
         if (isGpsOn()) {
             locationListener = new MyLocationListener(context);
 
+            //TODO: Ask for permissions before performing this request
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
         } else {
             Log.i("HomePageActivity", "GPS is offline");

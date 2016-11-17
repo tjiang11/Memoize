@@ -31,10 +31,7 @@ public class MyLocationListener implements LocationListener {
     public void onLocationChanged(Location loc) {
 //        editLocation.setText("");
 //        pb.setVisibility(View.INVISIBLE);
-        Toast.makeText(
-                context,
-                "Location changed: Lat: " + loc.getLatitude() + " Lng: "
-                        + loc.getLongitude(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Location changed: Lat: " + loc.getLatitude() + " Lng: " + loc.getLongitude(), Toast.LENGTH_SHORT).show();
         String longitude = "Longitude: " + loc.getLongitude();
         Log.v("MyLocationListener", longitude);
         String latitude = "Latitude: " + loc.getLatitude();
@@ -46,19 +43,23 @@ public class MyLocationListener implements LocationListener {
         List<Address> addresses;
 
         try {
-            addresses = gcd.getFromLocation(loc.getLatitude(),
-                    loc.getLongitude(), 1);
+            Log.i("MyLocationListener", "In try block 1");
+            addresses = gcd.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
+            Log.i("MyLocationListener", "In try block 2");
             if (addresses.size() > 0) {
+                Log.i("MyLocationListener", "In try block 3");
                 System.out.println(addresses.get(0).getLocality());
                 cityName = addresses.get(0).getLocality();
             }
         }
         catch (IOException e) {
+            Log.i("MyLocationListener", "In catch block");
             e.printStackTrace();
         }
-        String s = longitude + "\n" + latitude + "\n\nMy Current City is: "
-                + cityName;
-        Log.i("MyLocationListener", s);
+
+        //Why isn't this line executing?
+        String s = longitude + "\n" + latitude + "\n\nMy Current City is: " + cityName;
+        Log.v("MyLocationListener", s);
 //        editLocation.setText(s);
     }
 

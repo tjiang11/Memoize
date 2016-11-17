@@ -13,43 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Event"
-        android:id="@+id/eventTextViewLoc"
-        android:paddingTop="10dp"
-        android:textSize="25dp"
-        android:gravity="center"
-        android:paddingBottom="0dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:layout_gravity="center_horizontal" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/event_name_locationbased"
-        android:hint="Event Name"
-        android:gravity="left|bottom" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/event_location_locationbased"
-        android:hint="Event Location Name"
-        android:gravity="left|bottom" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="105dp"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/event_description_locationbased"
-        android:gravity="bottom|left"
-        android:hint="Event Description (optional)" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Location"
         android:id="@+id/locTextView"
         android:paddingTop="5dp"
@@ -74,8 +37,64 @@
         android:id="@+id/drop_pin_button"
         android:layout_gravity="center_horizontal" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Event"
+        android:id="@+id/eventTextViewLoc"
+        android:paddingTop="5dp"
+        android:textSize="25dp"
+        android:gravity="center"
+        android:paddingBottom="0dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:layout_gravity="center_horizontal" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/event_name_locationbased"
+        android:hint="Event Name"
+        android:gravity="left|bottom" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/event_location_locationbased"
+        android:hint="Event Location Name"
+        android:gravity="left|bottom" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/event_description_locationbased"
+        android:gravity="bottom|left"
+        android:hint="Event Description (optional)" />
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:ems="10"
+        android:id="@+id/start_time_box_location"
+        android:layout_gravity="center_horizontal"
+        android:hint="Start Time" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:ems="10"
+        android:id="@+id/end_time_box_location"
+        android:layout_gravity="center_horizontal"
+        android:hint="End Time" />
+
     <Button
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save"
