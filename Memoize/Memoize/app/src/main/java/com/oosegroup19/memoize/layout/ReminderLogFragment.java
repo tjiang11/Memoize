@@ -35,8 +35,6 @@ public class ReminderLogFragment extends BaseFragment {
     protected static ArrayList<ReminderItem> reminderItems;
     protected static ReminderItemAdapter aa;
 
-    private OnFragmentInteractionListener mListener;
-
     private Context context;
     private static Cursor curse;
     //protected static ListDatabaseAdapter dbAdapt;
@@ -198,12 +196,7 @@ public class ReminderLogFragment extends BaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+
     }
 
     @Override
@@ -214,9 +207,5 @@ public class ReminderLogFragment extends BaseFragment {
 
     public String getFragmentName() {
         return this.fragmentName;
-    }
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
     }
 }
