@@ -1,8 +1,7 @@
 # MEMOIZE [![Build Status](https://travis-ci.com/jhu-oose/2016-group-19.svg?token=pxuwgYspjAfqr5xt35A6&branch=master)](https://travis-ci.com/jhu-oose/2016-group-19)
 
-
-
 ## Premise:
+Memoize is a Android application built for event notification and discovery. It contains extensive support for location-based notifications, as well as support for time-based notifications in an intuitive and secure setting. Memoize is built on a modern stack of native Android, as well as Django and PostgreSQL. 
 
 ## To Install:
 
@@ -20,7 +19,14 @@
 	* `python manage.py runserver`
 * We are currently working on an automated build setup.
 
+## To Run:
+
+* Run the server (as shown in the installation instructions using `python manage.py runserver`).
+* Run the Android application by opening the Memoize file in Android Studio and pressing the play button (this performs an automated build, executing the gradle build program and running the application on the generic android adb emulator). 
+	* Note: if one is using genymotion or another non-native-to-android-studio virtual machine, they should reference a different server in the baseURL.
+	
 ## Components:
+
 * Frontend:
     * Java
     * Android Studio
@@ -34,6 +40,7 @@
     * PostgreSQL
        
 ## Built By:
+
 Tony Jiang (tjiang11@jhu.edu)  
 Mariya Kazachkova (mkazach1@jhu.edu)  
 Sarah Sukardi (smsukardi@jhu.edu)    
