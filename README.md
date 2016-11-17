@@ -12,11 +12,12 @@
 * `pip install -r "requirements.txt"`
 * Install postgres.app (for mac), available at http://postgresapp.com/; a blue elephant should show up on the top of your toolbar.
 * Setup postgresql. Create database with name "memoize_db". Set superuser as "postgres" and password as "password".
-	* CREATE DATABASE memoize_db;
-	* GRANT ALL PRIVILEGES ON DATABASE "memoize_db" to postgres;
+	* `CREATE DATABASE memoize_db;`
+	* `GRANT ALL PRIVILEGES ON DATABASE "memoize_db" to postgres;`
 * Perform initial migrations.
-	* python manage.py migrate
-* Run the server (python manage.py runserver).
+	* `python manage.py migrate`
+* Run the server.
+	* `python manage.py runserver`
 
 * We are currently working on an automated build setup.
 
@@ -24,6 +25,9 @@
 * Frontend:
     * Java
     * Android Studio
+    * Various libraries
+    	* Fast-Android-Networking
+	* Google Maps
 * Backend:
     * Python
     * Django 1.10
