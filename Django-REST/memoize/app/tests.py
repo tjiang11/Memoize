@@ -35,12 +35,18 @@ class tests(APITestCase):
 		#response = self.client.post('/users/', data, format='json')
 		response = make_test_user(self)
 		data3 = {"time": "1996-12-05T06:32:00", "name": "buy food", "description": "descripto patronum", "location_descriptor": "Hogwarts school of oose"}
-		response = self.client.post('/users/3/timereminders/', data3, format='json')
+		response = self.client.post('/users/4/timereminders/', data3, format='json')
 
-		response = self.client.get('/users/3/timereminders/', {}, format = 'json')
+		response = self.client.get('/users/4/timereminders/', {}, format = 'json')
 		self.assertEqual(response.content, '[{"name":"buy food","description":"descripto patronum","location_descriptor":"Hogwarts school of oose","time":"1996-12-05T06:32:00Z"}]')
 		self.assertEqual(response.status_code, 200)
 
+	def test_location_reminder(self):
+		response = make_test_user(self)
+		data = {"start_time": "10:45[:0[0]]", "name": "buy food", "description": "descripto patronum", "location_descriptor": "Hogwarts school of oose", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00"}
+		response = self.client.post('/users/3/locationreminders/', data, format='json')
+		self.assertEqual(response.content, '{"name":"buy food","description":"descripto patronum","location_descriptor":"Hogwarts school of oose","start_time":"10:45:00","end_time":"11:45:00","latitude":"1.00000","longitude":"1.00000"}')
+		self.assertEqual(response.status_code, 201) 
 
 def make_test_user(self):
 	global count
