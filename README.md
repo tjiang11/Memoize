@@ -18,7 +18,6 @@
 	* `python manage.py migrate`
 * Run the server.
 	* `python manage.py runserver`
-
 * We are currently working on an automated build setup.
 
 ## Components:
