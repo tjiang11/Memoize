@@ -75,10 +75,22 @@ public class HomePageActivity extends AppCompatActivity {
             locationListener = new MyLocationListener(context);
 
             //TODO: Ask for permissions before performing this request
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+            //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
         } else {
             Log.i("HomePageActivity", "GPS is offline");
         }
+
+//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        boolean gpsStatus = false;
+//        gpsStatus = isGpsOn();
+//
+//        if (isGpsOn()) {
+//            locationListener = new MyLocationListener(context);
+//
+//            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+//        } else {
+//            Log.i("HomePageActivity", "GPS is offline");
+//        }
 
 
         //Stuff for initializing bottom bar for tabbing between fragments
