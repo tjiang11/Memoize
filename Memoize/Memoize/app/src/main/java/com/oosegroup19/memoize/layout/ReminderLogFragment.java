@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,16 @@ import android.widget.ListView;
 import android.widget.Toolbar;
 
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.oosegroup19.memoize.structures.LocationReminderItem;
 import com.oosegroup19.memoize.R;
 import com.oosegroup19.memoize.structures.ReminderItem;
 import com.oosegroup19.memoize.structures.ReminderItemAdapter;
 import com.oosegroup19.memoize.structures.User;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 
@@ -38,6 +44,9 @@ public class ReminderLogFragment extends BaseFragment {
     private Context context;
     private static Cursor curse;
     //protected static ListDatabaseAdapter dbAdapt;
+
+    private int PORT = 8000;
+    private String baseURL = "http://10.0.2.2:" + PORT;
 
     //Constructor
     public ReminderLogFragment() {}
@@ -155,8 +164,26 @@ public class ReminderLogFragment extends BaseFragment {
         });
         */
 
+        Log.i("ReminderLogFrag", "attempting networking request...");
 
         //now, listview is bound to user's array data
+        AndroidNetworking.get(baseURL + "/users/1/locationreminders/")
+                .build()
+                .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.i("ReminderLogFrag", "get request made successfully");
+                        Log.i("ReminderLogFrag", response.toString());
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e("tag", "noooooo");
+                        Log.e("tag", anError.getMessage());
+                    }
+                });
+
+
 
         //populates the list with some dummy data
         ReminderItem item1 = new LocationReminderItem("This is a Test Event", "Brody Learning Commons", "In which there are profuse amounts of testing done by some hardworking OOSE students!", "3:00pm", "5:00pm", 500, 600);
