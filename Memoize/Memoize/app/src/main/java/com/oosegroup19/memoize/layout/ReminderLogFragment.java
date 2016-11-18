@@ -21,6 +21,7 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.StringRequestListener;
 import com.google.gson.Gson;
+import com.oosegroup19.memoize.activity.HomePageActivity;
 import com.oosegroup19.memoize.structures.LocationReminderItem;
 import com.oosegroup19.memoize.R;
 import com.oosegroup19.memoize.structures.ReminderItem;
@@ -47,9 +48,6 @@ public class ReminderLogFragment extends BaseFragment {
     private Context context;
     private static Cursor curse;
     //protected static ListDatabaseAdapter dbAdapt;
-
-    private int PORT = 8000;
-    private String baseURL = "http://10.0.3.2:" + PORT;
 
     //Constructor
     public ReminderLogFragment() {}
@@ -170,7 +168,7 @@ public class ReminderLogFragment extends BaseFragment {
         Log.i("ReminderLogFrag", "attempting networking request...");
 
         //now, listview is bound to user's array data
-        AndroidNetworking.get(baseURL + "/users/1/locationreminders/")
+        AndroidNetworking.get(HomePageActivity.baseURL + "/users/1/locationreminders/")
                 .build()
                 .getAsString(new StringRequestListener() {
                     @Override

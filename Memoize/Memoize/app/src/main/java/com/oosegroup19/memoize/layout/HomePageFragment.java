@@ -46,9 +46,6 @@ public class HomePageFragment extends BaseFragment {
 
     private TextView textView;
 
-    private int PORT = 8000;
-    private String baseURL = "http://10.0.3.2:" + PORT;
-
 //    //Sarah's variables for moving between fragments
     private CharSequence mTitle;
 
@@ -77,7 +74,7 @@ public class HomePageFragment extends BaseFragment {
 
         AndroidNetworking.setParserFactory(new JacksonParserFactory());
 
-        AndroidNetworking.get(baseURL + "/hello/")
+        AndroidNetworking.get(HomePageActivity.baseURL + "/hello/")
                 .build()
                 .getAsString(new StringRequestListener() {
                     @Override

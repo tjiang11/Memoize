@@ -17,6 +17,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.oosegroup19.memoize.R;
+import com.oosegroup19.memoize.activity.HomePageActivity;
 import com.oosegroup19.memoize.structures.User;
 
 import org.json.JSONObject;
@@ -33,9 +34,6 @@ import org.json.JSONObject;
 public class TimeBasedNotificationFragment extends BaseFragment {
     public final static String FRAGMENTNAME = "TimeBasedNotificationFragment";
     private final String fragmentName = FRAGMENTNAME;
-
-    private int PORT = 8000;
-    private String baseURL = "http://10.0.3.2:" + PORT;
 
     public String getFragmentName(){
         return this.fragmentName;
@@ -79,7 +77,7 @@ public class TimeBasedNotificationFragment extends BaseFragment {
                 } else {
 
                     //make api call to create a new event!
-                    AndroidNetworking.post(baseURL + "/users/1/locationreminders/")
+                    AndroidNetworking.post(HomePageActivity.baseURL + "/users/1/locationreminders/")
                             .addBodyParameter("name", eventNameField.getText().toString())
                             .addBodyParameter("description", eventDescriptionField.getText().toString())
                             .addBodyParameter("location_descriptor", eventLocationNameField.getText().toString())

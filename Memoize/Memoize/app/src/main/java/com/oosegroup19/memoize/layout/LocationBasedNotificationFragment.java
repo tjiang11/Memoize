@@ -18,6 +18,7 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.oosegroup19.memoize.R;
+import com.oosegroup19.memoize.activity.HomePageActivity;
 import com.oosegroup19.memoize.structures.User;
 
 import org.json.JSONArray;
@@ -40,9 +41,6 @@ public class LocationBasedNotificationFragment extends BaseFragment {
     private static double eventLatitude = -1;
     private static double eventLongitude = -1;
     private static String locationName = "";
-
-    private int PORT = 8000;
-    private String baseURL = "http://10.0.3.2:" + PORT;
 
     public String getFragmentName(){
         return this.fragmentName;
@@ -112,7 +110,7 @@ public class LocationBasedNotificationFragment extends BaseFragment {
                 } else {
 
                     //make api call to create a new event!
-                    AndroidNetworking.post(baseURL + "/users/1/locationreminders/")
+                    AndroidNetworking.post(HomePageActivity.baseURL + "/users/1/locationreminders/")
                             .addBodyParameter("name", eventNameField.getText().toString())
                             .addBodyParameter("description", eventDescriptionField.getText().toString())
                             .addBodyParameter("location_descriptor", eventLocationNameField.getText().toString())
