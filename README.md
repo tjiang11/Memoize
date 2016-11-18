@@ -21,18 +21,19 @@ Memoize is a Android application built for event notification and discovery. It 
 
 ## To Run:
 
-* Run the server (as shown in the installation instructions using `python manage.py runserver`).
-* Run the Android application by opening the Memoize file in Android Studio and pressing the play button (this performs an automated build, executing the gradle build program and running the application on the generic android adb emulator). 
-	* Note: if one is using genymotion or another non-native-to-android-studio virtual machine, they should reference a different server in the baseURL.
+* Run the server (as shown in the installation instructions using `python manage.py runserver`). If you are using mac, make sure you have executed `postgres.app` before running the server.
+* Run the Android application by opening the `Memoize` file in Android Studio and pressing the play button (this performs an automated build, executing the gradle build program and running the application on the generic android adb emulator). If you are using the android emulator with the server on, change the string in `baseURL` from `"http://10.0.3.2:"` to `"http://10.0.2.2:"`. If you are using genymotion, leave the baseURL as is.
+
+* NOTE: if one is using genymotion or another non-native-to-android-studio virtual machine, they MUST reference a different server in the baseURL. This was explained further above.
 	
 ## Components:
 
 * Frontend:
-    * Java
-    * Android Studio
-    * Various libraries
-    	* Fast-Android-Networking
-	* Google Maps
+    * Java  
+    * Android Studio  
+    * Various libraries  
+       * Fast-Android-Networking  
+       * Google Maps  
 * Backend:
     * Python
     * Django 1.10
