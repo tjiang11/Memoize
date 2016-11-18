@@ -182,8 +182,6 @@ public class ReminderLogFragment extends BaseFragment {
                             Log.i("ReminderLogFrag", reminderItem.toString());
                             aa.add(reminderItem);
                         }
-
-
                     }
 
                     @Override
@@ -201,7 +199,7 @@ public class ReminderLogFragment extends BaseFragment {
 //        ReminderItem item2 = new LocationReminderItem("Cry", "Gilman 1st floor", "Lots and lots of tears as they say.", "3:00pm", "5:00pm", 600, 700);
 //        ReminderItem item3 = new LocationReminderItem("Cry A Lot", "Tuesdays and Thursdays in Shaffer 300 at 3pm", "Sadness abounds on the dark, dreary campus of Johns Hopkins University. It's a depressing place.", "4:00pm", "5:00pm", 100, 400);
 //        ReminderItem item4 = new LocationReminderItem("SADNESS", "everywhere", "Really. Sadness. It's EVERYWHERE here. Do not go to this school!!! WARNING!!!!", "5:00pm", "6:00pm", 300, 250);
-//
+
 //        aa.add(item1);
 //        aa.add(item2);
 //        aa.add(item3);

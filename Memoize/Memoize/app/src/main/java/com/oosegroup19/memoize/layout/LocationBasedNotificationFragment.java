@@ -78,7 +78,6 @@ public class LocationBasedNotificationFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_location_based_notification, container, false);
-        getActivity().setTitle("Testing2");
 
         final Button chooseHopkinsLocationsButton = (Button) view.findViewById(R.id.choose_hopkins_loc_button);
         Button locationBasedNotifsButton = (Button) view.findViewById(R.id.drop_pin_button);
@@ -107,7 +106,8 @@ public class LocationBasedNotificationFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 if (eventNameField.getText().toString().equals("") || eventLocationNameField.getText().toString().equals("")
-                        || eventStartTimeField.getText().equals("") || eventEndTimeField.getText().equals("")) {
+                        || eventStartTimeField.getText().equals("") || eventEndTimeField.getText().equals("")
+                        || eventLatitude == -1 || eventLongitude == -1) {
                     makeToast("One or more of your fields has not been filled.");
                 } else {
 
@@ -126,7 +126,7 @@ public class LocationBasedNotificationFragment extends BaseFragment {
                                 public void onResponse(JSONObject response) {
                                     //TODO: Make sure this works when connected to the server; that is, that the toast is there for the appropriate
                                     //amount of time even when it transitions to the home fragment.
-                                    makeToast("Your notification has been successfully created!");
+                                    makeToast("Your location based notification has been successfully created!");
                                     Log.i("tag", "Success");
                                     Log.i("tag", response.toString());
 

@@ -79,7 +79,7 @@ public class ReminderDetailFragment extends BaseFragment {
             longitudeOrEndTime.setText("Longitude: " + String.valueOf(temp.getLongitude()));
         } else if (reminderItem instanceof TimeReminderItem) {
             TimeReminderItem temp = (TimeReminderItem) reminderItem;
-            latitudeOrStartTime.setText("Start Time: " + String.valueOf(temp.getStartTime()));
+            latitudeOrStartTime.setText("Time: " + String.valueOf(temp.getTime()));
             longitudeOrEndTime.setText("");
         }
 

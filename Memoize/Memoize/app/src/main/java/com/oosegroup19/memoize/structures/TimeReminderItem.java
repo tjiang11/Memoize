@@ -5,12 +5,17 @@ package com.oosegroup19.memoize.structures;
  */
 public class TimeReminderItem extends ReminderItem {
 
-    private int startTime;
+    private int time;
 
-    public TimeReminderItem(String event, String location, String description, int startTime) {
+    public TimeReminderItem(String event, String location, String description, int time) {
         super(event, location, description);
-        this.startTime = startTime;
+        this.time = time;
     }
 
-    public int getStartTime()   { return startTime; }
+    public int getTime()   { return time; }
+
+    @Override
+    public String toString() {
+        return super.toString() + " Time: " + String.valueOf(time);
+    }
 }

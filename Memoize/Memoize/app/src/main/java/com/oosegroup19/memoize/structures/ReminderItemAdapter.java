@@ -54,7 +54,7 @@ public class ReminderItemAdapter extends ArrayAdapter<ReminderItem> {
 
         } else if (reminder instanceof TimeReminderItem) {
             TimeReminderItem tempReminder = (TimeReminderItem) reminder;
-            latitudeView.setText("Start Time: " + tempReminder.getStartTime());
+            latitudeView.setText("Start Time: " + tempReminder.getTime());
             //longitudeView.setText("End Time: " + tempReminder.getEndTime());
         }
 

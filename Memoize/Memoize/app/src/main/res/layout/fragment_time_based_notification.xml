@@ -80,7 +80,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save"
-        android:id="@+id/button5"
+        android:id="@+id/save_button_time_based_notif"
         android:layout_gravity="center_horizontal" />
 
 </LinearLayout>
