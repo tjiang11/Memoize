@@ -1,7 +1,7 @@
 # MEMOIZE [![Build Status](https://travis-ci.com/jhu-oose/2016-group-19.svg?token=pxuwgYspjAfqr5xt35A6&branch=master)](https://travis-ci.com/jhu-oose/2016-group-19)
 
 ## Premise:
-Memoize is a Android application built for event notification and discovery. It contains extensive support for location-based notifications, as well as support for time-based notifications in an intuitive and secure setting. Memoize is built on a modern stack of native Android, as well as Django and PostgreSQL. 
+Memoize is a Android application built for event notification and discovery. It contains extensive support for location-based notifications, as well as support for time-based notifications in an intuitive and secure setting. Memoize is built on a modern stack of native Android, Django, and PostgreSQL. 
 
 ## To Install:
 
