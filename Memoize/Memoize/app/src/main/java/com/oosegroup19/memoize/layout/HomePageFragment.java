@@ -47,7 +47,7 @@ public class HomePageFragment extends BaseFragment {
     private TextView textView;
 
     private int PORT = 8000;
-    private String baseURL = "http://10.0.2.2:" + PORT;
+    private String baseURL = "http://10.0.3.2:" + PORT;
 
 //    //Sarah's variables for moving between fragments
     private CharSequence mTitle;
@@ -88,6 +88,7 @@ public class HomePageFragment extends BaseFragment {
                     @Override
                     public void onError(ANError anError) {
                         textView.setText("noo");
+                        Log.e("tag", anError.getMessage());
                     }
                 });
 

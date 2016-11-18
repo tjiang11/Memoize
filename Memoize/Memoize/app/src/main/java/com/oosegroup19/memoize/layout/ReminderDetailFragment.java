@@ -69,8 +69,8 @@ public class ReminderDetailFragment extends BaseFragment {
         TextView latitudeOrStartTime = (TextView) view.findViewById(R.id.task_latitude_or_start_time);
         TextView longitudeOrEndTime = (TextView) view.findViewById(R.id.task_longitude_or_end_time);
 
-        taskName.setText(reminderItem.getEvent());
-        taskLocation.setText(reminderItem.getLocation());
+        taskName.setText(reminderItem.getName());
+        taskLocation.setText(reminderItem.getLocationDescriptor());
         taskDescription.setText(reminderItem.getDescription());
 
         if (reminderItem instanceof LocationReminderItem) {

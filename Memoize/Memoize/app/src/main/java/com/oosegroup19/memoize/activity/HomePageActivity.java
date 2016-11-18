@@ -40,7 +40,7 @@ public class HomePageActivity extends AppCompatActivity {
     private LocationListener locationListener = null;
 
     private int PORT = 8000;
-    private String baseURL = "http://10.0.2.2:" + PORT;
+    private String baseURL = "http://10.0.3.2:" + PORT;
 
     //later there will be django stuff
     /*######################## View Elements ########################*/

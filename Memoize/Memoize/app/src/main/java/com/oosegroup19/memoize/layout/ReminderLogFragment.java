@@ -19,6 +19,8 @@ import android.widget.Toolbar;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.androidnetworking.interfaces.StringRequestListener;
+import com.google.gson.Gson;
 import com.oosegroup19.memoize.structures.LocationReminderItem;
 import com.oosegroup19.memoize.R;
 import com.oosegroup19.memoize.structures.ReminderItem;
@@ -27,6 +29,7 @@ import com.oosegroup19.memoize.structures.User;
 
 import org.json.JSONArray;
 
+import java.io.FileReader;
 import java.util.ArrayList;
 
 /**
@@ -46,7 +49,7 @@ public class ReminderLogFragment extends BaseFragment {
     //protected static ListDatabaseAdapter dbAdapt;
 
     private int PORT = 8000;
-    private String baseURL = "http://10.0.2.2:" + PORT;
+    private String baseURL = "http://10.0.3.2:" + PORT;
 
     //Constructor
     public ReminderLogFragment() {}
@@ -169,11 +172,18 @@ public class ReminderLogFragment extends BaseFragment {
         //now, listview is bound to user's array data
         AndroidNetworking.get(baseURL + "/users/1/locationreminders/")
                 .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
+                .getAsString(new StringRequestListener() {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        Log.i("ReminderLogFrag", "get request made successfully");
-                        Log.i("ReminderLogFrag", response.toString());
+                    public void onResponse(String response) {
+                        Gson gson = new Gson();
+                        LocationReminderItem[] myReminderItems = gson.fromJson(response, LocationReminderItem[].class);
+
+                        for (LocationReminderItem reminderItem : myReminderItems) {
+                            Log.i("ReminderLogFrag", reminderItem.toString());
+                            aa.add(reminderItem);
+                        }
+
+
                     }
 
                     @Override
@@ -185,16 +195,17 @@ public class ReminderLogFragment extends BaseFragment {
 
 
 
-        //populates the list with some dummy data
-        ReminderItem item1 = new LocationReminderItem("This is a Test Event", "Brody Learning Commons", "In which there are profuse amounts of testing done by some hardworking OOSE students!", "3:00pm", "5:00pm", 500, 600);
-        ReminderItem item2 = new LocationReminderItem("Cry", "Gilman 1st floor", "Lots and lots of tears as they say.", "3:00pm", "5:00pm", 600, 700);
-        ReminderItem item3 = new LocationReminderItem("Cry A Lot", "Tuesdays and Thursdays in Shaffer 300 at 3pm", "Sadness abounds on the dark, dreary campus of Johns Hopkins University. It's a depressing place.", "4:00pm", "5:00pm", 100, 400);
-        ReminderItem item4 = new LocationReminderItem("SADNESS", "everywhere", "Really. Sadness. It's EVERYWHERE here. Do not go to this school!!! WARNING!!!!", "5:00pm", "6:00pm", 300, 250);
 
-        aa.add(item1);
-        aa.add(item2);
-        aa.add(item3);
-        aa.add(item4);
+        //populates the list with some dummy data
+//        ReminderItem item1 = new LocationReminderItem("This is a Test Event", "Brody Learning Commons", "In which there are profuse amounts of testing done by some hardworking OOSE students!", "3:00pm", "5:00pm", 500, 600);
+//        ReminderItem item2 = new LocationReminderItem("Cry", "Gilman 1st floor", "Lots and lots of tears as they say.", "3:00pm", "5:00pm", 600, 700);
+//        ReminderItem item3 = new LocationReminderItem("Cry A Lot", "Tuesdays and Thursdays in Shaffer 300 at 3pm", "Sadness abounds on the dark, dreary campus of Johns Hopkins University. It's a depressing place.", "4:00pm", "5:00pm", 100, 400);
+//        ReminderItem item4 = new LocationReminderItem("SADNESS", "everywhere", "Really. Sadness. It's EVERYWHERE here. Do not go to this school!!! WARNING!!!!", "5:00pm", "6:00pm", 300, 250);
+//
+//        aa.add(item1);
+//        aa.add(item2);
+//        aa.add(item3);
+//        aa.add(item4);
 
         return view;
     }

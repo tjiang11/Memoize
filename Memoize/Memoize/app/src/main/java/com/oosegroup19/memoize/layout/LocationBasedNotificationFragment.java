@@ -42,7 +42,7 @@ public class LocationBasedNotificationFragment extends BaseFragment {
     private static String locationName = "";
 
     private int PORT = 8000;
-    private String baseURL = "http://10.0.2.2:" + PORT;
+    private String baseURL = "http://10.0.3.2:" + PORT;
 
     public String getFragmentName(){
         return this.fragmentName;
