@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +24,8 @@ import com.oosegroup19.memoize.layout.BaseFragment;
 import com.oosegroup19.memoize.layout.HomePageFragment;
 import com.oosegroup19.memoize.layout.NewNotificationFragment;
 import com.oosegroup19.memoize.layout.ReminderLogFragment;
+
+import java.util.List;
 
 public class HomePageActivity extends AppCompatActivity {
 
@@ -42,7 +45,6 @@ public class HomePageActivity extends AppCompatActivity {
     public static int PORT = 8000;
     public static String baseURL = "http://10.0.3.2:" + PORT;
 
-    //later there will be django stuff
     /*######################## View Elements ########################*/
     private BaseFragment baseFragment;
     private static TabLayout tabLayout;
@@ -165,7 +167,7 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     private void initiateFragment() {
-        String currentFragment = myPrefs.getString(CURRENTFRAGMENT,"0");
+        String currentFragment = myPrefs.getString(CURRENTFRAGMENT, "0");
         Log.i("MainActivity", "Attempting to inflate: " + currentFragment);
         if(currentFragment.equals("0")){
             baseFragment = ReminderLogFragment.newInstance(user);
@@ -214,5 +216,19 @@ public class HomePageActivity extends AppCompatActivity {
         }
         peditor.putInt("TabPosition", tabLayout.getSelectedTabPosition());
         peditor.commit();
+    }
+
+    //for maps permissions
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.e("HomePageActivity", "onrequestpermissionsresult called");
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        List<android.support.v4.app.Fragment> fragments = getSupportFragmentManager().getFragments();
+
+        if (fragments != null) {
+            for (android.support.v4.app.Fragment fragment : fragments) {
+                fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            }
+        }
     }
 }

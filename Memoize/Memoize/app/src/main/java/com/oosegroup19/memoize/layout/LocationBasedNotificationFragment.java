@@ -17,6 +17,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.oosegroup19.memoize.DropPinFragment;
 import com.oosegroup19.memoize.R;
 import com.oosegroup19.memoize.activity.HomePageActivity;
 import com.oosegroup19.memoize.structures.User;
@@ -78,7 +79,7 @@ public class LocationBasedNotificationFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_location_based_notification, container, false);
 
         final Button chooseHopkinsLocationsButton = (Button) view.findViewById(R.id.choose_hopkins_loc_button);
-        Button locationBasedNotifsButton = (Button) view.findViewById(R.id.drop_pin_button);
+        Button dropPinButton = (Button) view.findViewById(R.id.drop_pin_button);
         Button saveButton = (Button) view.findViewById(R.id.save_button_location_based_notif);
 
         final TextView eventNameField = (TextView) view.findViewById(R.id.event_name_locationbased);
@@ -93,6 +94,18 @@ public class LocationBasedNotificationFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 HopkinsLocationsFragment fragment = new HopkinsLocationsFragment();
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_main, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+
+        dropPinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Go back to home fragment
+                DropPinFragment fragment = new DropPinFragment();
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame_main, fragment);
                 fragmentTransaction.addToBackStack(null);
