@@ -11,7 +11,7 @@ count = 0
 
 
 # Create your tests here.
-class tests(APITestCase):
+class happy_path_tests(APITestCase):
 	
 	def test_creating_user(self):
 		response = make_test_user(self)
@@ -65,8 +65,6 @@ class tests(APITestCase):
 
 	#things to consider: when making a group I am not in the admins list for that group. Should probably be fixed
 	def test_adding_subscription_to_group(self):
-		response = self.client.get('/users/', {}, format='json')
-
 		data = {"username": "test_subscription@jhu.edu", "password": "PaSsWoRdTest",  "mem_groups": [], "sub_groups": []}
 		response = self.client.post('/users/', data, format='json')	
 		data = {
@@ -103,34 +101,32 @@ class tests(APITestCase):
 		self.assertEqual(response.content, '{"id":1,"username":"test_subscription@jhu.edu","mem_groups":[],"sub_groups":[1]}')
 
 		data = {
-		    "name": [
-		        "This is a test event for group 1"
-		    ],
-		    "tags": [
-		        "test tag"
-		    ],
-		    "start_time": [
-		        ""
-		    ],
-		    "longitude": [
-		        "1.000"
-		    ],
-		    "location_descriptor": [
-		        "This field is required."
-		    ],
-		    "end_time": [
-		        "This field is required."
-		    ],
-		    "latitude": [
-		        "1.000"
-		    ],
-		    "description": [
-		        "This field is required."
-		    ]
+		    "name": 
+		        "This is a test event for group 1",
+		    "tags": 
+		        "test tag",
+		    "start_time": 
+		    	"1996-12-05T06:32:00",
+		    "longitude": 
+		        "1.000",
+		    "location_descriptor": 
+		        "This is a test location",
+		    "end_time": 
+		        "1996-12-05T06:32:00",
+		    "latitude":
+		        "1.000",
+		    "description": 
+		        "This is a test description"
 		}
 
-		#response = self.client.post('/groups/1/events', data, format='json')
-		#print response.status_code
+		response = self.client.post('/groups/1/events/', data, format='json')
+		self.assertEqual(response.content, '{"name":"This is a test event for group 1","description":"This is a test description","location_descriptor":"This is a test location","start_time":"1996-12-05T06:32:00Z","end_time":"1996-12-05T06:32:00Z","longitude":"1.00000","latitude":"1.00000","tags":"test tag","group":1}')
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+#class non_happy_path_tests(APITestCase):
+	#def test1(self):
+
 
 
 
