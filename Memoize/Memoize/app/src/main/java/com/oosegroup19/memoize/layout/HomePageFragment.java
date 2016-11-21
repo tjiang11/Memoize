@@ -68,7 +68,6 @@ public class HomePageFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_homepage, container, false);
-        getActivity().setTitle("Testing...");
 
         textView = (TextView) view.findViewById(R.id.textView2);
 

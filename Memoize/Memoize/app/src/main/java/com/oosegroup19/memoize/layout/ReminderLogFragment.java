@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -67,7 +66,7 @@ public class ReminderLogFragment extends BaseFragment {
     public void onResume(){
         super.onResume();
         AppCompatActivity myActivity = (AppCompatActivity) getActivity();
-        ActionBar myActionBar = myActivity.getSupportActionBar();
+//        ActionBar myActionBar = myActivity.getSupportActionBar();
 //        myActionBar.setTitle("Upcoming Reminders");
         updateArray();
     }
@@ -189,9 +188,6 @@ public class ReminderLogFragment extends BaseFragment {
                     }
                 });
 
-
-
-
         //populates the list with some dummy data
 //        ReminderItem item1 = new LocationReminderItem("This is a Test Event", "Brody Learning Commons", "In which there are profuse amounts of testing done by some hardworking OOSE students!", "3:00pm", "5:00pm", 500, 600);
 //        ReminderItem item2 = new LocationReminderItem("Cry", "Gilman 1st floor", "Lots and lots of tears as they say.", "3:00pm", "5:00pm", 600, 700);
@@ -236,7 +232,6 @@ public class ReminderLogFragment extends BaseFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        /* mListener = null;*/
     }
 
     public String getFragmentName() {
