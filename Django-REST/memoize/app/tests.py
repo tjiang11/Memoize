@@ -11,20 +11,20 @@ count = 0
 
 
 # Create your tests here.
-class tests(APITestCase):
+class happy_path_tests(APITestCase):
 	
 	def test_creating_user(self):
 		response = make_test_user(self)
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
 
 		#data2 = {"username": "test2@jhu.edu2", "password": "PaSsWoRd2",  "mem_groups": [], "sub_groups": []}
 		#response = self.client.post('/users/', data2, format='json')
 		response = make_test_user(self)
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-
-		client.login(username='test1@jhu.edu', password='PaSsWoRd1')
-		reponse = self.client.get('/users/', format='json')
+		#client.login(username='test1@jhu.edu', password='PaSsWoRd1')
+		#reponse = self.client.get('/users/', format='json')
 		#print reponse
 		#print response.status_code
 		#data2 = {'password': 'PaSsWoRd'}
@@ -37,16 +37,16 @@ class tests(APITestCase):
 		#response = self.client.post('/users/', data, format='json')
 		response = make_test_user(self)
 		data3 = {"time": "1996-12-05T06:32:00", "name": "buy food", "description": "descripto patronum", "location_descriptor": "Hogwarts school of oose"}
-		response = self.client.post('/users/4/timereminders/', data3, format='json')
+		response = self.client.post('/users/6/timereminders/', data3, format='json')
 
-		response = self.client.get('/users/4/timereminders/', {}, format = 'json')
+		response = self.client.get('/users/6/timereminders/', {}, format = 'json')
 		self.assertEqual(response.content, '[{"name":"buy food","description":"descripto patronum","location_descriptor":"Hogwarts school of oose","time":"1996-12-05T06:32:00Z"}]')
 		self.assertEqual(response.status_code, 200)
 
 	def test_location_reminder(self):
 		response = make_test_user(self)
 		data = {"start_time": "10:45[:0[0]]", "name": "buy food", "description": "descripto patronum", "location_descriptor": "Hogwarts school of oose", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00"}
-		response = self.client.post('/users/3/locationreminders/', data, format='json')
+		response = self.client.post('/users/5/locationreminders/', data, format='json')
 		self.assertEqual(response.content, '{"name":"buy food","description":"descripto patronum","location_descriptor":"Hogwarts school of oose","start_time":"10:45:00","end_time":"11:45:00","latitude":"1.00000","longitude":"1.00000"}')
 		self.assertEqual(response.status_code, 201) 
 
@@ -60,7 +60,77 @@ class tests(APITestCase):
 		}
 		response = self.client.post('/groups/', data, format='json')
 		self.assertEqual(response.status_code, 201)
-		self.assertEqual(response.content, '{"id":1,"name":"test group","description":"this is a test group","admins":[],"subscribers":[],"events":[]}')
+		self.assertEqual(response.content, '{"id":3,"name":"test group","description":"this is a test group","admins":[],"subscribers":[],"events":[]}')
+
+
+	#things to consider: when making a group I am not in the admins list for that group. Should probably be fixed
+	def test_adding_subscription_to_group(self):
+		data = {"username": "test_subscription@jhu.edu", "password": "PaSsWoRdTest",  "mem_groups": [], "sub_groups": []}
+		response = self.client.post('/users/', data, format='json')	
+		data = {
+		    "name": "group that should be added for subscription testing",
+		    "description": "this is a test group",
+		    "admins": [],
+		    "subscribers": [2],
+		    "events": []
+		}
+		response = self.client.post('/groups/', data, format='json')
+		self.assertEqual(response.status_code, 201)
+		self.assertEqual(response.content, '{"id":2,"name":"group that should be added for subscription testing","description":"this is a test group","admins":[],"subscribers":[2],"events":[]}')
+
+		response = self.client.get('/users/2/', {}, format='json')
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.content, '{"id":2,"username":"test_subscription@jhu.edu","mem_groups":[],"sub_groups":[2]}')
+
+	def test_adding_event_to_group(self):
+		data = {"username": "test_subscription@jhu.edu", "password": "PaSsWoRdTest",  "mem_groups": [], "sub_groups": []}
+		response = self.client.post('/users/', data, format='json')	
+		data = {
+		    "name": "group that should be added for subscription testing",
+		    "description": "this is a test group",
+		    "admins": [],
+		    "subscribers": [1],
+		    "events": []
+		}
+		response = self.client.post('/groups/', data, format='json')
+		self.assertEqual(response.status_code, 201)
+		self.assertEqual(response.content, '{"id":1,"name":"group that should be added for subscription testing","description":"this is a test group","admins":[],"subscribers":[1],"events":[]}')
+
+		response = self.client.get('/users/1/', {}, format='json')
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.content, '{"id":1,"username":"test_subscription@jhu.edu","mem_groups":[],"sub_groups":[1]}')
+
+		data = {
+		    "name": 
+		        "This is a test event for group 1",
+		    "tags": 
+		        "test tag",
+		    "start_time": 
+		    	"1996-12-05T06:32:00",
+		    "longitude": 
+		        "1.000",
+		    "location_descriptor": 
+		        "This is a test location",
+		    "end_time": 
+		        "1996-12-05T06:32:00",
+		    "latitude":
+		        "1.000",
+		    "description": 
+		        "This is a test description"
+		}
+
+		response = self.client.post('/groups/1/events/', data, format='json')
+		self.assertEqual(response.content, '{"name":"This is a test event for group 1","description":"This is a test description","location_descriptor":"This is a test location","start_time":"1996-12-05T06:32:00Z","end_time":"1996-12-05T06:32:00Z","longitude":"1.00000","latitude":"1.00000","tags":"test tag","group":1}')
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+#class non_happy_path_tests(APITestCase):
+	#def test1(self):
+
+
+
+
+
 
 	
 
