@@ -180,9 +180,24 @@ class non_happy_path_tests(APITestCase):
 		self.assertEquals(response.content, '{"description":["This field may not be blank."]}')
 
 
+	def test_z_reminders_without_time(self):
+		response = make_test_user(self)
+		data = {"time": "", "name": "test without time", "description": "we are testing", "location_descriptor": "Hogwarts school of oose"}
+		response = self.client.post('/users/8/timereminders/', data, format='json')
+		self.assertEquals(response.content, '{"time":["Datetime has wrong format. Use one of these formats instead: YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z]."]}')\
+
+		data = {"start_time": "", "name": "test without start time", "description": "we are testing", "location_descriptor": "Hogwarts school of oose", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00"}
+		response = self.client.post('/users/8/locationreminders/', data, format='json')
+		self.assertEquals(response.content, '{"start_time":["Time has wrong format. Use one of these formats instead: hh:mm[:ss[.uuuuuu]]."]}')
+
+		data = {"start_time": "11:45[:0[0]]", "name": "test without start time", "description": "we are testing", "location_descriptor": "Hogwarts school of oose", "end_time": "", "latitude": "1.00", "longitude": "1.00"}
+		response = self.client.post('/users/8/locationreminders/', data, format='json')
+		self.assertEquals(response.content, '{"end_time":["Time has wrong format. Use one of these formats instead: hh:mm[:ss[.uuuuuu]]."]}')
 
 
 		#test making time reminder without a time (will fail)
+
+
 
 
 
