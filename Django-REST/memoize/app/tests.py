@@ -124,8 +124,65 @@ class happy_path_tests(APITestCase):
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
-#class non_happy_path_tests(APITestCase):
-	#def test1(self):
+class non_happy_path_tests(APITestCase):
+	def test_making_user_without_username_password(self):
+		#test creating a user without an email and without a password (name? I don't remember)
+		data = {"username": "", "password": "PaSsWoRd2",  "mem_groups": [], "sub_groups": []}
+		response = self.client.post('/users/', data, format='json')
+		self.assertEquals(response.content, '{"username":["This field may not be blank."]}')
+		self.assertEquals(response.status_code, 400)
+
+		data2 = {"username": "test_without_password", "password": "",  "mem_groups": [], "sub_groups": []}
+		response = self.client.post('/users/', data2, format='json')
+		self.assertEquals(response.content, '{"password":["This field may not be blank."]}')
+		self.assertEquals(response.status_code, 400)
+
+	def test_reminders_without_descriptions(self):
+		response = make_test_user(self)
+		data3 = {"time": "1996-12-05T06:32:00", "name": "buy food", "description": "", "location_descriptor": "Hogwarts school of oose"}
+		response = self.client.post('/users/7/timereminders/', data3, format='json')
+		self.assertEquals(response.content, '{"description":["This field may not be blank."]}')
+		#Now we test to make sure that the reminder really wasn't created
+		response = self.client.get('/users/7/timereminders/', {}, format = 'json')
+		self.assertEquals(response.content, '[]')
+
+		data = {"start_time": "10:45[:0[0]]", "name": "buy food", "description": "", "location_descriptor": "Hogwarts school of oose", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00"}
+		response = self.client.post('/users/7/locationreminders/', data, format='json')
+		self.assertEquals(response.content, '{"description":["This field may not be blank."]}')
+		#Now we test to make sure that the reminder really wasn't created
+		response = self.client.get('/users/7/locationreminders/', {}, format = 'json')
+		self.assertEquals(response.content, '[]')
+
+		#test making a user with incorrect credentials (do we have this implemented yet?)
+
+		#test making reminder (both) without a description (this might be a happy path thing actually)
+
+		#test making group without name (should not work)
+	def test_z_making_group_without_name_and_description(self):
+		data = {
+		    "name": "",
+		    "description": "this is a test group",
+		    "admins": [],
+		    "subscribers": [],
+		    "events": []
+		}
+		response = self.client.post('/groups/', data, format='json')
+		self.assertEquals(response.content, '{"name":["This field may not be blank."]}')
+
+		data = {
+		    "name": "now test no description",
+		    "description": "",
+		    "admins": [],
+		    "subscribers": [],
+		    "events": []
+		}
+		response = self.client.post('/groups/', data, format='json')
+		self.assertEquals(response.content, '{"description":["This field may not be blank."]}')
+
+
+
+
+		#test making time reminder without a time (will fail)
 
 
 
