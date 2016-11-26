@@ -7,11 +7,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -47,7 +47,8 @@ public class HomePageActivity extends AppCompatActivity {
 
     public static int PORT = 8000;
     //    public static String baseURL = "http://10.0.3.2:" + PORT; //uncomment if you are using emulator
-    public static String baseURL = "http://0abf1c15.ngrok.io"; //uncomment and put your ngrok url here if using ngrok tunneling
+    public static String baseURL = "http://4a936fd8.ngrok.io"; //uncomment and put your ngrok url here if using ngrok tunneling
+    public static Location currentLocation = null;
 
     /*######################## View Elements ########################*/
     private BaseFragment baseFragment;
@@ -67,7 +68,6 @@ public class HomePageActivity extends AppCompatActivity {
         //remove app title from home page
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-
         Context context = getApplicationContext();
 
         AndroidNetworking.initialize(context);
@@ -77,12 +77,13 @@ public class HomePageActivity extends AppCompatActivity {
 
 
         //Get current GPS location
-        //http://rdcworld-android.blogspot.in/2012/01/get-current-location-coordinates-city.html
+        // http://rdcworld-android.blogspot.in/2012/01/get-current-location-coordinates-city.html
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean gpsStatus = false;
         gpsStatus = isGpsOn();
 
         if (isGpsOn()) {
+            Log.i("HomePageActivity", "Gps is on");
             locationListener = new MyLocationListener(context);
 
             //TODO: Ask for permissions before performing this request
@@ -103,12 +104,15 @@ public class HomePageActivity extends AppCompatActivity {
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
                 return;
             } else {
+                Log.i("HomePageActivity", "Requesting location updates");
+                currentLocation = getLastKnownLocation();
+                Log.i("Latitude", String.valueOf(currentLocation.getLatitude()));
+
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
             }
         } else {
             Log.i("HomePageActivity", "GPS is offline");
         }
-
 
         //Stuff for initializing bottom bar for tabbing between fragments
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
@@ -217,6 +221,23 @@ public class HomePageActivity extends AppCompatActivity {
         return gpsStatus;
     }
 
+    private Location getLastKnownLocation() {
+        locationManager = (LocationManager)getApplicationContext().getSystemService(LOCATION_SERVICE);
+        List<String> providers = locationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            Location l = locationManager.getLastKnownLocation(provider);
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                Log.i("HomePageActivity", "Found location!");
+                // Found best last known location: %s", l);
+                bestLocation = l;
+            }
+        }
+        return bestLocation;
+    }
     @Override
     public void onPause(){
         super.onPause();

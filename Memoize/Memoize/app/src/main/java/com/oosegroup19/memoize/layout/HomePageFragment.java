@@ -83,7 +83,7 @@ public class HomePageFragment extends BaseFragment {
 
                     @Override
                     public void onError(ANError anError) {
-                        textView.setText("noo");
+                        textView.setText("Please connect to the internet.");
                         Log.e("tag", anError.getMessage());
                     }
                 });

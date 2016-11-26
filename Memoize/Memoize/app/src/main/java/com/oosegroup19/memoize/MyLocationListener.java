@@ -7,7 +7,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -22,6 +21,11 @@ import java.util.Locale;
 public class MyLocationListener implements LocationListener {
 
     Context context;
+    public static double currLatitude;
+    public static double currLongitude;
+    public static boolean hasLatitude = false;
+
+    private Location currentBestLocation = null;
 
     public MyLocationListener(Context c) {
         this.context = c;
@@ -29,13 +33,15 @@ public class MyLocationListener implements LocationListener {
 
     @Override
     public void onLocationChanged(Location loc) {
-//        editLocation.setText("");
-//        pb.setVisibility(View.INVISIBLE);
         Toast.makeText(context, "Location changed: Lat: " + loc.getLatitude() + " Lng: " + loc.getLongitude(), Toast.LENGTH_SHORT).show();
         String longitude = "Longitude: " + loc.getLongitude();
-        Log.v("MyLocationListener", longitude);
+        Log.i("MyLocationListener", longitude);
         String latitude = "Latitude: " + loc.getLatitude();
-        Log.v("MyLocationListener", latitude);
+        Log.i("MyLocationListener", latitude);
+
+        this.hasLatitude = true;
+        this.currLatitude = loc.getLatitude();
+        this.currLongitude = loc.getLongitude();
 
         /*------- To get city name from coordinates -------- */
         String cityName = null;
@@ -60,8 +66,8 @@ public class MyLocationListener implements LocationListener {
         //Why isn't this line executing?
         String s = longitude + "\n" + latitude + "\n\nMy Current City is: " + cityName;
         Log.v("MyLocationListener", s);
-//        editLocation.setText(s);
     }
+
 
     @Override
     public void onProviderDisabled(String provider) {}

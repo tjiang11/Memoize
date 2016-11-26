@@ -20,6 +20,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.oosegroup19.memoize.activity.HomePageActivity;
 import com.oosegroup19.memoize.layout.BaseFragment;
 
 
@@ -69,6 +70,7 @@ public class DropPinFragment extends BaseFragment {
             e.printStackTrace();
         }
 
+        //Ref: http://stackoverflow.com/questions/19353255/how-to-put-google-maps-v2-on-a-fragment-using-viewpager
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap mMap) {
@@ -94,7 +96,10 @@ public class DropPinFragment extends BaseFragment {
                     googleMap.setMyLocationEnabled(true);
 
                     // For dropping a marker at a point on the Map
-                    LatLng sydney = new LatLng(-34, 151);
+                    double currLat = HomePageActivity.currentLocation.getLatitude();
+                    double currLong = HomePageActivity.currentLocation.getLongitude();
+                    Log.i("DropPinFrag", "Latitude: " + currLat + "Longitude: " + currLong);
+                    LatLng sydney = new LatLng(currLat, currLong);
                     googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
 
                     // For zooming automatically to the location of the marker
