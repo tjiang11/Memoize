@@ -46,8 +46,8 @@ public class HomePageActivity extends AppCompatActivity {
     private LocationListener locationListener = null;
 
     public static int PORT = 8000;
-    //    public static String baseURL = "http://10.0.3.2:" + PORT; //uncomment if you are using emulator
-    public static String baseURL = "http://4a936fd8.ngrok.io"; //uncomment and put your ngrok url here if using ngrok tunneling
+//        public static String baseURL = "http://10.0.3.2:" + PORT; //uncomment if you are using emulator
+    public static String baseURL = "http://9194e27a.ngrok.io"; //uncomment and put your ngrok url here if using ngrok tunneling
     public static Location currentLocation = null;
 
     /*######################## View Elements ########################*/
@@ -71,6 +71,8 @@ public class HomePageActivity extends AppCompatActivity {
         Context context = getApplicationContext();
 
         AndroidNetworking.initialize(context);
+
+        System.setProperty("http.keepAlive", "false");
 
         myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         peditor = myPrefs.edit();
@@ -106,7 +108,7 @@ public class HomePageActivity extends AppCompatActivity {
             } else {
                 Log.i("HomePageActivity", "Requesting location updates");
                 currentLocation = getLastKnownLocation();
-                Log.i("Latitude", String.valueOf(currentLocation.getLatitude()));
+//                Log.i("Latitude", String.valueOf(currentLocation.getLatitude()));
 
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
             }

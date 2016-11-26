@@ -1,6 +1,7 @@
 package com.oosegroup19.memoize.layout;
 
 import android.Manifest;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -38,6 +40,8 @@ public class DropPinFragment extends BaseFragment {
 
     MapView mMapView;
     private GoogleMap googleMap;
+    private double finalLatitude = 0;
+    private double finalLongitude = 0;
 
     public DropPinFragment() {
         // Required empty public constructor
@@ -58,6 +62,22 @@ public class DropPinFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_drop_pin, container, false);
+
+        //button listener
+        Button saveLocationButton = (Button) rootView.findViewById(R.id.save_location_button);
+        saveLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("DropPinFrag", "Final latitude: " + finalLatitude + "Final longitude: " + finalLongitude);
+                LocationBasedNotificationFragment fragment = LocationBasedNotificationFragment.newInstance("hi", finalLatitude, finalLongitude);
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_main, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+
+
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
@@ -95,10 +115,15 @@ public class DropPinFragment extends BaseFragment {
                     googleMap.setMyLocationEnabled(true);
 
                     // For dropping a marker at a point on the Map
-                    double currLat = HomePageActivity.currentLocation.getLatitude();
-                    double currLong = HomePageActivity.currentLocation.getLongitude();
+                    final double currLat = HomePageActivity.currentLocation.getLatitude();
+                    final double currLong = HomePageActivity.currentLocation.getLongitude();
+
+                    finalLatitude = currLat;
+                    finalLongitude = currLong;
+
                     Log.i("DropPinFrag", "Latitude: " + currLat + "Longitude: " + currLong);
                     LatLng initialPosition = new LatLng(currLat, currLong);
+
                     googleMap.addMarker(new MarkerOptions()
                             .position(initialPosition)
                             .title("My Current Location")
@@ -116,6 +141,8 @@ public class DropPinFragment extends BaseFragment {
                         public void onMarkerDragEnd(Marker marker) {
                             Log.i("DropPinFrag", "Dragged lat: " + marker.getPosition().latitude + " Dragged long" +
                                 marker.getPosition().longitude);
+                            finalLatitude = marker.getPosition().latitude;
+                            finalLongitude = marker.getPosition().longitude;
                         }
 
                         @Override
@@ -126,6 +153,7 @@ public class DropPinFragment extends BaseFragment {
 
                     // For zooming automatically to the location of the marker
                     CameraPosition cameraPosition = new CameraPosition.Builder().target(initialPosition).zoom(12).build();
+
                     googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 }
 

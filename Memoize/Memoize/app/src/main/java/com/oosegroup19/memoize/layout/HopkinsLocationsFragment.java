@@ -103,7 +103,6 @@ public class HopkinsLocationsFragment extends BaseFragment {
                 fragmentTransaction.replace(R.id.frame_main, fragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
-                //TODO: Pass the LocationItem back to the parent so that it can be saved via POST request in LocationBasedNotificationFragment
             }
         });
 

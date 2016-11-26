@@ -147,7 +147,7 @@ public class LocationBasedNotificationFragment extends BaseFragment {
                                 @Override
                                 public void onError(ANError anError) {
                                     Log.e("tag", "noooooo");
-                                    Log.e("tag", anError.getMessage());
+                                    Log.e("tag", anError.toString());
                                     makeToast("Your Notification could not be saved to the database. Please try again with " +
                                             "a more secure connection.");
                                 }
