@@ -69,7 +69,7 @@ public class DropPinFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 Log.i("DropPinFrag", "Final latitude: " + finalLatitude + "Final longitude: " + finalLongitude);
-                LocationBasedNotificationFragment fragment = LocationBasedNotificationFragment.newInstance("hi", finalLatitude, finalLongitude);
+                LocationBasedNotificationFragment fragment = LocationBasedNotificationFragment.newInstance("", finalLatitude, finalLongitude);
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame_main, fragment);
                 fragmentTransaction.addToBackStack(null);

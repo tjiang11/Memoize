@@ -241,6 +241,7 @@ public class HomePageActivity extends AppCompatActivity {
         }
         return bestLocation;
     }
+
     @Override
     public void onPause(){
         super.onPause();

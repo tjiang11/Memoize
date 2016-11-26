@@ -94,7 +94,6 @@ public class HopkinsLocationsFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.i("HopkinsLocationFrag", String.valueOf(id));
-//                Log.i("HopkinsLocationFrag", )
                 HopkinsLocationItem value = (HopkinsLocationItem) parent.getItemAtPosition(position);
                 Log.i("HopkinsLocationFrag", value.getLocationName());
 
