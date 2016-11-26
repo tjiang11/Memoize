@@ -1,9 +1,8 @@
-package com.oosegroup19.memoize;
+package com.oosegroup19.memoize.layout;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 
 import android.support.v4.app.ActivityCompat;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,8 +20,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.oosegroup19.memoize.R;
 import com.oosegroup19.memoize.activity.HomePageActivity;
-import com.oosegroup19.memoize.layout.BaseFragment;
 
 
 /**
@@ -44,7 +42,6 @@ public class DropPinFragment extends BaseFragment {
     public DropPinFragment() {
         // Required empty public constructor
     }
-
 
     public static DropPinFragment newInstance(String param1, String param2) {
         DropPinFragment fragment = new DropPinFragment();
@@ -101,25 +98,22 @@ public class DropPinFragment extends BaseFragment {
                     double currLat = HomePageActivity.currentLocation.getLatitude();
                     double currLong = HomePageActivity.currentLocation.getLongitude();
                     Log.i("DropPinFrag", "Latitude: " + currLat + "Longitude: " + currLong);
-                    LatLng sydney = new LatLng(currLat, currLong);
+                    LatLng initialPosition = new LatLng(currLat, currLong);
                     googleMap.addMarker(new MarkerOptions()
-                            .position(sydney)
-                            .title("Marker Title")
-                            .snippet("Marker Description")
+                            .position(initialPosition)
+                            .title("My Current Location")
+                            .snippet("Drag the pin to set the location!")
                             .draggable(true));
 
                     googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
 
                         @Override
                         public void onMarkerDragStart(Marker marker) {
-                            // TODO Auto-generated method stub
-                            // Here your code
                             Log.i("DropPinFrag", "Dragging start");
                         }
 
                         @Override
                         public void onMarkerDragEnd(Marker marker) {
-                            // TODO Auto-generated method stub
                             Log.i("DropPinFrag", "Dragged lat: " + marker.getPosition().latitude + " Dragged long" +
                                 marker.getPosition().longitude);
                         }
@@ -131,9 +125,8 @@ public class DropPinFragment extends BaseFragment {
                     });
 
                     // For zooming automatically to the location of the marker
-                    CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(initialPosition).zoom(12).build();
                     googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
                 }
 
             }

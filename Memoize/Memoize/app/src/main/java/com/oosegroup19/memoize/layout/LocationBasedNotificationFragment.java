@@ -2,7 +2,6 @@ package com.oosegroup19.memoize.layout;
 
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,16 +14,12 @@ import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.oosegroup19.memoize.DropPinFragment;
 import com.oosegroup19.memoize.R;
 import com.oosegroup19.memoize.activity.HomePageActivity;
 import com.oosegroup19.memoize.structures.User;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 
 /**
