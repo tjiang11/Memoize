@@ -21,6 +21,8 @@ import com.oosegroup19.memoize.structures.User;
 
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -117,6 +119,10 @@ public class LocationBasedNotificationFragment extends BaseFragment {
                     makeToast("One or more of your fields has not been filled.");
                 } else {
 
+                    DecimalFormat df = new DecimalFormat("#.########"); //for max 8 digit latitudes/longitudes
+                    System.out.println(df.format(eventLatitude));
+                    System.out.println(df.format(eventLongitude));
+
                     //make api call to create a new event!
                     AndroidNetworking.post(HomePageActivity.baseURL + "/users/1/locationreminders/")
                             .addBodyParameter("name", eventNameField.getText().toString())
@@ -124,8 +130,8 @@ public class LocationBasedNotificationFragment extends BaseFragment {
                             .addBodyParameter("location_descriptor", eventLocationNameField.getText().toString())
                             .addBodyParameter("start_time", eventStartTimeField.getText().toString())
                             .addBodyParameter("end_time", eventEndTimeField.getText().toString())
-                            .addBodyParameter("longitude", String.valueOf(eventLongitude))
-                            .addBodyParameter("latitude", String.valueOf(eventLatitude))
+                            .addBodyParameter("longitude", df.format(eventLongitude))
+                            .addBodyParameter("latitude", df.format(eventLatitude))
                             .build()
                             .getAsJSONObject(new JSONObjectRequestListener() {
                                 @Override

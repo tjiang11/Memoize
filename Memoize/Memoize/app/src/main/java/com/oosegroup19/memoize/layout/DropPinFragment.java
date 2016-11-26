@@ -147,7 +147,7 @@ public class DropPinFragment extends BaseFragment {
 
                         @Override
                         public void onMarkerDrag(Marker marker) {
-                            //System.out.println("Draagging");
+                            //System.out.println("Dragging");
                         }
                     });
 
