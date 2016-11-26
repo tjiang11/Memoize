@@ -221,6 +221,7 @@ public class HomePageActivity extends AppCompatActivity {
         return gpsStatus;
     }
 
+    //from http://stackoverflow.com/questions/20438627/getlastknownlocation-returns-null
     private Location getLastKnownLocation() {
         locationManager = (LocationManager)getApplicationContext().getSystemService(LOCATION_SERVICE);
         List<String> providers = locationManager.getProviders(true);

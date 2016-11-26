@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.oosegroup19.memoize.activity.HomePageActivity;
 import com.oosegroup19.memoize.layout.BaseFragment;
@@ -100,7 +102,33 @@ public class DropPinFragment extends BaseFragment {
                     double currLong = HomePageActivity.currentLocation.getLongitude();
                     Log.i("DropPinFrag", "Latitude: " + currLat + "Longitude: " + currLong);
                     LatLng sydney = new LatLng(currLat, currLong);
-                    googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(sydney)
+                            .title("Marker Title")
+                            .snippet("Marker Description")
+                            .draggable(true));
+
+                    googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+
+                        @Override
+                        public void onMarkerDragStart(Marker marker) {
+                            // TODO Auto-generated method stub
+                            // Here your code
+                            Log.i("DropPinFrag", "Dragging start");
+                        }
+
+                        @Override
+                        public void onMarkerDragEnd(Marker marker) {
+                            // TODO Auto-generated method stub
+                            Log.i("DropPinFrag", "Dragged lat: " + marker.getPosition().latitude + " Dragged long" +
+                                marker.getPosition().longitude);
+                        }
+
+                        @Override
+                        public void onMarkerDrag(Marker marker) {
+                            //System.out.println("Draagging");
+                        }
+                    });
 
                     // For zooming automatically to the location of the marker
                     CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
