@@ -141,14 +141,14 @@ class happy_path_tests(APITestCase):
 		}
 
 		response = self.client.post('/groups/1/events/', data, format='json')
-		self.assertEqual(response.content, '{"name":"This is a test event for group 1","description":"This is a test description","location_descriptor":"This is a test location","start_time":"1996-12-05T06:32:00Z","end_time":"1996-12-05T06:32:00Z","longitude":"1.00000000","latitude":"1.00000000","tags":"test tag","group":1}')
+		self.assertEqual(response.content, '{"name":"This is a test event for group 1","description":"This is a test description","location_descriptor":"This is a test location","start_time":"1996-12-05T06:32:00Z","end_time":"1996-12-05T06:32:00Z","longitude":"1.00000","latitude":"1.00000","tags":"test tag","group":1}')
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 		response = self.client.get('/events/', {}, format='json')
-		self.assertEquals(response.content, '[{"name":"This is a test event for group 1","description":"This is a test description","location_descriptor":"This is a test location","start_time":"1996-12-05T06:32:00Z","end_time":"1996-12-05T06:32:00Z","longitude":"1.00000000","latitude":"1.00000000","tags":"test tag","group":1}]')
+		self.assertEquals(response.content, '[{"name":"This is a test event for group 1","description":"This is a test description","location_descriptor":"This is a test location","start_time":"1996-12-05T06:32:00Z","end_time":"1996-12-05T06:32:00Z","longitude":"1.00000","latitude":"1.00000","tags":"test tag","group":1}]')
 
 		response = self.client.get('/events/1/', {}, format='json')
-		self.assertEquals(response.content, '{"name":"This is a test event for group 1","description":"This is a test description","location_descriptor":"This is a test location","start_time":"1996-12-05T06:32:00Z","end_time":"1996-12-05T06:32:00Z","longitude":"1.00000000","latitude":"1.00000000","tags":"test tag","group":1}')
+		self.assertEquals(response.content, '{"name":"This is a test event for group 1","description":"This is a test description","location_descriptor":"This is a test location","start_time":"1996-12-05T06:32:00Z","end_time":"1996-12-05T06:32:00Z","longitude":"1.00000","latitude":"1.00000","tags":"test tag","group":1}')
 
 
 class unhappy_path_tests(APITestCase):
