@@ -29,7 +29,7 @@ class Reminder(models.Model):
    		name: the name of the reminder.
    	"""
 	name = models.CharField(max_length=255)
-	description = models.CharField(max_length=1000)
+	description = models.CharField(null=True, blank=True, max_length=1000)
 	location_descriptor = models.CharField(max_length=255)
 
 	class Meta:
