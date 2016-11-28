@@ -47,6 +47,11 @@ class happy_path_tests(APITestCase):
 		self.assertEqual(response.content, '[{"name":"make a time reminder","description":"this is a test description","location_descriptor":"TEST","time":"1996-12-05T06:32:00Z"}]')
 		self.assertEqual(response.status_code, 200)
 
+		#test creating reminder without a description
+		data = {"time": "1996-12-05T06:32:00", "name": "this is a reminder with no description", "description": "", "location_descriptor": "TEST"}
+		response = self.client.post('/users/6/timereminders/', data, format='json')
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
 	def test_location_reminder(self):
 		"""Tests successful creation of a location reminder."""
 		response = make_test_user(self)
@@ -60,6 +65,11 @@ class happy_path_tests(APITestCase):
 		response = self.client.get('/users/5/locationreminders/', {}, format = 'json')
 		self.assertEqual(response.content, '[{"name":"make a location reminder","description":"this is a test description","location_descriptor":"test location","start_time":"10:45:00","end_time":"11:45:00","latitude":"1.00000000","longitude":"1.00000000"}]')
 		self.assertEqual(response.status_code, 200)
+
+		#test creating reminder without a description
+		data = {"start_time": "10:45[:0[0]]", "name": "make a location reminder without description", "description": "", "location_descriptor": "test location", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00"}
+		response = self.client.post('/users/5/locationreminders/', data, format='json')
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 	def test_group(self): #will need to be modified when we add authentication!
 		"""Tests successful creation of a group."""
@@ -174,24 +184,8 @@ class unhappy_path_tests(APITestCase):
 		self.assertEquals(response.content, '{"username":["This field may not be blank."]}') #so we may want to change this 
 		self.assertEquals(response.status_code, 400)
 
-	def test_reminders_without_descriptions(self):
-		"""Tests that creating a reminder without a description fails."""
-		response = make_test_user(self)
-		data3 = {"time": "1996-12-05T06:32:00", "name": "buy food", "description": "", "location_descriptor": "Hogwarts school of oose"}
-		response = self.client.post('/users/7/timereminders/', data3, format='json')
-		self.assertEquals(response.content, '{"description":["This field may not be blank."]}')
-		#Now we test to make sure that the reminder really wasn't created
-		response = self.client.get('/users/7/timereminders/', {}, format = 'json')
-		self.assertEquals(response.content, '[]')
 
-		data = {"start_time": "10:45[:0[0]]", "name": "buy food", "description": "", "location_descriptor": "Hogwarts school of oose", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00"}
-		response = self.client.post('/users/7/locationreminders/', data, format='json')
-		self.assertEquals(response.content, '{"description":["This field may not be blank."]}')
-		#Now we test to make sure that the reminder really wasn't created
-		response = self.client.get('/users/7/locationreminders/', {}, format = 'json')
-		self.assertEquals(response.content, '[]')
-
-	def test_z_making_group_without_name_and_description(self):
+	def test_z_making_group_without_name(self):
 		"""Test that making a group without a name or description or both fails."""
 		data = {
 		    "name": "",
@@ -204,16 +198,6 @@ class unhappy_path_tests(APITestCase):
 		self.assertEquals(response.content, '{"name":["This field may not be blank."]}')
 
 		data = {
-		    "name": "now test no description",
-		    "description": "",
-		    "admins": [],
-		    "subscribers": [],
-		    "events": []
-		}
-		response = self.client.post('/groups/', data, format='json')
-		self.assertEquals(response.content, '{"description":["This field may not be blank."]}')
-
-		data = {
 		    "name": "",
 		    "description": "",
 		    "admins": [],
@@ -221,21 +205,21 @@ class unhappy_path_tests(APITestCase):
 		    "events": []
 		}
 		response = self.client.post('/groups/', data, format='json')
-		self.assertEquals(response.content, '{"name":["This field may not be blank."],"description":["This field may not be blank."]}')
+		self.assertEquals(response.content, '{"name":["This field may not be blank."]}')
 
 	def test_z_reminders_without_time(self):
 		"""Test that making a time reminder without a time fails."""
 		response = make_test_user(self)
 		data = {"time": "", "name": "test without time", "description": "we are testing", "location_descriptor": "Hogwarts school of oose"}
-		response = self.client.post('/users/8/timereminders/', data, format='json')
+		response = self.client.post('/users/7/timereminders/', data, format='json')
 		self.assertEquals(response.content, '{"time":["Datetime has wrong format. Use one of these formats instead: YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z]."]}')\
 
 		data = {"start_time": "", "name": "test without start time", "description": "we are testing", "location_descriptor": "Hogwarts school of oose", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00"}
-		response = self.client.post('/users/8/locationreminders/', data, format='json')
+		response = self.client.post('/users/7/locationreminders/', data, format='json')
 		self.assertEquals(response.content, '{"start_time":["Time has wrong format. Use one of these formats instead: hh:mm[:ss[.uuuuuu]]."]}')
 
 		data = {"start_time": "11:45[:0[0]]", "name": "test without start time", "description": "we are testing", "location_descriptor": "Hogwarts school of oose", "end_time": "", "latitude": "1.00", "longitude": "1.00"}
-		response = self.client.post('/users/8/locationreminders/', data, format='json')
+		response = self.client.post('/users/7/locationreminders/', data, format='json')
 		self.assertEquals(response.content, '{"end_time":["Time has wrong format. Use one of these formats instead: hh:mm[:ss[.uuuuuu]]."]}')
 
 
