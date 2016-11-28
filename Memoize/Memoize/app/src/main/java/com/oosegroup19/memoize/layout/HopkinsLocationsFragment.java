@@ -113,14 +113,14 @@ public class HopkinsLocationsFragment extends BaseFragment {
         HopkinsLocationItem item2 = new HopkinsLocationItem("AMR II", "amr2", 39.331494, -76.619162);
         HopkinsLocationItem item3 = new HopkinsLocationItem("Barnes and Noble", "barnesandnoble", 39.32831472, -76.61625963);
         HopkinsLocationItem item4 = new HopkinsLocationItem("Brody Learning Commons", "brody", 39.32842042, -76.61933525);
-        HopkinsLocationItem item5 = new HopkinsLocationItem("Charles Commons", "commons", 400, 400);
-        HopkinsLocationItem item6 = new HopkinsLocationItem("Gilman Hall", "gilman", 300, 250);
-        HopkinsLocationItem item7 = new HopkinsLocationItem("Hackerman Hall", "hackerman", 300, 250);
-        HopkinsLocationItem item8 = new HopkinsLocationItem("Interfaith Center", "interfaithcenter", 400, 400);
-        HopkinsLocationItem item9 = new HopkinsLocationItem("Malone Hall", "malone", 300, 250);
-        HopkinsLocationItem item10 = new HopkinsLocationItem("Hackerman Hall", "mattin", 300, 250);
-        HopkinsLocationItem item11 = new HopkinsLocationItem("Milton S. Eisenhower Library", "mse", 300, 250);
-        HopkinsLocationItem item12 = new HopkinsLocationItem("Shaffer Hall", "shaffer", 300, 250);
+        HopkinsLocationItem item5 = new HopkinsLocationItem("Charles Commons", "commons", 39.32857821, -76.61646080);
+        HopkinsLocationItem item6 = new HopkinsLocationItem("Gilman Hall", "gilman", 39.32897241, -76.62163210);
+        HopkinsLocationItem item7 = new HopkinsLocationItem("Hackerman Hall", "hackerman", 39.32681050, -76.62097227);
+        HopkinsLocationItem item8 = new HopkinsLocationItem("Interfaith Center", "interfaithcenter", 39.33180231, -76.617327150);
+        HopkinsLocationItem item9 = new HopkinsLocationItem("Malone Hall", "malone", 39.32620673, -76.62084889);
+        HopkinsLocationItem item10 = new HopkinsLocationItem("Mattin", "mattin", 39.32789406, -76.61815595);
+        HopkinsLocationItem item11 = new HopkinsLocationItem("Milton S. Eisenhower Library", "mse", 39.32905592, -76.61942732);
+        HopkinsLocationItem item12 = new HopkinsLocationItem("Shaffer Hall", "shaffer", 39.32718033, -76.61989939);
 
         aa.add(item1);
         aa.add(item2);
