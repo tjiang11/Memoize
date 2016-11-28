@@ -111,8 +111,8 @@ public class HopkinsLocationsFragment extends BaseFragment {
         //TODO: Actually put in the correct GPS coordinates
         HopkinsLocationItem item1 = new HopkinsLocationItem("AMR I", "amr1", 39.330690, -76.618441);
         HopkinsLocationItem item2 = new HopkinsLocationItem("AMR II", "amr2", 39.331494, -76.619162);
-        HopkinsLocationItem item3 = new HopkinsLocationItem("Barnes and Noble", "barnesandnoble", 600, 700);
-        HopkinsLocationItem item4 = new HopkinsLocationItem("Brody Learning Commons", "brody", 100, 400);
+        HopkinsLocationItem item3 = new HopkinsLocationItem("Barnes and Noble", "barnesandnoble", 39.32831472, -76.61625963);
+        HopkinsLocationItem item4 = new HopkinsLocationItem("Brody Learning Commons", "brody", 39.32842042, -76.61933525);
         HopkinsLocationItem item5 = new HopkinsLocationItem("Charles Commons", "commons", 400, 400);
         HopkinsLocationItem item6 = new HopkinsLocationItem("Gilman Hall", "gilman", 300, 250);
         HopkinsLocationItem item7 = new HopkinsLocationItem("Hackerman Hall", "hackerman", 300, 250);
