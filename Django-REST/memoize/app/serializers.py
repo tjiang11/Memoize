@@ -52,12 +52,14 @@ class IDSerializer(serializers.Serializer):
 class TimeReminderSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimeReminder
-        fields = ('name', 'description', 'location_descriptor', 'time')
+        fields = ('name', 'description', 'location_descriptor', 'time', 'id')
+        read_only_fields = ('id', )
 
 class LocationReminderSerializer(serializers.ModelSerializer):
     class Meta:
         model = LocationReminder
-        fields = ('name', 'description', 'location_descriptor', 'start_time', 'end_time', 'latitude', 'longitude')
+        fields = ('name', 'description', 'location_descriptor', 'start_time', 'end_time', 'latitude', 'longitude', 'id')
+        read_only_fields = ('id', )
 # class EventSerializer(serializers.Serializer):
 # 	name = serializers.CharField(required=True, allow_blank=False, max_length=255)
 # 	start_time = serializers.DateTimeField()
