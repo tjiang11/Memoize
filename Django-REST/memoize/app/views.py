@@ -196,6 +196,28 @@ class UserTimeReminders(views.APIView):
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
+class UserTimeRemindersDetail(views.APIView):
+    def get_user(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+
+    def get_reminder(self, pk):
+        try:
+            return TimeReminder.objects.get(pk=pk)
+        except TimeReminder.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, pk, pk_reminder, format=None):
+        #user = self.get_user(pk=pk)
+        reminder = self.get_reminder(pk=pk_reminder)
+        serializer = TimeReminderSerializer(reminder, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class UserLocationReminders(views.APIView):
     def get_user(self, pk):
         try:
