@@ -39,12 +39,12 @@ class happy_path_tests(APITestCase):
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 		data3 = {"time": "1996-12-05T06:32:00", "name": "make a time reminder", "description": "this is a test description", "location_descriptor": "TEST"}
 		response = self.client.post('/users/6/timereminders/', data3, format='json')
-		self.assertEquals(response.content, '{"name":"make a time reminder","description":"this is a test description","location_descriptor":"TEST","time":"1996-12-05T06:32:00Z"}')
+		self.assertEquals(response.content, '{"name":"make a time reminder","description":"this is a test description","location_descriptor":"TEST","time":"1996-12-05T06:32:00Z","id":1}')
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 		
 		#test if actually stored
 		response = self.client.get('/users/6/timereminders/', {}, format = 'json')
-		self.assertEqual(response.content, '[{"name":"make a time reminder","description":"this is a test description","location_descriptor":"TEST","time":"1996-12-05T06:32:00Z"}]')
+		self.assertEqual(response.content, '[{"name":"make a time reminder","description":"this is a test description","location_descriptor":"TEST","time":"1996-12-05T06:32:00Z","id":1}]')
 		self.assertEqual(response.status_code, 200)
 
 		#test creating reminder without a description
@@ -58,12 +58,12 @@ class happy_path_tests(APITestCase):
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 		data = {"start_time": "10:45[:0[0]]", "name": "make a location reminder", "description": "this is a test description", "location_descriptor": "test location", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00"}
 		response = self.client.post('/users/5/locationreminders/', data, format='json')
-		self.assertEqual(response.content, '{"name":"make a location reminder","description":"this is a test description","location_descriptor":"test location","start_time":"10:45:00","end_time":"11:45:00","latitude":"1.00000000","longitude":"1.00000000"}')
+		self.assertEqual(response.content, '{"name":"make a location reminder","description":"this is a test description","location_descriptor":"test location","start_time":"10:45:00","end_time":"11:45:00","latitude":"1.00000000","longitude":"1.00000000","id":1}')
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED) 
 
 		#test if actually stored
 		response = self.client.get('/users/5/locationreminders/', {}, format = 'json')
-		self.assertEqual(response.content, '[{"name":"make a location reminder","description":"this is a test description","location_descriptor":"test location","start_time":"10:45:00","end_time":"11:45:00","latitude":"1.00000000","longitude":"1.00000000"}]')
+		self.assertEqual(response.content, '[{"name":"make a location reminder","description":"this is a test description","location_descriptor":"test location","start_time":"10:45:00","end_time":"11:45:00","latitude":"1.00000000","longitude":"1.00000000","id":1}]')
 		self.assertEqual(response.status_code, 200)
 
 		#test creating reminder without a description
