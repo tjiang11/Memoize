@@ -47,7 +47,7 @@ public class HomePageActivity extends AppCompatActivity {
 
     public static int PORT = 8000;
 //        public static String baseURL = "http://10.0.3.2:" + PORT; //uncomment if you are using emulator
-    public static String baseURL = "http://9194e27a.ngrok.io"; //uncomment and put your ngrok url here if using ngrok tunneling
+    public static String baseURL = "http://3de2c359.ngrok.io"; //uncomment and put your ngrok url here if using ngrok tunneling
     public static Location currentLocation = null;
 
     /*######################## View Elements ########################*/
@@ -78,7 +78,7 @@ public class HomePageActivity extends AppCompatActivity {
         peditor = myPrefs.edit();
 
 
-        //Get current GPS location
+        // Get current GPS location
         // http://rdcworld-android.blogspot.in/2012/01/get-current-location-coordinates-city.html
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean gpsStatus = false;
