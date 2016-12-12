@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter email"
-        android:id="@+id/editText"
+        android:id="@+id/enterEmail"
         android:paddingTop="30dp" />
 
     <EditText
@@ -37,7 +37,7 @@
         android:hint="Enter password"
         android:inputType="textPassword"
         android:ems="10"
-        android:id="@+id/editText2" />
+        android:id="@+id/enterPassword" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -49,12 +49,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Login"
-            android:id="@+id/button" />
+            android:id="@+id/loginButton" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Account"
-            android:id="@+id/button2" />
+            android:id="@+id/newAccountButton" />
     </LinearLayout>
 </LinearLayout>
