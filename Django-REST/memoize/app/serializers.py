@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from models import Event, MemGroup, TimeReminder, LocationReminder
+from models import Event, MemGroup, TimeReminder, LocationReminder, LastResortReminder
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -59,6 +59,12 @@ class LocationReminderSerializer(serializers.ModelSerializer):
     class Meta:
         model = LocationReminder
         fields = ('name', 'description', 'location_descriptor', 'start_time', 'end_time', 'latitude', 'longitude', 'id')
+        read_only_fields = ('id', )
+
+class LastResortReminderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LastResortReminder
+        fields = ('name', 'description', 'location_descriptor', 'time', 'latitude', 'longitude', 'id')
         read_only_fields = ('id', )
 # class EventSerializer(serializers.Serializer):
 # 	name = serializers.CharField(required=True, allow_blank=False, max_length=255)

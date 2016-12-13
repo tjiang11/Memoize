@@ -66,3 +66,12 @@ class TimeReminder(Reminder):
 		related_name='time_reminders',
 		on_delete=models.CASCADE,
 		default=1)
+
+class LastResortReminder(Reminder):
+    time = models.DateTimeField(null=False)
+    latitude = models.DecimalField(max_digits=11, decimal_places=8)
+    longitude = models.DecimalField(max_digits=11, decimal_places=8)
+    user = models.ForeignKey(User,
+        related_name='last_resort_reminders',
+        on_delete=models.CASCADE,
+        default=1)

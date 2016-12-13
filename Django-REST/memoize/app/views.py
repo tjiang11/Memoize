@@ -3,10 +3,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from rest_framework import viewsets, views, status, generics, permissions
 from rest_framework.response import Response
-from memoize.app.models import Event, MemGroup, TimeReminder
-from memoize.app.serializers import UserSerializer, UserUpdateSerializer, MemGroupSerializer, EventSerializer, IDSerializer, TimeReminderSerializer, LocationReminderSerializer
+from memoize.app.models import Event, MemGroup, TimeReminder, LastResortReminder
+from memoize.app.serializers import UserSerializer, UserUpdateSerializer, MemGroupSerializer, EventSerializer, IDSerializer, TimeReminderSerializer, LocationReminderSerializer, LastResortReminderSerializer
 from memoize.app.permissions import IsOwnerOrReadOnlyEvent, IsOwnerOrReadOnlyGroup, IsOwnerOrReadOnlyUser
-
+from math import radians, cos, sin, asin, sqrt
+import datetime
+from datetime import timedelta
 
 # class UserViewSet(viewsets.ModelViewSet):
 #     """
@@ -227,8 +229,30 @@ class UserLocationReminders(views.APIView):
 
     def get(self, request, pk, format=None):
         user = self.get_user(pk=pk)
+        
+        if 'longitude' in request.GET and 'latitude' in request.GET:
+            #print request.GET['longitude']
+            #print request.GET['latitude']
+
+            current_lon = float(request.GET['longitude'])
+            current_lat = float(request.GET['latitude'])
+
+        #print current_lat
+        #print current_lon
+
         serializer = LocationReminderSerializer(user.location_reminders, many=True)
-        return Response(serializer.data)
+        length = len(serializer.data)
+        nearby = []
+        for i in range(length):
+            lat = float(serializer.data[i]['latitude'])
+            lon = float(serializer.data[i]['longitude'])
+
+            distance_in_meters = calcDistance(current_lat, current_lon, lat, lon)
+            print distance_in_meters
+            if distance_in_meters < 100.0:
+                nearby.append(serializer.data[i])
+
+        return Response(nearby)
 
     def post(self, request, pk, format=None):
         serializer = LocationReminderSerializer(data=request.data)
@@ -238,3 +262,85 @@ class UserLocationReminders(views.APIView):
             user.location_reminders.add(lr)
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+class UserLastResortReminders(views.APIView):
+    serializer_class = LastResortReminderSerializer
+    def get_user(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        user = self.get_user(pk=pk)
+        
+
+
+        if 'longitude' in request.GET and 'latitude' in request.GET:
+            #print request.GET['longitude']
+            #print request.GET['latitude']
+
+            current_lon = float(request.GET['longitude'])
+            current_lat = float(request.GET['latitude'])
+
+        else:
+            serializer = LastResortReminderSerializer(user.last_resort_reminders, many=True)
+            return Response(serializer.data)
+        #print current_lat
+        #print current_lon
+
+        serializer = LastResortReminderSerializer(user.last_resort_reminders, many=True)
+        length = len(serializer.data)
+        nearby = []
+        for i in range(length):
+            lat = float(serializer.data[i]['latitude'])
+            lon = float(serializer.data[i]['longitude'])
+            time = serializer.data[i]['time']
+
+            distance_in_meters = calcDistance(current_lat, current_lon, lat, lon)
+            event_time = datetime.datetime.strptime(time, "%Y-%m-%dT%H:%M:00Z")
+            #print event_time
+            current_time = datetime.datetime.now()
+            tdelta =  event_time - current_time
+            zero_tdelta = timedelta(days=0, seconds=0, microseconds=0)
+            print distance_in_meters
+            print tdelta
+
+            if distance_in_meters < 800:
+                expected_time_to_event = 10
+                expected_time_to_event += distance_in_meters * (1.0 / 80.0)
+            elif distance_in_meters < 32186.9:
+                expected_time_to_event = 10
+                expected_time_to_event += (distance_in_meters / 1609.34) * 4
+            else:
+                expected_time_to_event = 10
+                expected_time_to_event += (distance_in_meters / 1609.34) * 2
+
+            if tdelta.total_seconds() < expected_time_to_event * 60 and tdelta > zero_tdelta:
+                nearby.append(serializer.data[i])
+
+        return Response(nearby)
+
+    def post(self, request, pk, format=None):
+        serializer = LastResortReminderSerializer(data=request.data)
+        if (serializer.is_valid()):
+            user = self.get_user(pk=pk)
+            lr = serializer.save()
+            user.last_resort_reminders.add(lr)
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+def calcDistance(lat1, lon1, lat2, lon2):
+    """
+    Calculate the great circle distance between two points 
+    on the earth (specified in decimal degrees)
+    """
+    # convert decimal degrees to radians 
+    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+    # haversine formula 
+    dlon = lon2 - lon1 
+    dlat = lat2 - lat1 
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    c = 2 * asin(sqrt(a)) 
+    km = 6367 * c
+    return km * 1000
