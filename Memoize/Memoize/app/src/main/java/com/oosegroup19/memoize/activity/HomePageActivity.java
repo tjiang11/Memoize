@@ -29,6 +29,7 @@ import com.oosegroup19.memoize.layout.HomePageFragment;
 import com.oosegroup19.memoize.layout.NewNotificationFragment;
 import com.oosegroup19.memoize.layout.ReminderLogFragment;
 
+import java.security.acl.Group;
 import java.util.List;
 
 public class HomePageActivity extends AppCompatActivity {
@@ -46,7 +47,7 @@ public class HomePageActivity extends AppCompatActivity {
     private LocationManager locationManager = null;
     private LocationListener locationListener = null;
 
-    public static int PORT = 8000;
+    public static int PORT = 8001;
 
     public static String baseURL = "http://10.0.2.2:" + PORT; //uncomment if you are using emulator, use 10.0.3.2 for genymotion, 10.0.2.2 if not
 //    public static String baseURL = "http://9194e27a.ngrok.io"; //uncomment and put your ngrok url here if using ngrok tunneling
@@ -196,7 +197,11 @@ public class HomePageActivity extends AppCompatActivity {
             baseFragment = HomePageFragment.newInstance(user);
         } else if(currentFragment.equals(NewNotificationFragment.FRAGMENTNAME)){
             baseFragment = NewNotificationFragment.newInstance(user);
-        } /*else if(currentFragment.equals(NotificationsFragment.FRAGMENTNAME)){
+        } else if(currentFragment.equals(GroupFragment.FRAGMENTNAME)) {
+            baseFragment = GroupFragment.newInstance(user);
+        }
+
+        /*else if(currentFragment.equals(NotificationsFragment.FRAGMENTNAME)){
             baseFragment = NotificationsFragment.newInstance(user);
         } else if(currentFragment.equals(SettingsFragment.FRAGMENTNAME)){
             baseFragment = SettingsFragment.newInstance(user);

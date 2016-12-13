@@ -76,7 +76,26 @@ public class LoginActivity extends AppCompatActivity {
         newAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AndroidNetworking.post(HomePageActivity.baseURL + "/users/")
+                        .addBodyParameter("username", emailField.getText().toString())
+                        .addBodyParameter("password", passwordField.getText().toString())
+                        .build()
+                        .getAsJSONObject(new JSONObjectRequestListener() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                makeToast("You have successfully made an account!");
+                                Log.i("tag", "Success: create account");
+                                Log.i("tag", response.toString());
+                                movetoMain();
+                            }
 
+                            @Override
+                            public void onError(ANError anError) {
+                                Log.e("tag", "noooooo");
+                                Log.e("tag", anError.toString());
+                                makeToast("Error creating account.");
+                            }
+                        });
 
             }
         });
