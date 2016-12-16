@@ -8,8 +8,14 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.StringRequestListener;
+import com.google.gson.Gson;
 import com.oosegroup19.memoize.R;
 import com.oosegroup19.memoize.activity.HomePageActivity;
+import com.oosegroup19.memoize.structures.LocationReminderItem;
+import com.oosegroup19.memoize.structures.ReminderItemAdapter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Random;
 
 /**
  * This {@code IntentService} does the app's actual work.
@@ -45,35 +52,61 @@ public class SampleSchedulingService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        // BEGIN_INCLUDE(service_onhandle)
-        // The URL from which to fetch content.
-        String urlString = URL;
-    
-        String result ="";
-        
-        // Try to connect to the Google homepage and download content.
-        try {
-            result = loadFromNetwork(urlString);
-        } catch (IOException e) {
-            Log.i(TAG, getString(R.string.connection_error));
-        }
-    
-        // If the app finds the string "doodle" in the Google home page content, it
-        // indicates the presence of a doodle. Post a "Doodle Alert" notification.
-        if (result.indexOf(SEARCH_STRING) != -1) {
-            sendNotification("found!");
-            Log.i(TAG, "Found doodle!!");
-        } else {
-            sendNotification("not found!");
-            Log.i(TAG, "No doodle found. :-(");
-        }
-        // Release the wake lock provided by the BroadcastReceiver.
+//        // BEGIN_INCLUDE(service_onhandle)
+//        // The URL from which to fetch content.
+//        String urlString = URL;
+//
+//        String result ="";
+//
+//        // Try to connect to the Google homepage and download content.
+//        try {
+//            result = loadFromNetwork(urlString);
+//        } catch (IOException e) {
+//            Log.i(TAG, getString(R.string.connection_error));
+//        }
+//
+//        // If the app finds the string "doodle" in the Google home page content, it
+//        // indicates the presence of a doodle. Post a "Doodle Alert" notification.
+//        if (result.indexOf(SEARCH_STRING) != -1) {
+//            sendNotification("found!");
+//            Log.i(TAG, "Found doodle!!");
+//        } else {
+//            sendNotification("Not found!");
+//            Log.i(TAG, "No doodle found. :-(");
+//        }
+//        // Release the wake lock provided by the BroadcastReceiver.
+//        SampleAlarmReceiver.completeWakefulIntent(intent);
+//        // END_INCLUDE(service_onhandle)
+//
+
+        AndroidNetworking.get(HomePageActivity.baseURL + "/users/1/locationreminders/")
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        Gson gson = new Gson();
+                        LocationReminderItem[] myReminderItems = gson.fromJson(response, LocationReminderItem[].class);
+
+                        for (LocationReminderItem reminderItem : myReminderItems) {
+                            Log.i("ReminderLogFrag", reminderItem.toString());
+                            sendNotification(reminderItem.getName());
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e("tag", "noooooo");
+                        Log.e("tag", "" + anError.getErrorBody());
+                    }
+                });
+
         SampleAlarmReceiver.completeWakefulIntent(intent);
-        // END_INCLUDE(service_onhandle)
     }
     
     // Post a notification indicating whether a doodle was found.
     private void sendNotification(String msg) {
+        Random r = new Random();
+
         mNotificationManager = (NotificationManager)
                this.getSystemService(Context.NOTIFICATION_SERVICE);
     
@@ -83,13 +116,13 @@ public class SampleSchedulingService extends IntentService {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
         .setSmallIcon(R.drawable.ic_launcher)
-        .setContentTitle("GO GET UR TUPPERWARE")
+        .setContentTitle(msg)
         .setStyle(new NotificationCompat.BigTextStyle()
         .bigText(msg))
         .setContentText(msg);
 
         mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        mNotificationManager.notify(r.nextInt(), mBuilder.build());
     }
  
 //

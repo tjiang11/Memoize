@@ -237,6 +237,10 @@ class UserLocationReminders(views.APIView):
             current_lon = float(request.GET['longitude'])
             current_lat = float(request.GET['latitude'])
 
+        else:
+            serializer = LastResortReminderSerializer(user.last_resort_reminders, many=True)
+            return Response(serializer.data)
+
         #print current_lat
         #print current_lon
 
