@@ -7,7 +7,8 @@
     android:paddingRight="5dp"
     android:paddingTop="5dp"
     android:orientation="vertical"
-    tools:context=".layout.LocationBasedNotificationFragment">
+    tools:context=".layout.LocationBasedNotificationFragment"
+    android:layout_weight="1">
 
     <TextView
         android:layout_width="match_parent"
@@ -24,20 +25,31 @@
         android:layout_gravity="center_horizontal" />
 
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Drop Pin"
-        android:id="@+id/drop_pin_button"
-        android:layout_gravity="center_horizontal" />
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="match_parent"
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Choose from Hopkins Locations"
-        android:id="@+id/choose_hopkins_loc_button" />
+        android:layout_gravity="center_horizontal">
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="180dp"
+            android:text="Drop Pin"
+            android:id="@+id/drop_pin_button"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="40dp" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="180dp"
+            android:text="Hopkins Locations"
+            android:id="@+id/choose_hopkins_loc_button"
+            android:layout_height="40dp" />
+    </LinearLayout>
+
+
 
     <TextView
         android:layout_width="match_parent"
