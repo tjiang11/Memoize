@@ -23,6 +23,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.oosegroup19.memoize.MyLocationListener;
 import com.oosegroup19.memoize.R;
 import com.oosegroup19.memoize.layout.GroupFragment;
+import com.oosegroup19.memoize.scheduler.SampleAlarmReceiver;
 import com.oosegroup19.memoize.structures.User;
 import com.oosegroup19.memoize.layout.BaseFragment;
 import com.oosegroup19.memoize.layout.HomePageFragment;
@@ -33,6 +34,7 @@ import java.security.acl.Group;
 import java.util.List;
 
 public class HomePageActivity extends AppCompatActivity {
+    SampleAlarmReceiver alarm = new SampleAlarmReceiver();
 
     /*######################## Data Variables ########################*/
     private final String CURRENTFRAGMENT = "currentFragment";
@@ -61,6 +63,7 @@ public class HomePageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        alarm.setAlarm(this);
         setContentView(R.layout.activity_home_page);
 
         //Disables landscape mode
