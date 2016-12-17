@@ -17,4 +17,5 @@ urlpatterns = [
 	url(r'^groups/(?P<pk>[0-9]+)/$', views.GroupDetail.as_view()),
 	url(r'^groups/(?P<pk>[0-9]+)/events/$', views.GroupEvents.as_view()),
 	url(r'^api-token-auth/', authtoken_views.obtain_auth_token),
+	url(r'^api-token-auth-id/', views.CustomObtainAuthToken.as_view()),
 ]

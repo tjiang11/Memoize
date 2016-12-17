@@ -2,6 +2,7 @@ package com.oosegroup19.memoize.layout;
 
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,6 +33,8 @@ import org.json.JSONArray;
 import java.io.FileReader;
 import java.util.ArrayList;
 
+import static com.oosegroup19.memoize.activity.HomePageActivity.PREFS_NAME;
+
 /**
  * Created by smsukardi on 11/12/16.
  */
@@ -44,7 +47,7 @@ public class ReminderLogFragment extends BaseFragment {
     protected static ArrayList<ReminderItem> reminderItems;
     protected static ReminderItemAdapter aa;
 
-    private Context context;
+    private static Context context;
     private static Cursor curse;
     //protected static ListDatabaseAdapter dbAdapt;
 
@@ -53,6 +56,7 @@ public class ReminderLogFragment extends BaseFragment {
 
     public static ReminderLogFragment newInstance(User user) {
         ReminderLogFragment fragment = new ReminderLogFragment();
+        context = HomePageActivity.getContext();
         // owner = user;
         return fragment;
     }
@@ -165,9 +169,10 @@ public class ReminderLogFragment extends BaseFragment {
         */
 
         Log.i("ReminderLogFrag", "attempting networking request...");
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
 
         //now, listview is bound to user's array data
-        AndroidNetworking.get(HomePageActivity.baseURL + "/users/1/locationreminders/")
+        AndroidNetworking.get(HomePageActivity.baseURL + "/users/" + settings.getString("user_id", "0") + "/locationreminders/")
                 .build()
                 .getAsString(new StringRequestListener() {
                     @Override

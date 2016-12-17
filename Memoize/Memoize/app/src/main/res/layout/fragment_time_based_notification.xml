@@ -58,22 +58,55 @@
         android:paddingRight="5dp"
         android:layout_gravity="center_horizontal" />
 
-    <EditText
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="date"
-        android:ems="10"
-        android:id="@+id/event_day_timebased"
-        android:layout_gravity="center_horizontal"
-        android:hint="Day" />
+        android:layout_gravity="center_horizontal">
 
-    <EditText
-        android:layout_width="match_parent"
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="180dp"
+            android:text="Choose Date"
+            android:id="@+id/choose_date_button"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="40dp" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="180dp"
+            android:text="Choose Time"
+            android:id="@+id/choose_time_button"
+            android:layout_height="40dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="time"
-        android:ems="10"
-        android:id="@+id/event_time_timebased"
-        android:hint="Time" />
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:inputType="textPersonName"
+            android:text="Date: Not Chosen"
+            android:ems="10"
+            android:id="@+id/dateText"
+            android:textSize="9sp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:inputType="textPersonName"
+            android:text="Time: Not Chosen"
+            android:ems="10"
+            android:id="@+id/timeText"
+            android:textSize="9sp"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
 
     <Button
         android:layout_marginTop="15dp"

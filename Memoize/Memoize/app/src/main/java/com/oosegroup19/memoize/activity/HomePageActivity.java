@@ -36,6 +36,7 @@ import java.util.List;
 public class HomePageActivity extends AppCompatActivity {
     SampleAlarmReceiver alarm = new SampleAlarmReceiver();
 
+    private static Context context;
     /*######################## Data Variables ########################*/
     private final String CURRENTFRAGMENT = "currentFragment";
     private User user;
@@ -75,7 +76,7 @@ public class HomePageActivity extends AppCompatActivity {
         //remove app title from home page
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        Context context = getApplicationContext();
+        context = getApplicationContext();
 
         AndroidNetworking.initialize(context);
 
@@ -279,5 +280,9 @@ public class HomePageActivity extends AppCompatActivity {
                 fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
             }
         }
+    }
+
+    public static Context getContext() {
+        return context;
     }
 }
