@@ -8,6 +8,8 @@ from memoize.app.models import Event, MemGroup, TimeReminder, LastResortReminder
 from memoize.app.serializers import UserSerializer, UserUpdateSerializer, MemGroupSerializer, EventSerializer, IDSerializer, TimeReminderSerializer, LocationReminderSerializer, LastResortReminderSerializer
 from memoize.app.permissions import IsOwnerOrReadOnlyEvent, IsOwnerOrReadOnlyGroup, IsOwnerOrReadOnlyUser
 from math import radians, cos, sin, asin, sqrt
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
 import datetime
 from datetime import timedelta
 
@@ -353,3 +355,10 @@ def calcDistance(lat1, lon1, lat2, lon2):
     c = 2 * asin(sqrt(a)) 
     km = 6367 * c
     return km * 1000
+
+
+class CustomObtainAuthToken(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        response = super(CustomObtainAuthToken, self).post(request, *args, **kwargs)
+        token = Token.objects.get(key=response.data['token'])
+        return Response({'token': token.key, 'id': token.user_id})
