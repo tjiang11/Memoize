@@ -1,6 +1,7 @@
 package com.oosegroup19.memoize.layout;
 
 import android.app.FragmentTransaction;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -20,8 +22,10 @@ import com.oosegroup19.memoize.activity.HomePageActivity;
 import com.oosegroup19.memoize.structures.User;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
 
 
 /**
@@ -39,6 +43,37 @@ public class LocationBasedNotificationFragment extends BaseFragment {
     private static double eventLatitude = -1;
     private static double eventLongitude = -1;
     private static String locationName = "";
+
+    private int startHour = -1;
+    private int startMinute = -1;
+
+    private int endHour = -1;
+    private int endMinute = -1;
+
+    private TextView currStartTimeTextField;
+    private TextView currEndTimeTextField;
+
+    Calendar calendar = Calendar.getInstance();
+
+    TimePickerDialog.OnTimeSetListener onTimeSetListenerBegin = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            startHour = hourOfDay;
+            startMinute = minute;
+
+            currStartTimeTextField.setText("Start Hour: " + startHour + ":" + (startMinute < 10 ? "0" + startMinute : startMinute));
+        }
+    };
+
+    TimePickerDialog.OnTimeSetListener onTimeSetListenerEnd = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            endHour = hourOfDay;
+            endMinute = minute;
+
+            currEndTimeTextField.setText("End Hour: " + endHour + ":" + (endMinute < 10 ? "0" + endMinute: endMinute));
+        }
+    };
 
     public String getFragmentName(){
         return this.fragmentName;
@@ -69,6 +104,7 @@ public class LocationBasedNotificationFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -76,16 +112,19 @@ public class LocationBasedNotificationFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_location_based_notification, container, false);
 
         final Button chooseHopkinsLocationsButton = (Button) view.findViewById(R.id.choose_hopkins_loc_button);
-        Button dropPinButton = (Button) view.findViewById(R.id.drop_pin_button);
-        Button saveButton = (Button) view.findViewById(R.id.save_button_location_based_notif);
+        final Button dropPinButton = (Button) view.findViewById(R.id.drop_pin_button);
+        final Button saveButton = (Button) view.findViewById(R.id.save_button_location_based_notif);
+
+        final Button chooseStartTimeButton = (Button) view.findViewById(R.id.choose_start_time_button);
+        final Button chooseEndTimeButton = (Button) view.findViewById(R.id.choose_end_time_button);
 
         final TextView eventNameField = (TextView) view.findViewById(R.id.event_name_locationbased);
         final TextView eventLocationNameField = (TextView) view.findViewById(R.id.event_location_locationbased);
         final TextView eventDescriptionField = (TextView) view.findViewById(R.id.event_description_locationbased);
-        final TextView eventStartTimeField = (TextView) view.findViewById(R.id.start_time_box_location);
-        final TextView eventEndTimeField = (TextView) view.findViewById(R.id.end_time_box_location);
-
         final TextView currLatLongField = (TextView) view.findViewById(R.id.currLocationTextView);
+
+        currStartTimeTextField = (TextView) view.findViewById(R.id.startTimeText);
+        currEndTimeTextField = (TextView) view.findViewById(R.id.endTimeText);
 
         eventLocationNameField.setText(locationName);
         currLatLongField.setText(eventLatitude == -1 ? "No Location Selected" : "Latitude: " + eventLatitude + " " + " Longitude: " + eventLongitude);
@@ -113,26 +152,43 @@ public class LocationBasedNotificationFragment extends BaseFragment {
             }
         });
 
+        chooseStartTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new TimePickerDialog(getActivity(), onTimeSetListenerBegin, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+            }
+        });
+
+        chooseEndTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new TimePickerDialog(getActivity(), onTimeSetListenerEnd, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+            }
+        });
+
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (eventNameField.getText().toString().equals("") || eventLocationNameField.getText().toString().equals("")
-                        || eventStartTimeField.getText().equals("") || eventEndTimeField.getText().equals("")
+                        || startHour == -1 || endHour == -1 || startMinute == -1 || endMinute == -1
                         || eventLatitude == -1 || eventLongitude == -1) {
                     makeToast("One or more of your fields has not been filled.");
                 } else {
 
                     DecimalFormat df = new DecimalFormat("#.########"); //for max 8 digit latitudes/longitudes
-                    System.out.println(df.format(eventLatitude));
-                    System.out.println(df.format(eventLongitude));
+
+                    String startTime = ((startHour < 10) ? ("0" + startHour) : startHour) + ":" + ((startMinute < 10) ? ("0" + startMinute) : startMinute) + ":00";
+                    String endTime = ((endHour < 10) ? ("0" + endHour) : endHour) + ":" + ((endMinute < 10) ? ("0" + endMinute) : endMinute) + ":00";
 
                     //make api call to create a new event!
                     AndroidNetworking.post(HomePageActivity.baseURL + "/users/1/locationreminders/")
                             .addBodyParameter("name", eventNameField.getText().toString())
                             .addBodyParameter("description", eventDescriptionField.getText().toString())
                             .addBodyParameter("location_descriptor", eventLocationNameField.getText().toString())
-                            .addBodyParameter("start_time", eventStartTimeField.getText().toString())
-                            .addBodyParameter("end_time", eventEndTimeField.getText().toString())
+
+                            .addBodyParameter("start_time", startTime)
+                            .addBodyParameter("end_time", startTime)
+
                             .addBodyParameter("longitude", df.format(eventLongitude))
                             .addBodyParameter("latitude", df.format(eventLatitude))
                             .build()
@@ -181,4 +237,5 @@ public class LocationBasedNotificationFragment extends BaseFragment {
     public void onDetach() {
         super.onDetach();
     }
+
 }
