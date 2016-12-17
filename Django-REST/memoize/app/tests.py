@@ -226,7 +226,7 @@ class unhappy_path_tests(APITestCase):
 		self.assertEquals(response.content, '{"end_time":["Time has wrong format. Use one of these formats instead: hh:mm[:ss[.uuuuuu]]."]}')
 
 
-class nontrivial_feature_happy_path_tests(APITestCase):
+class nontrivial_feature_tests(APITestCase):
 
 	def test_last_resort_reminder_creation(self):
 		response = make_test_user(self)
@@ -266,6 +266,32 @@ class nontrivial_feature_happy_path_tests(APITestCase):
 
 		response = self.client.get('/users/8/lastresortreminders/?latitude=50&longitude=50', {}, format='json')
 		self.assertEqual(response.content,'[]') #should be empty because this reminder is in the past
+
+	def test_not_displaying_z_reminder_ahead_of_time(self):
+		response = make_test_user(self)
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+		time = datetime.datetime.now()
+		new_time = time + datetime.timedelta(0, 7200) #2 hours in the future
+
+		time_str = str(new_time)
+		passed_time = time_str[:-10]
+		t = passed_time[:10] + "T" + passed_time[11:]
+		data3 = {"time": passed_time, "name": "make a last resort reminder", "description": "", "location_descriptor": "TEST", "latitude": "50.000", "longitude": "50.000"}
+
+		response = self.client.post('/users/9/lastresortreminders/', data3, format='json')
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+		response = self.client.get('/users/9/lastresortreminders/?latitude=50.5&longitude=50.5', {}, format='json')
+		self.assertEqual(response.content,'[]') 
+		#should be empty because this reminder is 2 hours into the future and only 40 miles away (which would mean notifying the user 92 minutes before the reminder time)
+
+		response = self.client.get('/users/9/lastresortreminders/?latitude=50.7&longitude=50.7', {}, format='json')
+		self.assertEquals(response.content, '[{"name":"make a last resort reminder","description":"","location_descriptor":"TEST","time":"' + t + ':00Z","latitude":"50.00000000","longitude":"50.00000000","id":3}]')
+		
+		"""^now the travel time to the location of the event is estimated to be 114 minutes, and with the 10 minute grace period
+		it becomes time to notify the user of his/her event, thus th notification is displayed"""
+
+
 
 
 
