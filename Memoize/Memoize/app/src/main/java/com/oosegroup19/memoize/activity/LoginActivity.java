@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (username.equals("") || password.equals("")) {
                     makeToast("One or more of your fields has not been filled.");
                 } else {
-                    AndroidNetworking.post(HomePageActivity.baseURL + "/api-token-auth/")
+                    AndroidNetworking.post(HomePageActivity.baseURL + "/api-token-auth-id/")
                             .addBodyParameter("username", username)
                             .addBodyParameter("password", password)
                             .build()
@@ -55,7 +55,9 @@ public class LoginActivity extends AppCompatActivity {
                                          SharedPreferences.Editor editor = settings.edit();
                                          try {
                                              Log.i("tag", "Got token " + response.getString("token"));
+                                             Log.i("tag", "Got user id: " + response.getString("id"));
                                              editor.putString("user_token", response.getString("token"));
+                                             editor.putString("user_id", response.getString("id"));
                                              editor.apply(); //editor.commit() for synchronous
                                          } catch (JSONException e) {
                                              Log.e("tag", "Could not parse token from JSON object");
@@ -68,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                                      public void onError(ANError anError) {
                                          Log.e("tag", "Could not fetch token.");
                                          Log.e("tag", anError.getErrorBody());
-                                         makeToast("Could not fetch user token.");
+                                         makeToast("Invalid username or password.");
                                      }
                             });
                 }
@@ -94,6 +96,14 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.i("tag", "Success: create account");
                                 Log.i("tag", response.toString());
                                 getUserToken(emailField.getText().toString(), passwordField.getText().toString());
+                                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                                SharedPreferences.Editor editor = settings.edit();
+                                try {
+                                    editor.putString("user_id", response.getString("id"));
+                                    editor.apply(); //editor.commit() for synchronous
+                                } catch (JSONException e) {
+                                    Log.e("tag", "Could not parse user id");
+                                }
                                 movetoMain();
                             }
 
@@ -135,7 +145,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onError(ANError anError) {
                         Log.e("tag", "Could not fetch token.");
                         Log.e("tag", anError.getErrorBody());
-                        makeToast("Could not fetch user token.");
+                        makeToast("Coudl not fetch user token.");
                     }
                 });
     }
