@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from memoize.app import views
+from rest_framework.authtoken import views as authtoken_views
 
 urlpatterns = [
 	url(r'^events/$', views.event_list.as_view()),
@@ -15,4 +16,5 @@ urlpatterns = [
 	url(r'^groups/$', views.GroupList.as_view()),
 	url(r'^groups/(?P<pk>[0-9]+)/$', views.GroupDetail.as_view()),
 	url(r'^groups/(?P<pk>[0-9]+)/events/$', views.GroupEvents.as_view()),
+	url(r'^api-token-auth/', authtoken_views.obtain_auth_token),
 ]

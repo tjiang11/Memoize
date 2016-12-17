@@ -238,7 +238,7 @@ class UserLocationReminders(views.APIView):
             current_lat = float(request.GET['latitude'])
 
         else:
-            serializer = LastResortReminderSerializer(user.last_resort_reminders, many=True)
+            serializer = LocationReminderSerializer(user.location_reminders, many=True)
             return Response(serializer.data)
 
         #print current_lat
@@ -247,10 +247,13 @@ class UserLocationReminders(views.APIView):
         serializer = LocationReminderSerializer(user.location_reminders, many=True)
         length = len(serializer.data)
         nearby = []
+        print length
         for i in range(length):
             lat = float(serializer.data[i]['latitude'])
             lon = float(serializer.data[i]['longitude'])
 
+            print lat
+            print lon
             distance_in_meters = calcDistance(current_lat, current_lon, lat, lon)
             print distance_in_meters
             if distance_in_meters < 100.0:
