@@ -180,43 +180,50 @@ public class LocationBasedNotificationFragment extends BaseFragment {
                     String startTime = ((startHour < 10) ? ("0" + startHour) : startHour) + ":" + ((startMinute < 10) ? ("0" + startMinute) : startMinute) + ":00";
                     String endTime = ((endHour < 10) ? ("0" + endHour) : endHour) + ":" + ((endMinute < 10) ? ("0" + endMinute) : endMinute) + ":00";
 
-                    //make api call to create a new event!
-                    AndroidNetworking.post(HomePageActivity.baseURL + "/users/1/locationreminders/")
-                            .addBodyParameter("name", eventNameField.getText().toString())
-                            .addBodyParameter("description", eventDescriptionField.getText().toString())
-                            .addBodyParameter("location_descriptor", eventLocationNameField.getText().toString())
+                    //Make sure that startTime < endTime
+                    if (endHour < startHour) {
+                        makeToast("Your end time must be after your start time.");
+                    } else if (endHour == startHour && endMinute <= startMinute) {
+                        makeToast("Your end time must be after your start time.");
+                    } else {
+                        //make api call to create a new event!
+                        AndroidNetworking.post(HomePageActivity.baseURL + "/users/1/locationreminders/")
+                                .addBodyParameter("name", eventNameField.getText().toString())
+                                .addBodyParameter("description", eventDescriptionField.getText().toString())
+                                .addBodyParameter("location_descriptor", eventLocationNameField.getText().toString())
 
-                            .addBodyParameter("start_time", startTime)
-                            .addBodyParameter("end_time", startTime)
+                                .addBodyParameter("start_time", startTime)
+                                .addBodyParameter("end_time", endTime)
 
-                            .addBodyParameter("longitude", df.format(eventLongitude))
-                            .addBodyParameter("latitude", df.format(eventLatitude))
-                            .build()
-                            .getAsJSONObject(new JSONObjectRequestListener() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    //TODO: Make sure this works when connected to the server; that is, that the toast is there for the appropriate
-                                    //amount of time even when it transitions to the home fragment.
-                                    makeToast("Your location based notification has been successfully created!");
-                                    Log.i("tag", "Success");
-                                    Log.i("tag", response.toString());
+                                .addBodyParameter("longitude", df.format(eventLongitude))
+                                .addBodyParameter("latitude", df.format(eventLatitude))
+                                .build()
+                                .getAsJSONObject(new JSONObjectRequestListener() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        //TODO: Make sure this works when connected to the server; that is, that the toast is there for the appropriate
+                                        //amount of time even when it transitions to the home fragment.
+                                        makeToast("Your location based notification has been successfully created!");
+                                        Log.i("tag", "Success");
+                                        Log.i("tag", response.toString());
 
-                                    //Go back to home fragment
-                                    NewNotificationFragment fragment = new NewNotificationFragment();
-                                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                                    fragmentTransaction.replace(R.id.frame_main, fragment);
-                                    fragmentTransaction.addToBackStack(null);
-                                    fragmentTransaction.commit();
-                                }
+                                        //Go back to home fragment
+                                        NewNotificationFragment fragment = new NewNotificationFragment();
+                                        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                                        fragmentTransaction.replace(R.id.frame_main, fragment);
+                                        fragmentTransaction.addToBackStack(null);
+                                        fragmentTransaction.commit();
+                                    }
 
-                                @Override
-                                public void onError(ANError anError) {
-                                    Log.e("tag", "noooooo");
-                                    Log.e("tag", anError.toString());
-                                    makeToast("Your Notification could not be saved to the database. Please try again with " +
-                                            "a more secure connection.");
-                                }
-                            });
+                                    @Override
+                                    public void onError(ANError anError) {
+                                        Log.e("tag", "noooooo");
+                                        Log.e("tag", anError.toString());
+                                        makeToast("Your Notification could not be saved to the database. Please try again with " +
+                                                "a more secure connection.");
+                                    }
+                                });
+                    }
                 }
             }
         });

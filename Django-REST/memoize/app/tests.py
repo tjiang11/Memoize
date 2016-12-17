@@ -1,3 +1,5 @@
+import datetime
+from datetime import timedelta
 from rest_framework.test import APIRequestFactory
 from rest_framework import status
 from django.test import TestCase
@@ -5,6 +7,7 @@ from rest_framework.test import APITestCase
 import unittest
 #import models
 from rest_framework.test import APIClient
+
 
 client = APIClient()
 count = 0
@@ -221,6 +224,49 @@ class unhappy_path_tests(APITestCase):
 		data = {"start_time": "11:45[:0[0]]", "name": "test without start time", "description": "we are testing", "location_descriptor": "Hogwarts school of oose", "end_time": "", "latitude": "1.00", "longitude": "1.00"}
 		response = self.client.post('/users/7/locationreminders/', data, format='json')
 		self.assertEquals(response.content, '{"end_time":["Time has wrong format. Use one of these formats instead: hh:mm[:ss[.uuuuuu]]."]}')
+
+
+class nontrivial_feature_happy_path_tests(APITestCase):
+
+	def test_last_resort_reminder_creation(self):
+		response = make_test_user(self)
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+		time = datetime.datetime.now()
+		new_time = time + datetime.timedelta(0,120) #2 minutes in the future
+
+		time_str = str(new_time)
+		passed_time = time_str[:-10]
+		data3 = {"time": passed_time, "name": "make a last resort reminder", "description": "", "location_descriptor": "TEST", "latitude": "50.000", "longitude": "50.000"}
+
+		response = self.client.post('/users/7/lastresortreminders/', data3, format='json')
+		t = passed_time[:10] + "T" + passed_time[11:]
+		temp = '{"name":"make a last resort reminder","description":"","location_descriptor":"TEST","time":"' + t + ':00Z","latitude":"50.00000000","longitude":"50.00000000","id":1}'
+		self.assertEqual(response.content, temp)
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+		response = self.client.get('/users/7/lastresortreminders/?latitude=50&longitude=50', {}, format='json')
+		#should find the notification because at the correct location and 2 minutes before event
+		self.assertEqual(response.content, '[{"name":"make a last resort reminder","description":"","location_descriptor":"TEST","time":"' + t + ':00Z","latitude":"50.00000000","longitude":"50.00000000","id":1}]')
+
+	def test_not_displaying_reminders_if_passed_time(self):
+		response = make_test_user(self)
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+		time = datetime.datetime.now()
+		new_time = time + datetime.timedelta(0, -120) #2 minutes in the past
+
+		time_str = str(new_time)
+		passed_time = time_str[:-10]
+		data3 = {"time": passed_time, "name": "make a last resort reminder", "description": "", "location_descriptor": "TEST", "latitude": "50.000", "longitude": "50.000"}
+
+		response = self.client.post('/users/8/lastresortreminders/', data3, format='json')
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+		response = self.client.get('/users/8/lastresortreminders/?latitude=50&longitude=50', {}, format='json')
+		self.assertEqual(response.content,'[]') #should be empty because this reminder is in the past
+
 
 
 def make_test_user(self):
