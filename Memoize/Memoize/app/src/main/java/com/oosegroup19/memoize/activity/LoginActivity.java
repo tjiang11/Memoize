@@ -2,6 +2,7 @@ package com.oosegroup19.memoize.activity;
 
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,9 +17,12 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.oosegroup19.memoize.R;
 import com.oosegroup19.memoize.layout.NewNotificationFragment;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+
+import static com.oosegroup19.memoize.activity.HomePageActivity.PREFS_NAME;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -35,35 +39,38 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (emailField.getText().toString().equals("") || passwordField.getText().toString().equals("")) {
+                String username = emailField.getText().toString();
+                String password = passwordField.getText().toString();
+                if (username.equals("") || password.equals("")) {
                     makeToast("One or more of your fields has not been filled.");
                 } else {
-                    movetoMain();
-
-                    /*
-                    //make api call to create a new event!
-                    AndroidNetworking.post(HomePageActivity.baseURL + "/users/1/locationreminders/")
-                            .addBodyParameter("email", emailField.getText().toString())
-                            .addBodyParameter("password", passwordField.getText().toString())
+                    AndroidNetworking.post(HomePageActivity.baseURL + "/api-token-auth/")
+                            .addBodyParameter("username", username)
+                            .addBodyParameter("password", password)
                             .build()
                             .getAsJSONObject(new JSONObjectRequestListener() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    makeToast("You have successfully logged in!");
-                                    Log.i("tag", "Success");
-                                    Log.i("tag", response.toString());
+                                     @Override
+                                     public void onResponse(JSONObject response) {
+                                         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                                         SharedPreferences.Editor editor = settings.edit();
+                                         try {
+                                             Log.i("tag", "Got token " + response.getString("token"));
+                                             editor.putString("user_token", response.getString("token"));
+                                             editor.apply(); //editor.commit() for synchronous
+                                         } catch (JSONException e) {
+                                             Log.e("tag", "Could not parse token from JSON object");
+                                             Log.e("tag", e.toString());
+                                         }
+                                         movetoMain();
+                                     }
 
-                                    movetoMain();
-                                }
-
-                                @Override
-                                public void onError(ANError anError) {
-                                    Log.e("tag", "noooooo");
-                                    Log.e("tag", anError.toString());
-                                    makeToast("Your Notification could not be saved to the database. Please try again with " +
-                                            "a more secure connection.");
-                                }
-                            }); */
+                                     @Override
+                                     public void onError(ANError anError) {
+                                         Log.e("tag", "Could not fetch token.");
+                                         Log.e("tag", anError.getErrorBody());
+                                         makeToast("Could not fetch user token.");
+                                     }
+                            });
                 }
             }
         });
@@ -86,12 +93,13 @@ public class LoginActivity extends AppCompatActivity {
                                 makeToast("You have successfully made an account!");
                                 Log.i("tag", "Success: create account");
                                 Log.i("tag", response.toString());
+                                getUserToken(emailField.getText().toString(), passwordField.getText().toString());
                                 movetoMain();
                             }
 
                             @Override
                             public void onError(ANError anError) {
-                                Log.e("tag", "noooooo");
+                                Log.e("tag", "Could not create user.");
                                 Log.e("tag", anError.toString());
                                 makeToast("Error creating account.");
                             }
@@ -100,6 +108,36 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void getUserToken(String username, String password) {
+        AndroidNetworking.post(HomePageActivity.baseURL + "/api-token-auth/")
+                .addBodyParameter("username", username)
+                .addBodyParameter("password", password)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                        SharedPreferences.Editor editor = settings.edit();
+                        try {
+                            Log.i("tag", "Got token " + response.getString("token"));
+                            editor.putString("user_token", response.getString("token"));
+                            editor.apply(); //editor.commit() for synchronous
+                        } catch (JSONException e) {
+                            Log.e("tag", "Could not parse token from JSON object");
+                            Log.e("tag", e.toString());
+                        }
+                        movetoMain();
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e("tag", "Could not fetch token.");
+                        Log.e("tag", anError.getErrorBody());
+                        makeToast("Could not fetch user token.");
+                    }
+                });
     }
 
     public void makeToast(String message) {
