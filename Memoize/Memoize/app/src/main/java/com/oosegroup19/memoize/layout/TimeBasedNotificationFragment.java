@@ -1,6 +1,8 @@
 package com.oosegroup19.memoize.layout;
 
+import android.app.DatePickerDialog;
 import android.app.FragmentTransaction;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -21,6 +25,8 @@ import com.oosegroup19.memoize.activity.HomePageActivity;
 import com.oosegroup19.memoize.structures.User;
 
 import org.json.JSONObject;
+
+import java.util.Calendar;
 
 
 /**
@@ -34,6 +40,39 @@ import org.json.JSONObject;
 public class TimeBasedNotificationFragment extends BaseFragment {
     public final static String FRAGMENTNAME = "TimeBasedNotificationFragment";
     private final String fragmentName = FRAGMENTNAME;
+
+    private TextView dateTextField;
+    private TextView timeTextField;
+
+    private int notificationHour = -1;
+    private int notificationMinute = -1;
+
+    private int notificationYear = -1;
+    private int notificationMonth = -1;
+    private int notificationDay = -1;
+
+    Calendar calendar = Calendar.getInstance();
+
+    DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            notificationYear = year;
+            notificationMonth = monthOfYear + 1;
+            notificationDay = dayOfMonth;
+
+            dateTextField.setText("Date: " + notificationMonth + "/" + notificationDay + "/" + notificationYear);
+        }
+    };
+
+    TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            notificationHour = hourOfDay;
+            notificationMinute = minute;
+
+            timeTextField.setText("Time: " + notificationHour + ":" + (notificationMinute < 10 ? "0" + notificationMinute: notificationMinute));
+        }
+    };
 
     public String getFragmentName(){
         return this.fragmentName;
@@ -63,31 +102,53 @@ public class TimeBasedNotificationFragment extends BaseFragment {
         final TextView eventNameField = (TextView) view.findViewById(R.id.event_name_timebased);
         final TextView eventLocationNameField = (TextView) view.findViewById(R.id.event_location_timebased);
         final TextView eventDescriptionField = (TextView) view.findViewById(R.id.event_description_timebased);
-        final TextView eventDayField = (TextView) view.findViewById(R.id.event_day_timebased);
-        final TextView eventTimeField = (TextView) view.findViewById(R.id.event_time_timebased);
+
+        dateTextField = (TextView) view.findViewById(R.id.dateText);
+        timeTextField = (TextView) view.findViewById(R.id.timeText);
+
+        Button chooseDateButton = (Button) view.findViewById(R.id.choose_date_button);
+        Button chooseTimeButton = (Button) view.findViewById(R.id.choose_time_button);
 
         Button saveButton = (Button) view.findViewById(R.id.save_button_time_based_notif);
+
+
+        chooseDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(getActivity(), onDateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        chooseTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new TimePickerDialog(getActivity(), onTimeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+            }
+        });
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (eventNameField.getText().toString().equals("") || eventLocationNameField.getText().toString().equals("")
-                        || eventDayField.getText().equals("") || eventTimeField.getText().equals("")) {
+                if (eventNameField.getText().toString().equals("") || eventLocationNameField.getText().toString().equals("") ||
+                        notificationMinute == -1 || notificationHour == -1 || notificationDay == -1 ||
+                        notificationMonth == -1 || notificationYear == -1) {
                     makeToast("One or more of your fields has not been filled.");
                 } else {
+                    String timeToSend = String.format("%04d-%02d-%02dT%02d:%02d:00", notificationYear, notificationMonth, notificationDay,
+                            notificationHour, notificationMinute);
+
+                    System.out.println("Time that is sent to api call: " + timeToSend);
 
                     //make api call to create a new event!
-                    AndroidNetworking.post(HomePageActivity.baseURL + "/users/1/locationreminders/")
+                    AndroidNetworking.post(HomePageActivity.baseURL + "/users/1/timereminders/")
                             .addBodyParameter("name", eventNameField.getText().toString())
                             .addBodyParameter("description", eventDescriptionField.getText().toString())
                             .addBodyParameter("location_descriptor", eventLocationNameField.getText().toString())
-                            .addBodyParameter("time", eventTimeField.getText().toString())
+                            .addBodyParameter("time", timeToSend)
                             .build()
                             .getAsJSONObject(new JSONObjectRequestListener() {
                                 @Override
                                 public void onResponse(JSONObject response) {
-                                    //TODO: Make sure this works when connected to the server; that is, that the toast is there for the appropriate
-                                    //amount of time even when it transitions to the home fragment.
                                     makeToast("Your time based notification has been successfully created!");
                                     Log.i("tag", "Success");
                                     Log.i("tag", response.toString());
@@ -102,7 +163,7 @@ public class TimeBasedNotificationFragment extends BaseFragment {
 
                                 @Override
                                 public void onError(ANError anError) {
-                                    Log.e("tag", "noooooo");
+                                    Log.e("tag", "A networking error occurred.");
                                     Log.e("tag", anError.getMessage());
                                     makeToast("Your Notification could not be saved to the database. Please try again with " +
                                             "a more secure connection.");
