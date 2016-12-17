@@ -85,7 +85,10 @@ public class LocationBasedNotificationFragment extends BaseFragment {
         final TextView eventStartTimeField = (TextView) view.findViewById(R.id.start_time_box_location);
         final TextView eventEndTimeField = (TextView) view.findViewById(R.id.end_time_box_location);
 
+        final TextView currLatLongField = (TextView) view.findViewById(R.id.currLocationTextView);
+
         eventLocationNameField.setText(locationName);
+        currLatLongField.setText(eventLatitude == -1 ? "No Location Selected" : "Latitude: " + eventLatitude + " " + " Longitude: " + eventLongitude);
 
         chooseHopkinsLocationsButton.setOnClickListener(new View.OnClickListener() {
             @Override

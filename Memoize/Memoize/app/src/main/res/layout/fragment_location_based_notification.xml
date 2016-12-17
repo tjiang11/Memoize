@@ -47,9 +47,19 @@
             android:text="Hopkins Locations"
             android:id="@+id/choose_hopkins_loc_button"
             android:layout_height="40dp" />
+
     </LinearLayout>
 
 
+    <TextView
+        android:layout_width="match_parent"
+        android:inputType="textPersonName"
+        android:text="No Location Selected"
+        android:ems="10"
+        android:id="@+id/currLocationTextView"
+        android:textSize="9sp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|center_horizontal" />
 
     <TextView
         android:layout_width="match_parent"
