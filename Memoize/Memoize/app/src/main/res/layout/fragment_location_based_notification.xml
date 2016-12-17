@@ -50,7 +50,6 @@
 
     </LinearLayout>
 
-
     <TextView
         android:layout_width="match_parent"
         android:inputType="textPersonName"
@@ -102,23 +101,55 @@
         android:textSize="15dp" />
 
 
-    <EditText
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:id="@+id/start_time_box_location"
-        android:layout_gravity="center_horizontal"
-        android:hint="Start Time"
-        android:textSize="15dp" />
+        android:layout_gravity="center_horizontal">
 
-    <EditText
-        android:layout_width="match_parent"
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="180dp"
+            android:text="Choose Start Time"
+            android:id="@+id/choose_start_time_button"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="40dp" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="180dp"
+            android:text="Choose End Time"
+            android:id="@+id/choose_end_time_button"
+            android:layout_height="40dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:id="@+id/end_time_box_location"
-        android:layout_gravity="center_horizontal"
-        android:hint="End Time"
-        android:textSize="15dp" />
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:inputType="textPersonName"
+            android:text="Start Time: Not Chosen"
+            android:ems="10"
+            android:id="@+id/startTimeText"
+            android:textSize="9sp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:inputType="textPersonName"
+            android:text="End Time: Not Chosen"
+            android:ems="10"
+            android:id="@+id/endTimeText"
+            android:textSize="9sp"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
 
     <Button
         android:layout_width="wrap_content"
