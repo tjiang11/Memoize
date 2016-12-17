@@ -3,6 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from rest_framework import viewsets, views, status, generics, permissions
 from rest_framework.response import Response
+from rest_framework.authentication import TokenAuthentication
 from memoize.app.models import Event, MemGroup, TimeReminder, LastResortReminder
 from memoize.app.serializers import UserSerializer, UserUpdateSerializer, MemGroupSerializer, EventSerializer, IDSerializer, TimeReminderSerializer, LocationReminderSerializer, LastResortReminderSerializer
 from memoize.app.permissions import IsOwnerOrReadOnlyEvent, IsOwnerOrReadOnlyGroup, IsOwnerOrReadOnlyUser
@@ -117,7 +118,8 @@ class UserList(generics.ListCreateAPIView):
     serializer_class = UserSerializer
 
 class UserDetail(generics.RetrieveUpdateAPIView):
-   # permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnlyUser)
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnlyUser)
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
 
