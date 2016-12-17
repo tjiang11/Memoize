@@ -53,7 +53,7 @@ public class HomePageActivity extends AppCompatActivity {
 
     public static String baseURL = "http://10.0.2.2:" + PORT; //uncomment if you are using emulator, use 10.0.3.2 for genymotion, 10.0.2.2 if not
 //    public static String baseURL = "http://9194e27a.ngrok.io"; //uncomment and put your ngrok url here if using ngrok tunneling
-
+    public static String PREFS_NAME = "myPrefs";
     public static Location currentLocation = null;
 
     /*######################## View Elements ########################*/
