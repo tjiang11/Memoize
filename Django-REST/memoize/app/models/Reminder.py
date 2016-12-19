@@ -46,8 +46,8 @@ class LocationReminder(Reminder):
    		user: the user that created the reminder.
    		radius: the radius that the user iputs with the desired radius for being reminded
    	"""
-	start_time = models.TimeField(null=False)
-	end_time = models.TimeField(null=False)
+	#start_time = models.TimeField(null=False)
+	#end_time = models.TimeField(null=False)
 	latitude = models.DecimalField(max_digits=11, decimal_places=8)
 	longitude = models.DecimalField(max_digits=11, decimal_places=8)
 	user = models.ForeignKey(User,
