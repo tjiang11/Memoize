@@ -294,7 +294,9 @@ class UserLocationReminders(views.APIView):
             print lon
             distance_in_meters = calcDistance(current_lat, current_lon, lat, lon)
             print distance_in_meters
-            if distance_in_meters < 100.0:
+            radius = serializer.data[i]['radius']
+            print "this is radius: " + str(radius)
+            if distance_in_meters < radius:
                 nearby.append(serializer.data[i])
 
         return Response(nearby)
