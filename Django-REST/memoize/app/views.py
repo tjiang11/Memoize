@@ -191,7 +191,41 @@ class UserTimeReminders(views.APIView):
     def get(self, request, pk, format=None):
         user = self.get_user(pk=pk)
         serializer = TimeReminderSerializer(user.time_reminders, many=True)
-        return Response(serializer.data)
+        
+        if 'get_current' not in request.GET: #modify
+            to_be_displayed = []
+            for element in serializer.data:
+                reminder_time = element['time']
+                curr_time = datetime.datetime.now() 
+                datetime_of_reminder = datetime.datetime.strptime(reminder_time, "%Y-%m-%dT%H:%M:00Z")
+                time_diff = datetime_of_reminder - curr_time
+               
+                seconds_diff = time_diff.total_seconds()
+                print str(time_diff)
+                print str(seconds_diff)
+                if (seconds_diff > 0):
+                    to_be_displayed.append(element)
+
+
+            return Response(to_be_displayed)
+
+        time_to_display = []
+        for element in serializer.data:
+            reminder_time = element['time']
+            curr_time = datetime.datetime.now()
+
+            datetime_of_reminder = datetime.datetime.strptime(reminder_time, "%Y-%m-%dT%H:%M:00Z")
+            #print str(datetime_object)
+            print "this is the time of the reminder: " + str(datetime_of_reminder)
+            print "this is the current time: " + str(curr_time)
+            test = datetime_of_reminder - curr_time
+            print "total seconds of difference: " + str(test.total_seconds())
+            seconds = test.total_seconds()
+            if (seconds < 35 and seconds >= 0):
+                time_to_display.append(element)
+
+
+        return Response(time_to_display)
 
     def post(self, request, pk, format=None):
         serializer = TimeReminderSerializer(data=request.data)
@@ -260,7 +294,9 @@ class UserLocationReminders(views.APIView):
             print lon
             distance_in_meters = calcDistance(current_lat, current_lon, lat, lon)
             print distance_in_meters
-            if distance_in_meters < 100.0:
+            radius = serializer.data[i]['radius']
+            print "this is radius: " + str(radius)
+            if distance_in_meters < radius:
                 nearby.append(serializer.data[i])
 
         return Response(nearby)
@@ -314,8 +350,8 @@ class UserLastResortReminders(views.APIView):
             current_time = datetime.datetime.now()
             tdelta =  event_time - current_time
             zero_tdelta = timedelta(days=0, seconds=0, microseconds=0)
-            print distance_in_meters
-            print tdelta
+            print str(distance_in_meters) + ' meters'
+            print tdelta.total_seconds()
 
             if distance_in_meters < 800:
                 expected_time_to_event = 10
@@ -328,7 +364,12 @@ class UserLastResortReminders(views.APIView):
                 expected_time_to_event += (distance_in_meters / 1609.34) * 2
 
             if tdelta.total_seconds() < expected_time_to_event * 60 and tdelta > zero_tdelta:
+                print "adding to return with the following info:"
+                print "distance in meters: " + str(distance_in_meters) + ' meters'
+                print "diffeence between event time and now: " + str(tdelta.total_seconds()) + " seconds"
+                print "expected time to event: " + str(expected_time_to_event)
                 nearby.append(serializer.data[i])
+
 
         return Response(nearby)
 
