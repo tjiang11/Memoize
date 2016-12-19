@@ -55,8 +55,8 @@ public class LocationBasedNotificationFragment extends BaseFragment {
     private int endHour = -1;
     private int endMinute = -1;
 
-    private TextView currStartTimeTextField;
-    private TextView currEndTimeTextField;
+//    private TextView currStartTimeTextField;
+//    private TextView currEndTimeTextField;
 
     Calendar calendar = Calendar.getInstance();
 
@@ -66,7 +66,7 @@ public class LocationBasedNotificationFragment extends BaseFragment {
             startHour = hourOfDay;
             startMinute = minute;
 
-            currStartTimeTextField.setText("Start Hour: " + startHour + ":" + (startMinute < 10 ? "0" + startMinute : startMinute));
+            //currStartTimeTextField.setText("Start Hour: " + startHour + ":" + (startMinute < 10 ? "0" + startMinute : startMinute));
         }
     };
 
@@ -76,7 +76,7 @@ public class LocationBasedNotificationFragment extends BaseFragment {
             endHour = hourOfDay;
             endMinute = minute;
 
-            currEndTimeTextField.setText("End Hour: " + endHour + ":" + (endMinute < 10 ? "0" + endMinute: endMinute));
+            //currEndTimeTextField.setText("End Hour: " + endHour + ":" + (endMinute < 10 ? "0" + endMinute: endMinute));
         }
     };
 
@@ -121,16 +121,16 @@ public class LocationBasedNotificationFragment extends BaseFragment {
         final Button dropPinButton = (Button) view.findViewById(R.id.drop_pin_button);
         final Button saveButton = (Button) view.findViewById(R.id.save_button_location_based_notif);
 
-        final Button chooseStartTimeButton = (Button) view.findViewById(R.id.choose_start_time_button);
-        final Button chooseEndTimeButton = (Button) view.findViewById(R.id.choose_end_time_button);
+//        final Button chooseStartTimeButton = (Button) view.findViewById(R.id.choose_start_time_button);
+//        final Button chooseEndTimeButton = (Button) view.findViewById(R.id.choose_end_time_button);
 
         final TextView eventNameField = (TextView) view.findViewById(R.id.event_name_locationbased);
         final TextView eventLocationNameField = (TextView) view.findViewById(R.id.event_location_locationbased);
         final TextView eventDescriptionField = (TextView) view.findViewById(R.id.event_description_locationbased);
         final TextView currLatLongField = (TextView) view.findViewById(R.id.currLocationTextView);
-
-        currStartTimeTextField = (TextView) view.findViewById(R.id.startTimeText);
-        currEndTimeTextField = (TextView) view.findViewById(R.id.endTimeText);
+//
+//        currStartTimeTextField = (TextView) view.findViewById(R.id.startTimeText);
+//        currEndTimeTextField = (TextView) view.findViewById(R.id.endTimeText);
 
         eventLocationNameField.setText(locationName);
         currLatLongField.setText(eventLatitude == -1 ? "No Location Selected" : "Latitude: " + eventLatitude + " " + " Longitude: " + eventLongitude);
@@ -158,40 +158,39 @@ public class LocationBasedNotificationFragment extends BaseFragment {
             }
         });
 
-        chooseStartTimeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new TimePickerDialog(getActivity(), onTimeSetListenerBegin, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
-            }
-        });
-
-        chooseEndTimeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new TimePickerDialog(getActivity(), onTimeSetListenerEnd, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
-            }
-        });
+//        chooseStartTimeButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                new TimePickerDialog(getActivity(), onTimeSetListenerBegin, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+//            }
+//        });
+//
+//        chooseEndTimeButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                new TimePickerDialog(getActivity(), onTimeSetListenerEnd, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+//            }
+//        });
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (eventNameField.getText().toString().equals("") || eventLocationNameField.getText().toString().equals("")
-                        || startHour == -1 || endHour == -1 || startMinute == -1 || endMinute == -1
                         || eventLatitude == -1 || eventLongitude == -1) {
                     makeToast("One or more of your fields has not been filled.");
                 } else {
 
                     DecimalFormat df = new DecimalFormat("#.########"); //for max 8 digit latitudes/longitudes
 
-                    String startTime = ((startHour < 10) ? ("0" + startHour) : startHour) + ":" + ((startMinute < 10) ? ("0" + startMinute) : startMinute) + ":00";
-                    String endTime = ((endHour < 10) ? ("0" + endHour) : endHour) + ":" + ((endMinute < 10) ? ("0" + endMinute) : endMinute) + ":00";
+//                    String startTime = ((startHour < 10) ? ("0" + startHour) : startHour) + ":" + ((startMinute < 10) ? ("0" + startMinute) : startMinute) + ":00";
+//                    String endTime = ((endHour < 10) ? ("0" + endHour) : endHour) + ":" + ((endMinute < 10) ? ("0" + endMinute) : endMinute) + ":00";
 
                     //Make sure that startTime < endTime
-                    if (endHour < startHour) {
-                        makeToast("Your end time must be after your start time.");
-                    } else if (endHour == startHour && endMinute <= startMinute) {
-                        makeToast("Your end time must be after your start time.");
-                    } else {
+//                    if (endHour < startHour) {
+//                        makeToast("Your end time must be after your start time.");
+//                    } else if (endHour == startHour && endMinute <= startMinute) {
+//                        makeToast("Your end time must be after your start time.");
+//                    } else {
                         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
                         //make api call to create a new event!
                         AndroidNetworking.post(HomePageActivity.baseURL + "/users/" + settings.getString("user_id", "0") + "/locationreminders/")
@@ -199,8 +198,8 @@ public class LocationBasedNotificationFragment extends BaseFragment {
                                 .addBodyParameter("description", eventDescriptionField.getText().toString())
                                 .addBodyParameter("location_descriptor", eventLocationNameField.getText().toString())
 
-                                .addBodyParameter("start_time", startTime)
-                                .addBodyParameter("end_time", endTime)
+//                                .addBodyParameter("start_time", startTime)
+//                                .addBodyParameter("end_time", endTime)
 
                                 .addBodyParameter("longitude", df.format(eventLongitude))
                                 .addBodyParameter("latitude", df.format(eventLatitude))
@@ -230,7 +229,7 @@ public class LocationBasedNotificationFragment extends BaseFragment {
                                                 "a more secure connection.");
                                     }
                                 });
-                    }
+                   // }
                 }
             }
         });

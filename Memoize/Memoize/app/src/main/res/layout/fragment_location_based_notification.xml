@@ -105,58 +105,58 @@
         android:textSize="15dp" />
 
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+    <!--<LinearLayout-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal">-->
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="180dp"
-            android:text="Choose Start Time"
-            android:id="@+id/choose_start_time_button"
-            android:layout_gravity="center_horizontal"
-            android:layout_height="40dp"
-            android:backgroundTint="@color/colorPrimary"
-            android:textColor="@color/white" />
+        <!--<Button-->
+            <!--style="?android:attr/buttonStyleSmall"-->
+            <!--android:layout_width="180dp"-->
+            <!--android:text="Choose Start Time"-->
+            <!--android:id="@+id/choose_start_time_button"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:backgroundTint="@color/colorPrimary"-->
+            <!--android:textColor="@color/white" />-->
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="180dp"
-            android:text="Choose End Time"
-            android:id="@+id/choose_end_time_button"
-            android:layout_height="40dp"
-            android:backgroundTint="@color/colorPrimary"
-            android:textColor="@color/white" />
+        <!--<Button-->
+            <!--style="?android:attr/buttonStyleSmall"-->
+            <!--android:layout_width="180dp"-->
+            <!--android:text="Choose End Time"-->
+            <!--android:id="@+id/choose_end_time_button"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:backgroundTint="@color/colorPrimary"-->
+            <!--android:textColor="@color/white" />-->
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+    <!--<LinearLayout-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal">-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:inputType="textPersonName"
-            android:text="Start Time: Not Chosen"
-            android:ems="10"
-            android:id="@+id/startTimeText"
-            android:textSize="9sp"
-            android:layout_height="wrap_content" />
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:inputType="textPersonName"-->
+            <!--android:text="Start Time: Not Chosen"-->
+            <!--android:ems="10"-->
+            <!--android:id="@+id/startTimeText"-->
+            <!--android:textSize="9sp"-->
+            <!--android:layout_height="wrap_content" />-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:inputType="textPersonName"
-            android:text="End Time: Not Chosen"
-            android:ems="10"
-            android:id="@+id/endTimeText"
-            android:textSize="9sp"
-            android:layout_height="wrap_content"/>
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:inputType="textPersonName"-->
+            <!--android:text="End Time: Not Chosen"-->
+            <!--android:ems="10"-->
+            <!--android:id="@+id/endTimeText"-->
+            <!--android:textSize="9sp"-->
+            <!--android:layout_height="wrap_content"/>-->
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
 
     <Button
