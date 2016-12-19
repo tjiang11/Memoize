@@ -22,10 +22,12 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.StringRequestListener;
 import com.google.gson.Gson;
 import com.oosegroup19.memoize.activity.HomePageActivity;
+import com.oosegroup19.memoize.structures.LastResortReminderItem;
 import com.oosegroup19.memoize.structures.LocationReminderItem;
 import com.oosegroup19.memoize.R;
 import com.oosegroup19.memoize.structures.ReminderItem;
 import com.oosegroup19.memoize.structures.ReminderItemAdapter;
+import com.oosegroup19.memoize.structures.TimeReminderItem;
 import com.oosegroup19.memoize.structures.User;
 
 import org.json.JSONArray;
@@ -188,7 +190,49 @@ public class ReminderLogFragment extends BaseFragment {
 
                     @Override
                     public void onError(ANError anError) {
-                        Log.e("tag", "noooooo");
+                        Log.e("tag", "Error on loading location reminders.");
+                        Log.e("tag", anError.getMessage());
+                    }
+                });
+
+        AndroidNetworking.get(HomePageActivity.baseURL + "/users/" + settings.getString("user_id", "0") + "/timereminders/")
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        Gson gson = new Gson();
+                        TimeReminderItem[] myReminderItems = gson.fromJson(response, TimeReminderItem[].class);
+
+                        for (TimeReminderItem reminderItem : myReminderItems) {
+                            Log.i("ReminderLogFrag", reminderItem.toString());
+                            aa.add(reminderItem);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e("tag", "Error on loading time reminders");
+                        Log.e("tag", anError.getMessage());
+                    }
+                });
+
+        AndroidNetworking.get(HomePageActivity.baseURL + "/users/" + settings.getString("user_id", "0") + "/lastresortreminders/")
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        Gson gson = new Gson();
+                        LastResortReminderItem[] myReminderItems = gson.fromJson(response, LastResortReminderItem[].class);
+
+                        for (LastResortReminderItem reminderItem : myReminderItems) {
+                            Log.i("ReminderLogFrag", reminderItem.toString());
+                            aa.add(reminderItem);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e("tag", "Error on loading last resort reminders");
                         Log.e("tag", anError.getMessage());
                     }
                 });
