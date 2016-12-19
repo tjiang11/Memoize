@@ -1,11 +1,12 @@
 package com.oosegroup19.memoize.layout;
 
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -35,6 +36,8 @@ public class HopkinsLocationsFragment extends BaseFragment {
     public final static String FRAGMENTNAME = "HopkinsLocationsFragment";
     private final String fragmentName = FRAGMENTNAME;
 
+    private static String returnToFrag = "";
+
     //Instance Fields
     private ListView hopkinsLocationsList;
     protected static ArrayList<HopkinsLocationItem> hopkinsLocationItems;
@@ -46,8 +49,9 @@ public class HopkinsLocationsFragment extends BaseFragment {
 
     public HopkinsLocationsFragment() {}
 
-    public static HopkinsLocationsFragment newInstance(User user) {
+    public static HopkinsLocationsFragment newInstance(String returnTo) {
         HopkinsLocationsFragment fragment = new HopkinsLocationsFragment();
+        returnToFrag = returnTo;
         // owner = user;
         return fragment;
     }
@@ -96,8 +100,15 @@ public class HopkinsLocationsFragment extends BaseFragment {
                 Log.i("HopkinsLocationFrag", String.valueOf(id));
                 HopkinsLocationItem value = (HopkinsLocationItem) parent.getItemAtPosition(position);
                 Log.i("HopkinsLocationFrag", value.getLocationName());
-
-                LocationBasedNotificationFragment fragment = LocationBasedNotificationFragment.newInstance(value.getLocationName(), value.getLatitude(), value.getLongitude());
+                Fragment fragment;
+                if (returnToFrag.equals("location")) {
+                    fragment = LocationBasedNotificationFragment.newInstance(value.getLocationName(), value.getLatitude(), value.getLongitude());
+                } else if (returnToFrag.equals("time")) {
+                    fragment = TimeBasedNotificationFragment.newInstance(value.getLatitude(), value.getLongitude());
+                } else {
+                    fragment = LocationBasedNotificationFragment.newInstance(value.getLocationName(), value.getLatitude(), value.getLongitude());
+                    Log.e("tag", "Error retrieving return fragment.");
+                }
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame_main, fragment);
                 fragmentTransaction.addToBackStack(null);

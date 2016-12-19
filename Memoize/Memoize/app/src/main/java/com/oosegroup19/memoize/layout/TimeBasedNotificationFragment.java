@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -26,7 +28,10 @@ import com.oosegroup19.memoize.structures.User;
 
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
+
+import static com.oosegroup19.memoize.activity.HomePageActivity.PREFS_NAME;
 
 
 /**
@@ -38,6 +43,7 @@ import java.util.Calendar;
  * create an instance of this fragment.
  */
 public class TimeBasedNotificationFragment extends BaseFragment {
+    Context context = HomePageActivity.getContext();
     public final static String FRAGMENTNAME = "TimeBasedNotificationFragment";
     private final String fragmentName = FRAGMENTNAME;
 
@@ -50,6 +56,9 @@ public class TimeBasedNotificationFragment extends BaseFragment {
     private int notificationYear = -1;
     private int notificationMonth = -1;
     private int notificationDay = -1;
+
+    private static double eventLatitude = -1;
+    private static double eventLongitude = -1;
 
     Calendar calendar = Calendar.getInstance();
 
@@ -78,8 +87,10 @@ public class TimeBasedNotificationFragment extends BaseFragment {
         return this.fragmentName;
     }
 
-    public static TimeBasedNotificationFragment newInstance(User user) {
+    public static TimeBasedNotificationFragment newInstance(double latitude, double longitude) {
         TimeBasedNotificationFragment fragment = new TimeBasedNotificationFragment();
+        eventLatitude = latitude;
+        eventLongitude = longitude;
         // owner = user;
         return fragment;
     }
@@ -106,10 +117,13 @@ public class TimeBasedNotificationFragment extends BaseFragment {
         dateTextField = (TextView) view.findViewById(R.id.dateText);
         timeTextField = (TextView) view.findViewById(R.id.timeText);
 
-        Button chooseDateButton = (Button) view.findViewById(R.id.choose_date_button);
-        Button chooseTimeButton = (Button) view.findViewById(R.id.choose_time_button);
+        final Button chooseHopkinsLocationsButton = (Button) view.findViewById(R.id.choose_hopkins_loc_button_time_based);
+        final Button chooseDateButton = (Button) view.findViewById(R.id.choose_date_button);
+        final Button chooseTimeButton = (Button) view.findViewById(R.id.choose_time_button);
+        final Button dropPinButton = (Button) view.findViewById(R.id.drop_pin_button_time_based);
+        final Button saveButton = (Button) view.findViewById(R.id.save_button_time_based_notif);
 
-        Button saveButton = (Button) view.findViewById(R.id.save_button_time_based_notif);
+        final CheckBox notifyTooFarCheckBox = (CheckBox) view.findViewById(R.id.notifyTooFar);
 
 
         chooseDateButton.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +140,29 @@ public class TimeBasedNotificationFragment extends BaseFragment {
             }
         });
 
+        chooseHopkinsLocationsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HopkinsLocationsFragment fragment = HopkinsLocationsFragment.newInstance("time");
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_main, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+
+        dropPinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Go back to home fragment
+                DropPinFragment fragment = DropPinFragment.newInstance("time");
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_main, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,18 +170,59 @@ public class TimeBasedNotificationFragment extends BaseFragment {
                         notificationMinute == -1 || notificationHour == -1 || notificationDay == -1 ||
                         notificationMonth == -1 || notificationYear == -1) {
                     makeToast("One or more of your fields has not been filled.");
-                } else {
+                } else if (!notifyTooFarCheckBox.isChecked()){
                     String timeToSend = String.format("%04d-%02d-%02dT%02d:%02d:00", notificationYear, notificationMonth, notificationDay,
                             notificationHour, notificationMinute);
 
                     System.out.println("Time that is sent to api call: " + timeToSend);
+                    SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
 
                     //make api call to create a new event!
-                    AndroidNetworking.post(HomePageActivity.baseURL + "/users/1/timereminders/")
+                    AndroidNetworking.post(HomePageActivity.baseURL + "/users/" + settings.getString("user_id", "0") + "/timereminders/")
                             .addBodyParameter("name", eventNameField.getText().toString())
                             .addBodyParameter("description", eventDescriptionField.getText().toString())
                             .addBodyParameter("location_descriptor", eventLocationNameField.getText().toString())
                             .addBodyParameter("time", timeToSend)
+                            .build()
+                            .getAsJSONObject(new JSONObjectRequestListener() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    makeToast("Your time based notification has been successfully created!");
+                                    Log.i("tag", "Success");
+                                    Log.i("tag", response.toString());
+
+                                    //Go back to home fragment
+                                    NewNotificationFragment fragment = new NewNotificationFragment();
+                                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                                    fragmentTransaction.replace(R.id.frame_main, fragment);
+                                    fragmentTransaction.addToBackStack(null);
+                                    fragmentTransaction.commit();
+                                }
+
+                                @Override
+                                public void onError(ANError anError) {
+                                    Log.e("tag", "A networking error occurred.");
+                                    Log.e("tag", anError.getMessage());
+                                    makeToast("Your Notification could not be saved to the database. Please try again with " +
+                                            "a more secure connection.");
+                                }
+                            });
+                } else {
+                    DecimalFormat df = new DecimalFormat("#.########"); //for max 8 digit latitudes/longitudes
+
+                    String timeToSend = String.format("%04d-%02d-%02dT%02d:%02d:00", notificationYear, notificationMonth, notificationDay,
+                            notificationHour, notificationMinute);
+
+                    System.out.println("Time that is sent to api call: " + timeToSend);
+                    SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+                    //make api call to create a new event!
+                    AndroidNetworking.post(HomePageActivity.baseURL + "/users/" + settings.getString("user_id", "0") + "/lastresortreminders/")
+                            .addBodyParameter("name", eventNameField.getText().toString())
+                            .addBodyParameter("description", eventDescriptionField.getText().toString())
+                            .addBodyParameter("location_descriptor", eventLocationNameField.getText().toString())
+                            .addBodyParameter("time", timeToSend)
+                            .addBodyParameter("longitude", df.format(eventLongitude))
+                            .addBodyParameter("latitude", df.format(eventLatitude))
                             .build()
                             .getAsJSONObject(new JSONObjectRequestListener() {
                                 @Override

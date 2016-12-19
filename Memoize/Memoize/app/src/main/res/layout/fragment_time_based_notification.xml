@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Event"
+        android:text="Create a Reminder"
         android:paddingTop="10dp"
         android:textSize="25dp"
         android:gravity="center"
@@ -27,17 +27,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/event_name_timebased"
-        android:hint="Event Name" />
+        android:hint="Reminder Name" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/event_location_timebased"
-        android:hint="Event Location" />
+        android:hint="Location Description" />
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/event_description_timebased"
@@ -51,7 +51,7 @@
         android:text="Time"
         android:id="@+id/timeTextView"
         android:paddingTop="10dp"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:gravity="center"
         android:paddingBottom="0dp"
         android:paddingLeft="5dp"
@@ -70,14 +70,18 @@
             android:text="Choose Date"
             android:id="@+id/choose_date_button"
             android:layout_gravity="center_horizontal"
-            android:layout_height="40dp" />
+            android:layout_height="40dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/white" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
             android:layout_width="180dp"
             android:text="Choose Time"
             android:id="@+id/choose_time_button"
-            android:layout_height="40dp" />
+            android:layout_height="40dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
 
@@ -93,7 +97,7 @@
             android:text="Date: Not Chosen"
             android:ems="10"
             android:id="@+id/dateText"
-            android:textSize="9sp"
+            android:textSize="15sp"
             android:layout_height="wrap_content" />
 
         <TextView
@@ -102,11 +106,57 @@
             android:text="Time: Not Chosen"
             android:ems="10"
             android:id="@+id/timeText"
-            android:textSize="9sp"
+            android:textSize="15sp"
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Location"
+        android:id="@+id/locTextViewTimeBased"
+        android:paddingTop="10dp"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:paddingBottom="0dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:layout_gravity="center_horizontal" />
+
+    <CheckBox
+        android:text="Notify me if too far"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/notifyTooFar" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="180dp"
+            android:text="Drop Pin"
+            android:id="@+id/drop_pin_button_time_based"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="40dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@android:color/white" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="180dp"
+            android:text="Hopkins Locations"
+            android:id="@+id/choose_hopkins_loc_button_time_based"
+            android:layout_height="40dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
 
     <Button
         android:layout_marginTop="15dp"
@@ -114,6 +164,8 @@
         android:layout_height="wrap_content"
         android:text="Save"
         android:id="@+id/save_button_time_based_notif"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@android:color/white" />
 
 </LinearLayout>

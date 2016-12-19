@@ -1,6 +1,7 @@
 package com.oosegroup19.memoize.layout;
 
 import android.Manifest;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -38,6 +39,8 @@ public class DropPinFragment extends BaseFragment {
     public final static String FRAGMENTNAME = "DropPinFragment";
     private final String fragmentName = FRAGMENTNAME;
 
+    private static String returnToFrag = "";
+
     MapView mMapView;
     private GoogleMap googleMap;
     private double finalLatitude = 0;
@@ -47,8 +50,9 @@ public class DropPinFragment extends BaseFragment {
         // Required empty public constructor
     }
 
-    public static DropPinFragment newInstance(String param1, String param2) {
+    public static DropPinFragment newInstance(String returnTo) {
         DropPinFragment fragment = new DropPinFragment();
+        returnToFrag = returnTo;
         return fragment;
     }
 
@@ -68,8 +72,16 @@ public class DropPinFragment extends BaseFragment {
         saveLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Fragment fragment;
                 Log.i("DropPinFrag", "Final latitude: " + finalLatitude + "Final longitude: " + finalLongitude);
-                LocationBasedNotificationFragment fragment = LocationBasedNotificationFragment.newInstance("", finalLatitude, finalLongitude);
+                if (returnToFrag.equals("location")) {
+                    fragment = LocationBasedNotificationFragment.newInstance("", finalLatitude, finalLongitude);
+                } else if (returnToFrag.equals("time")) {
+                    fragment = TimeBasedNotificationFragment.newInstance(finalLatitude, finalLongitude);
+                } else {
+                    fragment = LocationBasedNotificationFragment.newInstance("", finalLatitude, finalLongitude);
+                    Log.e("tag", "Error retrieving return fragment.");
+                }
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame_main, fragment);
                 fragmentTransaction.addToBackStack(null);

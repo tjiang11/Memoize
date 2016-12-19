@@ -3,6 +3,7 @@ package com.oosegroup19.memoize.layout;
 import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -27,6 +28,8 @@ import org.w3c.dom.Text;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 
+import static com.oosegroup19.memoize.activity.HomePageActivity.PREFS_NAME;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +40,8 @@ import java.util.Calendar;
  * create an instance of this fragment.
  */
 public class LocationBasedNotificationFragment extends BaseFragment {
+    Context context;
+
     public final static String FRAGMENTNAME = "LocationBasedNotificationFragment";
     private final String fragmentName = FRAGMENTNAME;
 
@@ -108,6 +113,7 @@ public class LocationBasedNotificationFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        context = HomePageActivity.getContext();
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_location_based_notification, container, false);
 
@@ -132,7 +138,7 @@ public class LocationBasedNotificationFragment extends BaseFragment {
         chooseHopkinsLocationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HopkinsLocationsFragment fragment = new HopkinsLocationsFragment();
+                HopkinsLocationsFragment fragment = HopkinsLocationsFragment.newInstance("location");
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame_main, fragment);
                 fragmentTransaction.addToBackStack(null);
@@ -144,7 +150,7 @@ public class LocationBasedNotificationFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 //Go back to home fragment
-                DropPinFragment fragment = new DropPinFragment();
+                DropPinFragment fragment = DropPinFragment.newInstance("location");
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame_main, fragment);
                 fragmentTransaction.addToBackStack(null);
@@ -186,8 +192,9 @@ public class LocationBasedNotificationFragment extends BaseFragment {
                     } else if (endHour == startHour && endMinute <= startMinute) {
                         makeToast("Your end time must be after your start time.");
                     } else {
+                        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
                         //make api call to create a new event!
-                        AndroidNetworking.post(HomePageActivity.baseURL + "/users/1/locationreminders/")
+                        AndroidNetworking.post(HomePageActivity.baseURL + "/users/" + settings.getString("user_id", "0") + "/locationreminders/")
                                 .addBodyParameter("name", eventNameField.getText().toString())
                                 .addBodyParameter("description", eventDescriptionField.getText().toString())
                                 .addBodyParameter("location_descriptor", eventLocationNameField.getText().toString())

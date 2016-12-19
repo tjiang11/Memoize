@@ -39,14 +39,18 @@
             android:text="Drop Pin"
             android:id="@+id/drop_pin_button"
             android:layout_gravity="center_horizontal"
-            android:layout_height="40dp" />
+            android:layout_height="40dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@android:color/white" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
             android:layout_width="180dp"
             android:text="Hopkins Locations"
             android:id="@+id/choose_hopkins_loc_button"
-            android:layout_height="40dp" />
+            android:layout_height="40dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
 
@@ -113,14 +117,18 @@
             android:text="Choose Start Time"
             android:id="@+id/choose_start_time_button"
             android:layout_gravity="center_horizontal"
-            android:layout_height="40dp" />
+            android:layout_height="40dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/white" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
             android:layout_width="180dp"
             android:text="Choose End Time"
             android:id="@+id/choose_end_time_button"
-            android:layout_height="40dp" />
+            android:layout_height="40dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/white" />
 
     </LinearLayout>
 
@@ -156,6 +164,8 @@
         android:layout_height="wrap_content"
         android:text="Save"
         android:id="@+id/save_button_location_based_notif"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@color/white" />
 
 </LinearLayout>
