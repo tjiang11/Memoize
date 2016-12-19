@@ -279,18 +279,46 @@ class nontrivial_feature_tests(APITestCase):
 		data3 = {"time": passed_time, "name": "make a last resort reminder", "description": "", "location_descriptor": "TEST", "latitude": "50.000", "longitude": "50.000"}
 
 		response = self.client.post('/users/9/lastresortreminders/', data3, format='json')
-		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+		self.assertEquals(response.status_code, status.HTTP_201_CREATED)
 
 		response = self.client.get('/users/9/lastresortreminders/?latitude=50.5&longitude=50.5', {}, format='json')
-		self.assertEqual(response.content,'[]') 
+		self.assertEquals(response.content,'[]') 
 		#should be empty because this reminder is 2 hours into the future and only 40 miles away (which would mean notifying the user 92 minutes before the reminder time)
 
 		response = self.client.get('/users/9/lastresortreminders/?latitude=50.7&longitude=50.7', {}, format='json')
 		self.assertEquals(response.content, '[{"name":"make a last resort reminder","description":"","location_descriptor":"TEST","time":"' + t + ':00Z","latitude":"50.00000000","longitude":"50.00000000","id":3}]')
-		
-		"""^now the travel time to the location of the event is estimated to be 114 minutes, and with the 10 minute grace period
-		it becomes time to notify the user of his/her event, thus th notification is displayed"""
+		self.assertEquals(response.status_code, 200)
 
+		"""^now the travel time to the location of the event is estimated to be 114 minutes, and with the 10 minute grace period
+		it becomes time to notify the user of his/her event, thus the notification is displayed"""
+
+
+	def test_reminders_at_location_under_800_meters(self):
+		response = make_test_user(self)
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+		time = datetime.datetime.now()
+		new_time = time + datetime.timedelta(0, 900) #15 minutes into the future
+
+		time_str = str(new_time)
+		passed_time = time_str[:-10]
+		t = passed_time[:10] + "T" + passed_time[11:]
+		data = {"time": passed_time, "name": "make a last resort reminder within 800 meters", "description": "", "location_descriptor": "TEST", "latitude": "50.000", "longitude": "50.000"}
+
+		response = self.client.post('/users/10/lastresortreminders/', data, format='json')
+		self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+
+		response = self.client.get('/users/10/lastresortreminders/?latitude=50.0035&longitude=50.0035', {}, format='json')
+		#this distance calls for an estimated travel time of 5.7 minutes, and we add on our 10 minute security period, 
+		#so our response should contain the notification because the reminder is for 15 minutes from now
+		self.assertEquals(response.content, '[{"name":"make a last resort reminder within 800 meters","description":"","location_descriptor":"TEST","time":"' + t + ':00Z","latitude":"50.00000000","longitude":"50.00000000","id":4}]')
+
+
+		"""Now we want to make sure that if we are closer the notification is not shown"""
+		response = self.client.get('/users/10/lastresortreminders/?latitude=50.0004&longitude=50.00004', {}, format='json')
+		#now the travel time is about half a minute, so with the 10 minute security period the user only needs to be notified 
+		#11.5 minutes before the reminder is scheduled. Thus, the user should not see the reminder as it is 15 minutes away
+		self.assertEquals(response.content,'[]') 
+		self.assertEquals(response.status_code, 200)
 
 
 
