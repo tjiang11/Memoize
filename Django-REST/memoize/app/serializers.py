@@ -58,7 +58,7 @@ class TimeReminderSerializer(serializers.ModelSerializer):
 class LocationReminderSerializer(serializers.ModelSerializer):
     class Meta:
         model = LocationReminder
-        fields = ('name', 'description', 'location_descriptor', 'start_time', 'end_time', 'latitude', 'longitude', 'id')
+        fields = ('name', 'description', 'location_descriptor', 'start_time', 'end_time', 'latitude', 'longitude','radius', 'id')
         read_only_fields = ('id', )
 
 class LastResortReminderSerializer(serializers.ModelSerializer):

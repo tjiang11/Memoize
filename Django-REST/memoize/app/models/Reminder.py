@@ -44,6 +44,7 @@ class LocationReminder(Reminder):
    		latitude: used for location of reminder.
    		longitude: used for location of reminder.
    		user: the user that created the reminder.
+   		radius: the radius that the user iputs with the desired radius for being reminded
    	"""
 	start_time = models.TimeField(null=False)
 	end_time = models.TimeField(null=False)
@@ -53,6 +54,7 @@ class LocationReminder(Reminder):
 		related_name='location_reminders',
 		on_delete=models.CASCADE,
 		default=1)
+	radius = models.IntegerField(default = 100)
 
 class TimeReminder(Reminder):
 	"""Represents a time based reminder.
