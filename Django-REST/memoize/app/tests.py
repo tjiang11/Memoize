@@ -320,8 +320,34 @@ class nontrivial_feature_tests(APITestCase):
 		self.assertEquals(response.content,'[]') 
 		self.assertEquals(response.status_code, 200)
 
+	def test_reminders_at_location_under__32186_meters(self):
+		response = make_test_user(self)
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+		time = datetime.datetime.now()
+		new_time = time + datetime.timedelta(0, 2400) #40 minutes into the future
 
+		time_str = str(new_time)
+		passed_time = time_str[:-10]
+		t = passed_time[:10] + "T" + passed_time[11:]
+		data = {"time": passed_time, "name": "make a last resort reminder within 32186 meters", "description": "", "location_descriptor": "TEST", "latitude": "50.000", "longitude": "50.000"}
 
+		response = self.client.post('/users/11/lastresortreminders/', data, format='json')
+		self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+
+		response = self.client.get('/users/11/lastresortreminders/?latitude=50.095&longitude=50.095', {}, format='json')
+		#this means we are about 7.795 miles away from our event. This calls for a travel time of about 31.18 minutes. 
+		#with the 10 minute security period this means the the estimated total travel time is slightly more than 40 minutes
+		#this means our get request should return our notification to display to the user
+		self.assertEquals(response.content, '[{"name":"make a last resort reminder within 32186 meters","description":"","location_descriptor":"TEST","time":"' + t + ':00Z","latitude":"50.00000000","longitude":"50.00000000","id":5}]')
+		self.assertEquals(response.status_code, 200)
+
+		print "*******"
+		#now we check to make sure that if you're closer the notification does not display
+		response = self.client.get('/users/11/lastresortreminders/?latitude=50.05&longitude=50.05', {}, format='json')
+		#only 4.1 miles away, which means about 16 minutes -- 26 minutes estimated time with the 10 minute security period
+		#notification should not display 
+		self.assertEquals(response.content, '[]')
+		self.assertEquals(response.status_code, 200)
 
 def make_test_user(self):
 	"""Method to make a user in the database that is used by various other methods."""
