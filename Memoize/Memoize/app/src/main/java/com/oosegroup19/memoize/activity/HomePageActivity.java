@@ -135,11 +135,11 @@ public class HomePageActivity extends AppCompatActivity {
                 if (position == 0) {
                     baseFragment = ReminderLogFragment.newInstance(user);
                 } else if (position == 1) {
-                    baseFragment = HomePageFragment.newInstance(user);
-                } else if (position == 2) {
                     baseFragment = NewNotificationFragment.newInstance(user);
-                } else if (position == 3) {
-                    baseFragment = GroupFragment.newInstance(user);
+//                } else if (position == 2) {
+//                    baseFragment = NewNotificationFragment.newInstance(user);
+//                } else if (position == 3) {
+//                    baseFragment = GroupFragment.newInstance(user);
                 } else {
                     baseFragment = ReminderLogFragment.newInstance(user);
                 }
