@@ -98,9 +98,10 @@ public class SampleAlarmReceiver extends WakefulBroadcastReceiver {
         // clock, and to repeat once a day.
 //        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP,
 //                SystemClock.elapsedRealtime(), 1000, alarmIntent);
-        alarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime(), 1000, alarmIntent);
-
+//        alarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+//                SystemClock.elapsedRealtime(), 1000, alarmIntent);
+        alarmMgr.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime(), alarmIntent);
 
         
         // Enable {@code SampleBootReceiver} to automatically restart the alarm when the
@@ -135,4 +136,8 @@ public class SampleAlarmReceiver extends WakefulBroadcastReceiver {
                 PackageManager.DONT_KILL_APP);
     }
     // END_INCLUDE(cancel_alarm)
+
+    public AlarmManager getAlarmMgr() {
+        return this.alarmMgr;
+    }
 }

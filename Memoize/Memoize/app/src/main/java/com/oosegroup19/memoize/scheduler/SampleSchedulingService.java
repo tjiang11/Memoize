@@ -1,11 +1,13 @@
 package com.oosegroup19.memoize.scheduler;
 
+import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -50,7 +52,7 @@ public class SampleSchedulingService extends IntentService {
     public static int PORT = 8001;
 
     //public static String baseURL = "http://10.0.2.2:" + PORT; //uncomment if you are using emulator, use 10.0.3.2 for genymotion, 10.0.2.2 if not
-    public static String baseURL = "https://24a3ae35.ngrok.io"; //uncomment and put your ngrok url here if using ngrok tunneling
+    public static String baseURL = "https://e1ad007b.ngrok.io"; //uncomment and put your ngrok url here if using ngrok tunneling
     public static String PREFS_NAME = "myPrefs";
 
     public static final String TAG = "Scheduling Demo";
@@ -169,6 +171,10 @@ public class SampleSchedulingService extends IntentService {
                     }
                 });
 
+        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent myIntent = new Intent(context, SampleAlarmReceiver.class);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, myIntent, 0);
+        alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 15000, alarmIntent);
         SampleAlarmReceiver.completeWakefulIntent(intent);
     }
     
