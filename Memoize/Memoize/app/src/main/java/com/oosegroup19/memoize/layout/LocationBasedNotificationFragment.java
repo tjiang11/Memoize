@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -128,12 +129,27 @@ public class LocationBasedNotificationFragment extends BaseFragment {
         final TextView eventLocationNameField = (TextView) view.findViewById(R.id.event_location_locationbased);
         final TextView eventDescriptionField = (TextView) view.findViewById(R.id.event_description_locationbased);
         final TextView currLatLongField = (TextView) view.findViewById(R.id.currLocationTextView);
+
+        final TextView radiusTextView = (TextView) view.findViewById(R.id.eventRadiusView);
+        final SeekBar radiusBar = (SeekBar) view.findViewById(R.id.radius_seek_bar);
 //
 //        currStartTimeTextField = (TextView) view.findViewById(R.id.startTimeText);
 //        currEndTimeTextField = (TextView) view.findViewById(R.id.endTimeText);
 
         eventLocationNameField.setText(locationName);
         currLatLongField.setText(eventLatitude == -1 ? "No Location Selected" : "Latitude: " + eventLatitude + " " + " Longitude: " + eventLongitude);
+
+        radiusBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                radiusTextView.setText("Event Radius: " + progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
 
         chooseHopkinsLocationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,6 +219,7 @@ public class LocationBasedNotificationFragment extends BaseFragment {
 
                                 .addBodyParameter("longitude", df.format(eventLongitude))
                                 .addBodyParameter("latitude", df.format(eventLatitude))
+                                .addBodyParameter("radius", Integer.toString(radiusBar.getProgress()))
                                 .build()
                                 .getAsJSONObject(new JSONObjectRequestListener() {
                                     @Override

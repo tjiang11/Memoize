@@ -96,7 +96,10 @@ public class SampleSchedulingService extends IntentService {
 //
         context = getApplicationContext();
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
-        AndroidNetworking.get(baseURL + "/users/" + settings.getString("user_id", "0") + "/locationreminders/")
+        AndroidNetworking.get(baseURL + "/users/" + settings.getString("user_id", "0")
+                + "/locationreminders/" + "?latitude=" + settings.getString("latitude", "0")
+                + "&longitude=" + settings.getString("longitude", "0"))
+
                 .build()
                 .getAsString(new StringRequestListener() {
                     @Override
@@ -117,7 +120,8 @@ public class SampleSchedulingService extends IntentService {
                     }
                 });
 
-        AndroidNetworking.get(baseURL + "/users/" + settings.getString("user_id", "0") + "/timereminders/")
+        AndroidNetworking.get(baseURL + "/users/" + settings.getString("user_id", "0") + "/timereminders/" +
+                "?get_current")
                 .build()
                 .getAsString(new StringRequestListener() {
                     @Override
@@ -139,7 +143,10 @@ public class SampleSchedulingService extends IntentService {
                     }
                 });
 
-        AndroidNetworking.get(baseURL + "/users/" + settings.getString("user_id", "0") + "/lastresortreminders/")
+        AndroidNetworking.get(baseURL + "/users/" + settings.getString("user_id", "0")
+                + "/lastresortreminders/" + "?latitude=" + settings.getString("latitude", "0")
+                + "&longitude=" + settings.getString("longitude", "0"))
+
                 .build()
                 .getAsString(new StringRequestListener() {
                     @Override

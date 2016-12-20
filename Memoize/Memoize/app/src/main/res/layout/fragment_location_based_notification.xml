@@ -159,6 +159,22 @@
     <!--</LinearLayout>-->
 
 
+    <TextView
+        android:text="Event Radius: 100"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/eventRadiusView"
+        android:textColor="#000000"
+        android:gravity="center_horizontal" />
+
+    <SeekBar
+        style="@style/Widget.AppCompat.SeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="1000"
+        android:progress="100"
+        android:id="@+id/radius_seek_bar" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
