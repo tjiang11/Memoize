@@ -44,7 +44,19 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
             </intent-filter>
         </receiver>
+
         <service android:name=".scheduler.SampleSchedulingService" />
+
+        <service
+            android:name=".scheduler.LocationService"
+            android:enabled="true"
+            android:exported="true"
+            android:label="MyInfiniteLocationService">
+            <intent-filter>
+                <action android:name="com.oosegroup19.memoize.LONGRUNSERVICE" />
+            </intent-filter>
+        </service>
+
     </application>
 
 

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.FragmentTransaction;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -23,6 +24,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.oosegroup19.memoize.MyLocationListener;
 import com.oosegroup19.memoize.R;
 import com.oosegroup19.memoize.layout.GroupFragment;
+import com.oosegroup19.memoize.scheduler.LocationService;
 import com.oosegroup19.memoize.scheduler.SampleAlarmReceiver;
 import com.oosegroup19.memoize.structures.User;
 import com.oosegroup19.memoize.layout.BaseFragment;
@@ -47,17 +49,17 @@ public class HomePageActivity extends AppCompatActivity {
     private String authenticationKey;
 
     /*###################### Location Variables ######################*/
-    private LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-    Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+    private LocationManager locationManager = null;
+    Location location = null;
     private LocationListener locationListener = null;
 
-    double longitude = location.getLongitude();
-    double latitude = location.getLatitude();
+    double longitude;
+    double latitude;
 
     /*#################### Networking Variables #####################*/
     public static int PORT = 8001;
-    public static String baseURL = "http://10.0.2.2:" + PORT; //uncomment if you are using emulator, use 10.0.3.2 for genymotion, 10.0.2.2 if not
-    // public static String baseURL = "http://9194e27a.ngrok.io"; //uncomment and put your ngrok url here if using ngrok tunneling
+//    public static String baseURL = "http://10.0.2.2:" + PORT; //uncomment if you are using emulator, use 10.0.3.2 for genymotion, 10.0.2.2 if not
+     public static String baseURL = "https://2a02d290.ngrok.io"; //uncomment and put your ngrok url here if using ngrok tunneling
     public static String PREFS_NAME = "myPrefs";
     public static Location currentLocation = null;
 
@@ -66,29 +68,13 @@ public class HomePageActivity extends AppCompatActivity {
     private static TabLayout tabLayout;
 
 
-    private final LocationListener locationListener2 = new LocationListener() {
-        @Override
-        public void onLocationChanged(Location location) {
-            longitude = location.getLongitude();
-            latitude = location.getLatitude();
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-        @Override
-        public void onProviderEnabled(String provider) {}
-
-        @Override
-        public void onProviderDisabled(String provider) {}
-    };
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         alarm.setAlarm(this);
+
         setContentView(R.layout.activity_home_page);
+
 
         //Disables landscape mode
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -101,6 +87,13 @@ public class HomePageActivity extends AppCompatActivity {
         context = getApplicationContext();
         AndroidNetworking.initialize(context);
         System.setProperty("http.keepAlive", "false");
+
+
+//        Intent locationServiceIntent = new Intent(context, LocationService.class);
+        Intent locationServiceIntent = new Intent("com.oosegroup19.memoize.LONGRUNSERVICE");
+        locationServiceIntent.setPackage("com.oosegroup19.memoize");
+        context.startService(locationServiceIntent);
+
 
         myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         peditor = myPrefs.edit();
@@ -138,7 +131,6 @@ public class HomePageActivity extends AppCompatActivity {
                 currentLocation = getLastKnownLocation();
 
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener2);
             }
         } else {
             Log.i("HomePageActivity", "GPS is offline");
