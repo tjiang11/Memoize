@@ -64,6 +64,10 @@ public class TimeBasedNotificationFragment extends BaseFragment {
     private static double eventLatitude = -1;
     private static double eventLongitude = -1;
 
+    private static String eventName = "";
+    private static String eventLocation = "";
+    private static String eventDescription = "";
+
     Calendar calendar = Calendar.getInstance();
 
     DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -95,8 +99,20 @@ public class TimeBasedNotificationFragment extends BaseFragment {
         TimeBasedNotificationFragment fragment = new TimeBasedNotificationFragment();
         eventLatitude = latitude;
         eventLongitude = longitude;
-        // owner = user;
         return fragment;
+    }
+
+    public static TimeBasedNotificationFragment newInstance(double latitude, double longitude, String name, String loc, String description) {
+        TimeBasedNotificationFragment fragment = new TimeBasedNotificationFragment();
+        eventLatitude = latitude;
+        eventLongitude = longitude;
+
+        eventName = name;
+        eventLocation = loc;
+        eventDescription = description;
+
+        return fragment;
+
     }
 
     public TimeBasedNotificationFragment() {
@@ -129,6 +145,9 @@ public class TimeBasedNotificationFragment extends BaseFragment {
 
         final CheckBox notifyTooFarCheckBox = (CheckBox) view.findViewById(R.id.notifyTooFar);
 
+        eventNameField.setText(eventName);
+        eventLocationNameField.setText(eventLocation);
+        eventDescriptionField.setText(eventDescription);
 
         chooseDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +166,9 @@ public class TimeBasedNotificationFragment extends BaseFragment {
         chooseHopkinsLocationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HopkinsLocationsFragment fragment = HopkinsLocationsFragment.newInstance("time");
+                HopkinsLocationsFragment fragment = HopkinsLocationsFragment.newInstance("time", eventNameField.getText().toString(),
+                        eventLocationNameField.getText().toString(), eventDescriptionField.getText().toString());
+
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame_main, fragment);
                 fragmentTransaction.addToBackStack(null);
@@ -159,7 +180,9 @@ public class TimeBasedNotificationFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 //Go back to home fragment
-                DropPinFragment fragment = DropPinFragment.newInstance("time");
+                DropPinFragment fragment = DropPinFragment.newInstance("time", eventNameField.getText().toString(),
+                        eventLocationNameField.getText().toString(), eventDescriptionField.getText().toString());
+
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame_main, fragment);
                 fragmentTransaction.addToBackStack(null);
@@ -185,7 +208,7 @@ public class TimeBasedNotificationFragment extends BaseFragment {
                     String datetime = date + time;
                     try {
                         Date oldDate = df.parse(datetime);
-                        Log.i("tag send time", "original " + timeToSend.toString());
+                        Log.i("tag send time", "original " + timeToSend);
                         Date newDate = new Date(oldDate.getTime() + 5 * 3600 * 1000);
                         timeToSend = df.format(newDate);
                         String dateNew = timeToSend.substring(0, 10);

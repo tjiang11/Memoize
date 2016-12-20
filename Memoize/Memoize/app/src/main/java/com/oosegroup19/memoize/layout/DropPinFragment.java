@@ -41,6 +41,15 @@ public class DropPinFragment extends BaseFragment {
 
     private static String returnToFrag = "";
 
+    private static String timeBasedReminderName = "";
+    private static String timeBasedLocationDescription = "";
+    private static String timeBasedEventDescription = "";
+
+    private static String locationBasedEventName = "";
+    private static String locationBasedEventLocationName = "";
+    private static String locationBasedEventDescription = "";
+    private static int locationBasedRadius = 100;
+
     MapView mMapView;
     private GoogleMap googleMap;
     private double finalLatitude = 0;
@@ -53,6 +62,31 @@ public class DropPinFragment extends BaseFragment {
     public static DropPinFragment newInstance(String returnTo) {
         DropPinFragment fragment = new DropPinFragment();
         returnToFrag = returnTo;
+        return fragment;
+    }
+
+    public static DropPinFragment newInstance(String returnTo, String name,
+                                              String locDescription, String eventDescription) {
+        DropPinFragment fragment = new DropPinFragment();
+        returnToFrag = returnTo;
+
+        timeBasedReminderName = name;
+        timeBasedLocationDescription = locDescription;
+        timeBasedEventDescription = eventDescription;
+
+        return fragment;
+    }
+
+    public static DropPinFragment newInstance(String returnTo, String eventName,
+                                              String eventLocationName, String eventLocationDescriptionName, int radius) {
+        DropPinFragment fragment = new DropPinFragment();
+        returnToFrag = returnTo;
+
+        locationBasedEventName = eventName;
+        locationBasedEventLocationName = eventLocationName;
+        locationBasedEventDescription = eventLocationDescriptionName;
+        locationBasedRadius = radius;
+
         return fragment;
     }
 
@@ -75,9 +109,11 @@ public class DropPinFragment extends BaseFragment {
                 Fragment fragment;
                 Log.i("DropPinFrag", "Final latitude: " + finalLatitude + "Final longitude: " + finalLongitude);
                 if (returnToFrag.equals("location")) {
-                    fragment = LocationBasedNotificationFragment.newInstance("", finalLatitude, finalLongitude);
+                    fragment = LocationBasedNotificationFragment.newInstance(locationBasedEventLocationName, finalLatitude, finalLongitude,
+                            locationBasedEventName, locationBasedEventDescription, locationBasedRadius);
                 } else if (returnToFrag.equals("time")) {
-                    fragment = TimeBasedNotificationFragment.newInstance(finalLatitude, finalLongitude);
+                    fragment = TimeBasedNotificationFragment.newInstance(finalLatitude, finalLongitude,
+                            timeBasedReminderName, timeBasedLocationDescription, timeBasedEventDescription);
                 } else {
                     fragment = LocationBasedNotificationFragment.newInstance("", finalLatitude, finalLongitude);
                     Log.e("tag", "Error retrieving return fragment.");
