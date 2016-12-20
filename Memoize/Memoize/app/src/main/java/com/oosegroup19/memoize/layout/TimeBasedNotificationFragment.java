@@ -28,8 +28,12 @@ import com.oosegroup19.memoize.structures.User;
 
 import org.json.JSONObject;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import static com.oosegroup19.memoize.activity.HomePageActivity.PREFS_NAME;
 
@@ -174,6 +178,24 @@ public class TimeBasedNotificationFragment extends BaseFragment {
                     String timeToSend = String.format("%04d-%02d-%02dT%02d:%02d:00", notificationYear, notificationMonth, notificationDay,
                             notificationHour, notificationMinute);
 
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
+                    String date = timeToSend.substring(0, 10);
+                    String time = timeToSend.substring(11);
+                    String dateTimeNew = "";
+                    String datetime = date + time;
+                    try {
+                        Date oldDate = df.parse(datetime);
+                        Log.i("tag send time", "original " + timeToSend.toString());
+                        Date newDate = new Date(oldDate.getTime() + 5 * 3600 * 1000);
+                        timeToSend = df.format(newDate);
+                        String dateNew = timeToSend.substring(0, 10);
+                        String timeNew = timeToSend.substring(11);
+                        dateTimeNew = dateNew + "T" + timeNew;
+                        Log.i("tag", dateTimeNew);
+                    } catch (ParseException e) {
+                        Log.e("tag", e.getMessage());
+                    }
+
                     System.out.println("Time that is sent to api call: " + timeToSend);
                     SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
 
@@ -182,7 +204,7 @@ public class TimeBasedNotificationFragment extends BaseFragment {
                             .addBodyParameter("name", eventNameField.getText().toString())
                             .addBodyParameter("description", eventDescriptionField.getText().toString())
                             .addBodyParameter("location_descriptor", eventLocationNameField.getText().toString())
-                            .addBodyParameter("time", timeToSend)
+                            .addBodyParameter("time", dateTimeNew)
                             .build()
                             .getAsJSONObject(new JSONObjectRequestListener() {
                                 @Override

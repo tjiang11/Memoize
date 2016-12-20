@@ -1,5 +1,13 @@
 package com.oosegroup19.memoize.structures;
 
+import android.text.format.DateUtils;
+import android.util.Log;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by Tony on 12/19/2016.
  */
@@ -15,5 +23,22 @@ public class LastResortReminderItem extends ReminderItem {
         this.latitude = latitude;
         this.longitude = longitude;
         this.time = time;
+    }
+
+    public void convertTime() {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
+        String date = this.time.substring(0, 10);
+        String time = this.time.substring(11);
+        String datetime = date + time;
+        Log.i("tag", "hi");
+        try {
+            Date oldDate = df.parse(datetime);
+            Log.i("tag", "original " + this.time.toString());
+            Date newDate = new Date(oldDate.getTime() - 5 * 3600 * 1000);
+            this.time = newDate.toString();
+            Log.i("tag", newDate.toString());
+        } catch (ParseException e) {
+            Log.e("tag", e.getMessage());
+        }
     }
 }

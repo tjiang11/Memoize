@@ -204,7 +204,7 @@ public class ReminderLogFragment extends BaseFragment {
                         TimeReminderItem[] myReminderItems = gson.fromJson(response, TimeReminderItem[].class);
 
                         for (TimeReminderItem reminderItem : myReminderItems) {
-                            Log.i("ReminderLogFrag", reminderItem.toString());
+                            Log.i("ReminderLogFragfvcv", reminderItem.toString());
                             aa.add(reminderItem);
                         }
                     }
