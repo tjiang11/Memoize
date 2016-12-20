@@ -61,7 +61,7 @@ class happy_path_tests(APITestCase):
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 		data = {"start_time": "10:45[:0[0]]", "name": "make a location reminder", "description": "this is a test description", "location_descriptor": "test location", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00"}
 		response = self.client.post('/users/5/locationreminders/', data, format='json')
-		self.assertEqual(response.content, '{"name":"make a location reminder","description":"this is a test description","location_descriptor":"test location","start_time":"10:45:00","end_time":"11:45:00","latitude":"1.00000000","longitude":"1.00000000","radius":100,"id":1}')
+		self.assertEqual(response.content, '{"name":"make a location reminder","description":"this is a test description","location_descriptor":"test location","latitude":"1.00000000","longitude":"1.00000000","radius":100,"id":1}')
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED) 
 
 		#test if actually stored
@@ -78,7 +78,7 @@ class happy_path_tests(APITestCase):
 		data = {"start_time": "10:45[:0[0]]", "name": "make a location reminder without description", "description": "", "location_descriptor": "test location", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00", "radius": "50"}
 		response = self.client.post('/users/5/locationreminders/', data, format='json')
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-		self.assertEqual(response.content, '{"name":"make a location reminder without description","description":"","location_descriptor":"test location","start_time":"10:45:00","end_time":"11:45:00","latitude":"1.00000000","longitude":"1.00000000","radius":50,"id":3}')		
+		self.assertEqual(response.content, '{"name":"make a location reminder without description","description":"","location_descriptor":"test location","latitude":"1.00000000","longitude":"1.00000000","radius":50,"id":3}')		
 
 	def test_group(self): #will need to be modified when we add authentication!
 		"""Tests successful creation of a group."""
@@ -223,13 +223,13 @@ class unhappy_path_tests(APITestCase):
 		response = self.client.post('/users/7/timereminders/', data, format='json')
 		self.assertEquals(response.content, '{"time":["Datetime has wrong format. Use one of these formats instead: YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z]."]}')\
 
-		data = {"start_time": "", "name": "test without start time", "description": "we are testing", "location_descriptor": "Hogwarts school of oose", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00"}
-		response = self.client.post('/users/7/locationreminders/', data, format='json')
-		self.assertEquals(response.content, '{"start_time":["Time has wrong format. Use one of these formats instead: hh:mm[:ss[.uuuuuu]]."]}')
+		#data = {"start_time": "", "name": "test without start time", "description": "we are testing", "location_descriptor": "Hogwarts school of oose", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00"}
+		#response = self.client.post('/users/7/locationreminders/', data, format='json')
+		#self.assertEquals(response.content, '{"start_time":["Time has wrong format. Use one of these formats instead: hh:mm[:ss[.uuuuuu]]."]}')
 
-		data = {"start_time": "11:45[:0[0]]", "name": "test without start time", "description": "we are testing", "location_descriptor": "Hogwarts school of oose", "end_time": "", "latitude": "1.00", "longitude": "1.00"}
-		response = self.client.post('/users/7/locationreminders/', data, format='json')
-		self.assertEquals(response.content, '{"end_time":["Time has wrong format. Use one of these formats instead: hh:mm[:ss[.uuuuuu]]."]}')
+		#data = {"start_time": "11:45[:0[0]]", "name": "test without start time", "description": "we are testing", "location_descriptor": "Hogwarts school of oose", "end_time": "", "latitude": "1.00", "longitude": "1.00"}
+		#response = self.client.post('/users/7/locationreminders/', data, format='json')
+		#self.assertEquals(response.content, '{"end_time":["Time has wrong format. Use one of these formats instead: hh:mm[:ss[.uuuuuu]]."]}')
 
 
 class nontrivial_feature_tests(APITestCase):
