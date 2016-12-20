@@ -221,7 +221,7 @@ class UserTimeReminders(views.APIView):
             test = datetime_of_reminder - curr_time
             print "total seconds of difference: " + str(test.total_seconds())
             seconds = test.total_seconds()
-            if (seconds < 35 and seconds >= 0):
+            if (seconds < 35):
                 time_to_display.append(element)
 
 
@@ -290,7 +290,7 @@ class UserLocationReminders(views.APIView):
         serializer = LocationReminderSerializer(user.location_reminders, many=True)
         length = len(serializer.data)
         nearby = []
-        print length
+        #print length
         for i in range(length):
             lat = float(serializer.data[i]['latitude'])
             lon = float(serializer.data[i]['longitude'])

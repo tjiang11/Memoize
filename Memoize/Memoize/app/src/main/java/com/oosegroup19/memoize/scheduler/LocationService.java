@@ -23,7 +23,7 @@ import android.widget.Toast;
 public class LocationService extends Service
 {
     public static final String BROADCAST_ACTION = "Hello World";
-    private static final int MINUTE = 1000 * 60;
+    private static final int MINUTE = 1000 * 1;
     public LocationManager locationManager;
     public MyLocationListener listener;
     public Location previousBestLocation = null;
@@ -149,17 +149,21 @@ public class LocationService extends Service
             Log.i("*************", "Latitude: " + loc.getLatitude());
             Log.i("*************", "Longitude: " + loc.getLongitude());
 
+            SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putLong("current_latitude", Double.doubleToRawLongBits(loc.getLatitude()));
+            editor.putLong("current_longitude", Double.doubleToRawLongBits(loc.getLongitude()));
+            editor.apply();
 
-
-            if(isBetterLocation(loc, previousBestLocation)) {
-                loc.getLatitude();
-                loc.getLongitude();
-                intent.putExtra("Latitude", loc.getLatitude());
-                intent.putExtra("Longitude", loc.getLongitude());
-                intent.putExtra("Provider", loc.getProvider());
-                sendBroadcast(intent);
-
-            }
+//            if(isBetterLocation(loc, previousBestLocation)) {
+//                loc.getLatitude();
+//                loc.getLongitude();
+////                intent.putExtra("current_latitude", loc.getLatitude());
+////                intent.putExtra("current_longitude", loc.getLongitude());
+////                intent.putExtra("Provider", loc.getProvider());
+////                sendBroadcast(intent);
+//
+//            }
         }
 
         public void onProviderDisabled(String provider)

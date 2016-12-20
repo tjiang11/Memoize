@@ -96,9 +96,11 @@ public class SampleSchedulingService extends IntentService {
 //
         context = getApplicationContext();
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+        Double lat = Double.longBitsToDouble(settings.getLong("current_latitude", 10));
+        Double lon = Double.longBitsToDouble(settings.getLong("current_longitude", 15));
+
         AndroidNetworking.get(baseURL + "/users/" + settings.getString("user_id", "0")
-                + "/locationreminders/" + "?latitude=" + settings.getString("latitude", "0")
-                + "&longitude=" + settings.getString("longitude", "0"))
+                + "/locationreminders/" + "?latitude=" + lat + "&longitude=" + lon)
 
                 .build()
                 .getAsString(new StringRequestListener() {
@@ -109,7 +111,7 @@ public class SampleSchedulingService extends IntentService {
 
                         for (LocationReminderItem reminderItem : myReminderItems) {
                             Log.i("ReminderLogFrag", reminderItem.toString());
-                            sendNotification(reminderItem.getName());
+                            sendNotification(reminderItem.getName(), reminderItem.getId());
                             deleteReminder("location", reminderItem.getId());
                         }
                     }
@@ -132,7 +134,7 @@ public class SampleSchedulingService extends IntentService {
                         for (TimeReminderItem reminderItem : myReminderItems) {
                             reminderItem.convertTime();
                             Log.i("ReminderLogFrag", reminderItem.toString());
-                            sendNotification(reminderItem.getName());
+                            sendNotification(reminderItem.getName(), reminderItem.getId());
                             deleteReminder("time", reminderItem.getId());
                         }
                     }
@@ -144,8 +146,7 @@ public class SampleSchedulingService extends IntentService {
                 });
 
         AndroidNetworking.get(baseURL + "/users/" + settings.getString("user_id", "0")
-                + "/lastresortreminders/" + "?latitude=" + settings.getString("latitude", "0")
-                + "&longitude=" + settings.getString("longitude", "0"))
+                + "/lastresortreminders/" + "?latitude=" + lat + "&longitude=" + lon)
 
                 .build()
                 .getAsString(new StringRequestListener() {
@@ -157,7 +158,7 @@ public class SampleSchedulingService extends IntentService {
                         for (LastResortReminderItem reminderItem : myReminderItems) {
                             reminderItem.convertTime();
                             Log.i("ReminderLogFrag", reminderItem.toString());
-                            sendNotification(reminderItem.getName());
+                            sendNotification(reminderItem.getName(), reminderItem.getId());
                             deleteReminder("lastresort", reminderItem.getId());
                         }
                     }
@@ -172,9 +173,7 @@ public class SampleSchedulingService extends IntentService {
     }
     
     // Post a notification indicating whether a doodle was found.
-    private void sendNotification(String msg) {
-        Random r = new Random();
-
+    private void sendNotification(String msg, int id) {
         mNotificationManager = (NotificationManager)
                this.getSystemService(Context.NOTIFICATION_SERVICE);
     
@@ -190,7 +189,7 @@ public class SampleSchedulingService extends IntentService {
         .setContentText(msg);
 
         mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(r.nextInt(), mBuilder.build());
+        mNotificationManager.notify(id, mBuilder.build());
     }
 
     private void deleteReminder(String type, int reminderId) {
