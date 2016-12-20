@@ -48,7 +48,11 @@ public class LocationBasedNotificationFragment extends BaseFragment {
 
     private static double eventLatitude = -1;
     private static double eventLongitude = -1;
-    private static String locationName = "";
+
+    private static String eventName = "";
+    private static String eventLocationName = "";
+    private static String eventDescription = "";
+    private static int eventRadius = 100;
 
     private int startHour = -1;
     private int startMinute = -1;
@@ -87,7 +91,19 @@ public class LocationBasedNotificationFragment extends BaseFragment {
 
     public static LocationBasedNotificationFragment newInstance(String loc, double latitude, double longitude) {
         LocationBasedNotificationFragment fragment = new LocationBasedNotificationFragment();
-        locationName = loc;
+        eventLocationName = loc;
+        eventLatitude = latitude;
+        eventLongitude = longitude;
+
+        return fragment;
+    }
+
+    public static LocationBasedNotificationFragment newInstance(String loc, double latitude, double longitude, String name, String description, int radius) {
+        LocationBasedNotificationFragment fragment = new LocationBasedNotificationFragment();
+        eventName = name;
+        eventLocationName = loc;
+        eventDescription = description;
+        eventRadius = radius;
         eventLatitude = latitude;
         eventLongitude = longitude;
 
@@ -136,7 +152,13 @@ public class LocationBasedNotificationFragment extends BaseFragment {
 //        currStartTimeTextField = (TextView) view.findViewById(R.id.startTimeText);
 //        currEndTimeTextField = (TextView) view.findViewById(R.id.endTimeText);
 
-        eventLocationNameField.setText(locationName);
+        //Initialize name, location, description, and radius bar to what was passed in the constructor/the default
+        eventNameField.setText(eventName);
+        eventLocationNameField.setText(eventLocationName);
+        eventDescriptionField.setText(eventDescription);
+        radiusTextView.setText("Event Radius: " + eventRadius);
+        radiusBar.setProgress(eventRadius);
+
         currLatLongField.setText(eventLatitude == -1 ? "No Location Selected" : "Latitude: " + eventLatitude + " " + " Longitude: " + eventLongitude);
 
         radiusBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -154,7 +176,8 @@ public class LocationBasedNotificationFragment extends BaseFragment {
         chooseHopkinsLocationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HopkinsLocationsFragment fragment = HopkinsLocationsFragment.newInstance("location");
+                HopkinsLocationsFragment fragment = HopkinsLocationsFragment.newInstance("location",
+                        eventNameField.getText().toString(), eventLocationNameField.getText().toString(), eventDescriptionField.getText().toString(), radiusBar.getProgress());
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame_main, fragment);
                 fragmentTransaction.addToBackStack(null);

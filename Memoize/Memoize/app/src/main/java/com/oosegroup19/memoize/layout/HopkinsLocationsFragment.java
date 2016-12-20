@@ -38,6 +38,15 @@ public class HopkinsLocationsFragment extends BaseFragment {
 
     private static String returnToFrag = "";
 
+    private static String timeBasedReminderName = "";
+    private static String timeBasedLocationDescription = "";
+    private static String timeBasedEventDescription = "";
+
+    private static String locationBasedEventName = "";
+    private static String locationBasedEventLocationName = "";
+    private static String locationBasedEventDescription = "";
+    private static int locationBasedRadius = 100;
+
     //Instance Fields
     private ListView hopkinsLocationsList;
     protected static ArrayList<HopkinsLocationItem> hopkinsLocationItems;
@@ -49,10 +58,27 @@ public class HopkinsLocationsFragment extends BaseFragment {
 
     public HopkinsLocationsFragment() {}
 
-    public static HopkinsLocationsFragment newInstance(String returnTo) {
+    public static HopkinsLocationsFragment newInstance(String returnTo, String name, String locDescription,
+                                                       String eventDescription) {
         HopkinsLocationsFragment fragment = new HopkinsLocationsFragment();
         returnToFrag = returnTo;
-        // owner = user;
+
+        timeBasedReminderName = name;
+        timeBasedLocationDescription = locDescription;
+        timeBasedEventDescription = eventDescription;
+
+        return fragment;
+    }
+
+    public static HopkinsLocationsFragment newInstance(String returnTo, String eventName, String eventLocationName, String eventLocationDescriptionName, int radius) {
+        HopkinsLocationsFragment fragment = new HopkinsLocationsFragment();
+        returnToFrag = returnTo;
+
+        locationBasedEventName = eventName;
+        locationBasedEventLocationName = eventLocationName;
+        locationBasedEventDescription = eventLocationDescriptionName;
+        locationBasedRadius = radius;
+
         return fragment;
     }
 
@@ -102,9 +128,11 @@ public class HopkinsLocationsFragment extends BaseFragment {
                 Log.i("HopkinsLocationFrag", value.getLocationName());
                 Fragment fragment;
                 if (returnToFrag.equals("location")) {
-                    fragment = LocationBasedNotificationFragment.newInstance(value.getLocationName(), value.getLatitude(), value.getLongitude());
+                    fragment = LocationBasedNotificationFragment.newInstance(value.getLocationName(),
+                            value.getLatitude(), value.getLongitude(), locationBasedEventName, locationBasedEventDescription, locationBasedRadius);
                 } else if (returnToFrag.equals("time")) {
-                    fragment = TimeBasedNotificationFragment.newInstance(value.getLatitude(), value.getLongitude());
+                    fragment = TimeBasedNotificationFragment.newInstance(value.getLatitude(),
+                            value.getLongitude(), timeBasedReminderName, timeBasedLocationDescription, timeBasedEventDescription);
                 } else {
                     fragment = LocationBasedNotificationFragment.newInstance(value.getLocationName(), value.getLatitude(), value.getLongitude());
                     Log.e("tag", "Error retrieving return fragment.");
