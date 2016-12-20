@@ -164,16 +164,13 @@ public class HomePageActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                Log.i("HomePageActivity", "Unselected Tab Position: " + tab.getPosition());
-            }
+            public void onTabUnselected(TabLayout.Tab tab) {}
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                Log.i("HomePageActivity", "Reselected Tab Position: " + tab.getPosition());
                 if (baseFragment != null) {
+
                     int position = tab.getPosition();
-                    Log.i("HomePageActivity", "Reselected Tab Position: " + position);
                     if (position == 0) {
                         baseFragment = ReminderLogFragment.newInstance(user);
                     } else if (position == 1) {
@@ -222,7 +219,6 @@ public class HomePageActivity extends AppCompatActivity {
         } else if(currentFragment.equals(SettingsFragment.FRAGMENTNAME)){
             baseFragment = SettingsFragment.newInstance(user);
         }  */ else{
-            Log.e("MainActivity", "InvalidFragmentNameFound: " + currentFragment);
         }
 
         inflateAndCommitBaseFragment();
