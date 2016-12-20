@@ -362,11 +362,13 @@ class UserLastResortReminders(views.APIView):
             time = serializer.data[i]['time']
 
             distance_in_meters = calcDistance(current_lat, current_lon, lat, lon)
+            print "serializer time: " + time
             event_time = datetime.datetime.strptime(time, "%Y-%m-%dT%H:%M:00Z")
             #print event_time
             current_time = datetime.datetime.now()
             tdelta =  event_time - current_time
             zero_tdelta = timedelta(days=0, seconds=0, microseconds=0)
+            print "event time: " + str(event_time)
             print str(distance_in_meters) + ' meters'
             print tdelta.total_seconds()
 
@@ -380,7 +382,7 @@ class UserLastResortReminders(views.APIView):
                 expected_time_to_event = 10
                 expected_time_to_event += (distance_in_meters / 1609.34) * 2
 
-            if tdelta.total_seconds() < expected_time_to_event * 60 and tdelta > zero_tdelta:
+            if tdelta.total_seconds() < expected_time_to_event * 60:
                 print "adding to return with the following info:"
                 print "distance in meters: " + str(distance_in_meters) + ' meters'
                 print "diffeence between event time and now: " + str(tdelta.total_seconds()) + " seconds"
