@@ -14,7 +14,7 @@ count = 0
 
 
 # Create your tests here.
-class happy_path_tests(APITestCase):
+class basic_creation_tests(APITestCase):
 	"""TEST SUITE (for happy path tests)."""
 	
 	def test_creating_user(self):
@@ -354,6 +354,35 @@ class nontrivial_feature_tests(APITestCase):
 		#notification should not display 
 		self.assertEquals(response.content, '[]')
 		self.assertEquals(response.status_code, 200)
+
+
+	def test_reminders_at_very_far_locations(self):
+		response = make_test_user(self)
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+		print response.content
+		time = datetime.datetime.now()
+		new_time = time + datetime.timedelta(0, 3540) #59 minutes into the future
+
+		time_str = str(new_time)
+		passed_time = time_str[:-10]
+		t = passed_time[:10] + "T" + passed_time[11:]
+		data = {"time": passed_time, "name": "make a last resort reminder over 32186 meters", "description": "", "location_descriptor": "TEST", "latitude": "50.000", "longitude": "50.000"}
+
+		response = self.client.post('/users/12/lastresortreminders/', data, format='json')
+		self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+
+		response = self.client.get('/users/12/lastresortreminders/?latitude=50.3&longitude=50.3', {}, format='json')
+		#this means that we are currently 24.6 miles away from where our event should be. This is an estimated travel time
+		#of about 49.2 minutes, and adding the addtional 10 minute grace period causes an estimated travel time of 59.2 minutes
+		self.assertEquals(response.content, '[{"name":"make a last resort reminder over 32186 meters","description":"","location_descriptor":"TEST","time":"' + t + ':00Z","latitude":"50.00000000","longitude":"50.00000000","id":6}]')
+		self.assertEquals(response.status_code, 200)
+
+		#if we are closer then the notificiation will not go off
+		response = self.client.get('/users/12/lastresortreminders/?latitude=50.1&longitude=50.1', {}, format='json')
+		self.assertEquals(response.content, '[]')
+		self.assertEquals(response.status_code, 200)
+
+
 
 def make_test_user(self):
 	"""Method to make a user in the database that is used by various other methods."""
