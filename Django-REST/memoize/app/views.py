@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from rest_framework import viewsets, views, status, generics, permissions
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
-from memoize.app.models import Event, MemGroup, TimeReminder, LastResortReminder
+from memoize.app.models import Event, MemGroup, TimeReminder, LocationReminder, LastResortReminder
 from memoize.app.serializers import UserSerializer, UserUpdateSerializer, MemGroupSerializer, EventSerializer, IDSerializer, TimeReminderSerializer, LocationReminderSerializer, LastResortReminderSerializer
 from memoize.app.permissions import IsOwnerOrReadOnlyEvent, IsOwnerOrReadOnlyGroup, IsOwnerOrReadOnlyUser
 from math import radians, cos, sin, asin, sqrt
@@ -193,21 +193,21 @@ class UserTimeReminders(views.APIView):
         serializer = TimeReminderSerializer(user.time_reminders, many=True)
         
         if 'get_current' not in request.GET: #modify
-            to_be_displayed = []
-            for element in serializer.data:
-                reminder_time = element['time']
-                curr_time = datetime.datetime.now() 
-                datetime_of_reminder = datetime.datetime.strptime(reminder_time, "%Y-%m-%dT%H:%M:00Z")
-                time_diff = datetime_of_reminder - curr_time
+        #     to_be_displayed = []
+        #     for element in serializer.data:
+        #         reminder_time = element['time']
+        #         curr_time = datetime.datetime.now() 
+        #         datetime_of_reminder = datetime.datetime.strptime(reminder_time, "%Y-%m-%dT%H:%M:00Z")
+        #         time_diff = datetime_of_reminder - curr_time
                
-                seconds_diff = time_diff.total_seconds()
-                print str(time_diff)
-                print str(seconds_diff)
-                if (seconds_diff > 0):
-                    to_be_displayed.append(element)
+        #         seconds_diff = time_diff.total_seconds()
+        #         print str(time_diff)
+        #         print str(seconds_diff)
+        #         if (seconds_diff > 0):
+        #             to_be_displayed.append(element)
 
 
-            return Response(to_be_displayed)
+            return Response(serializer.data)
 
         time_to_display = []
         for element in serializer.data:
@@ -257,6 +257,11 @@ class UserTimeRemindersDetail(views.APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, pk_reminder, format=None):
+        reminder = self.get_reminder(pk=pk_reminder)
+        reminder.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class UserLocationReminders(views.APIView):
     def get_user(self, pk):
@@ -309,6 +314,18 @@ class UserLocationReminders(views.APIView):
             user.location_reminders.add(lr)
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+class UserLocationRemindersDetail(views.APIView):
+    def get_reminder(self, pk):
+        try:
+            return LocationReminder.objects.get(pk=pk)
+        except LocationReminder.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request, pk, pk_reminder, format=None):
+        reminder = self.get_reminder(pk=pk_reminder)
+        reminder.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class UserLastResortReminders(views.APIView):
     serializer_class = LastResortReminderSerializer
@@ -381,6 +398,19 @@ class UserLastResortReminders(views.APIView):
             user.last_resort_reminders.add(lr)
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class UserLastResortRemindersDetail(views.APIView):
+    def get_reminder(self, pk):
+        try:
+            return LastResortReminder.objects.get(pk=pk)
+        except LastResortReminder.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    def delete(self, request, pk, pk_reminder, format=None):
+        reminder = self.get_reminder(pk=pk_reminder)
+        reminder.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 def calcDistance(lat1, lon1, lat2, lon2):
     """

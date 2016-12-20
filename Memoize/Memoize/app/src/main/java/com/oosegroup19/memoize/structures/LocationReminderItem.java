@@ -11,8 +11,8 @@ public class LocationReminderItem extends ReminderItem {
     private String end_time;
 
 
-    public LocationReminderItem(String event, String location, String description, String start_time, String end_time, double latitude, double longitude) {
-        super(event, location, description);
+    public LocationReminderItem(String event, String location, String description, String start_time, String end_time, double latitude, double longitude, int id) {
+        super(event, location, description, id);
         this.latitude = latitude;
         this.longitude = longitude;
         this.start_time = start_time;

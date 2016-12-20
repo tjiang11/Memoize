@@ -5,17 +5,22 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.OkHttpResponseListener;
 import com.androidnetworking.interfaces.StringRequestListener;
 import com.google.gson.Gson;
 import com.oosegroup19.memoize.R;
 import com.oosegroup19.memoize.activity.HomePageActivity;
+import com.oosegroup19.memoize.structures.LastResortReminderItem;
 import com.oosegroup19.memoize.structures.LocationReminderItem;
 import com.oosegroup19.memoize.structures.ReminderItemAdapter;
+import com.oosegroup19.memoize.structures.TimeReminderItem;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,6 +30,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Random;
 
+import okhttp3.Response;
+
+import static com.oosegroup19.memoize.activity.HomePageActivity.PREFS_NAME;
+
 /**
  * This {@code IntentService} does the app's actual work.
  * {@code SampleAlarmReceiver} (a {@code WakefulBroadcastReceiver}) holds a
@@ -33,6 +42,7 @@ import java.util.Random;
  * wake lock.
  */
 public class SampleSchedulingService extends IntentService {
+    Context context;
     public SampleSchedulingService() {
         super("SchedulingService");
     }
@@ -78,8 +88,9 @@ public class SampleSchedulingService extends IntentService {
 //        SampleAlarmReceiver.completeWakefulIntent(intent);
 //        // END_INCLUDE(service_onhandle)
 //
-
-        AndroidNetworking.get(HomePageActivity.baseURL + "/users/1/locationreminders/")
+        context = HomePageActivity.getContext();
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+        AndroidNetworking.get(HomePageActivity.baseURL + "/users/" + settings.getString("user_id", "0") + "/locationreminders/")
                 .build()
                 .getAsString(new StringRequestListener() {
                     @Override
@@ -90,12 +101,54 @@ public class SampleSchedulingService extends IntentService {
                         for (LocationReminderItem reminderItem : myReminderItems) {
                             Log.i("ReminderLogFrag", reminderItem.toString());
                             sendNotification(reminderItem.getName());
+                            deleteReminder("location", reminderItem.getId());
                         }
                     }
 
                     @Override
                     public void onError(ANError anError) {
-                        Log.e("tag", "noooooo");
+                        Log.e("tag", "" + anError.getErrorBody());
+                    }
+                });
+
+        AndroidNetworking.get(HomePageActivity.baseURL + "/users/" + settings.getString("user_id", "0") + "/timereminders/")
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        Gson gson = new Gson();
+                        TimeReminderItem[] myReminderItems = gson.fromJson(response, TimeReminderItem[].class);
+
+                        for (TimeReminderItem reminderItem : myReminderItems) {
+                            Log.i("ReminderLogFrag", reminderItem.toString());
+                            sendNotification(reminderItem.getName());
+                            deleteReminder("time", reminderItem.getId());
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.e("tag", "" + anError.getErrorBody());
+                    }
+                });
+
+        AndroidNetworking.get(HomePageActivity.baseURL + "/users/" + settings.getString("user_id", "0") + "/lastresortreminders/")
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        Gson gson = new Gson();
+                        LastResortReminderItem[] myReminderItems = gson.fromJson(response, LastResortReminderItem[].class);
+
+                        for (LastResortReminderItem reminderItem : myReminderItems) {
+                            Log.i("ReminderLogFrag", reminderItem.toString());
+                            sendNotification(reminderItem.getName());
+                            deleteReminder("lastresort", reminderItem.getId());
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
                         Log.e("tag", "" + anError.getErrorBody());
                     }
                 });
@@ -123,6 +176,25 @@ public class SampleSchedulingService extends IntentService {
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(r.nextInt(), mBuilder.build());
+    }
+
+    private void deleteReminder(String type, int reminderId) {
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+        AndroidNetworking.delete(HomePageActivity.baseURL + "/users/" + settings.getString("user_id", "0") + "/" + type + "remindersdetail/" + reminderId)
+                .build()
+                .getAsOkHttpResponse(new OkHttpResponseListener() {
+                    @Override
+                    public void onResponse(Response response) {
+                        makeToast("Successfully deleted.");
+                        Log.i("tag", "Successfully deleted");
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        makeToast("Error attempting to delete.");
+                        Log.e("tag", "Failed to delete.");
+                    }
+                });
     }
  
 //
@@ -180,5 +252,9 @@ public class SampleSchedulingService extends IntentService {
             builder.append(line);
         reader.close();
         return builder.toString();
+    }
+
+    public void makeToast(String message) {
+        Toast.makeText(HomePageActivity.getContext(), message, Toast.LENGTH_SHORT).show();
     }
 }
