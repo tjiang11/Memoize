@@ -189,7 +189,8 @@ public class LocationBasedNotificationFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 //Go back to home fragment
-                DropPinFragment fragment = DropPinFragment.newInstance("location");
+                DropPinFragment fragment = DropPinFragment.newInstance("location",
+                        eventNameField.getText().toString(), eventLocationNameField.getText().toString(), eventDescriptionField.getText().toString(), radiusBar.getProgress());
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame_main, fragment);
                 fragmentTransaction.addToBackStack(null);

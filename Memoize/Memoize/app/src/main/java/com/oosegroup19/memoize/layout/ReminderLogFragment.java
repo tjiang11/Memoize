@@ -106,14 +106,24 @@ public class ReminderLogFragment extends BaseFragment {
         remindersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                LocationReminderItem locReminderItem = (LocationReminderItem) parent.getItemAtPosition(position);
+                if (parent.getItemAtPosition(position) instanceof LocationReminderItem) {
+                    LocationReminderItem locReminderItem = (LocationReminderItem) parent.getItemAtPosition(position);
 
-                //TODO: Send item to ReminderDetailFragment
-                ReminderDetailFragment fragment = ReminderDetailFragment.newInstance(locReminderItem);
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.frame_main, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                    //TODO: Send item to ReminderDetailFragment
+                    ReminderDetailFragment fragment = ReminderDetailFragment.newInstance(locReminderItem);
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.frame_main, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                } else { //must be a timereminderitem
+                    TimeReminderItem timeReminderItem = (TimeReminderItem) parent.getItemAtPosition(position);
+
+                    ReminderDetailFragment fragment = ReminderDetailFragment.newInstance(timeReminderItem);
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.frame_main, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
 
             }
         });

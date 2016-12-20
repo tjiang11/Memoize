@@ -109,7 +109,7 @@ public class DropPinFragment extends BaseFragment {
                 Fragment fragment;
                 Log.i("DropPinFrag", "Final latitude: " + finalLatitude + "Final longitude: " + finalLongitude);
                 if (returnToFrag.equals("location")) {
-                    fragment = LocationBasedNotificationFragment.newInstance("", finalLatitude, finalLongitude,
+                    fragment = LocationBasedNotificationFragment.newInstance(locationBasedEventLocationName, finalLatitude, finalLongitude,
                             locationBasedEventName, locationBasedEventDescription, locationBasedRadius);
                 } else if (returnToFrag.equals("time")) {
                     fragment = TimeBasedNotificationFragment.newInstance(finalLatitude, finalLongitude,
