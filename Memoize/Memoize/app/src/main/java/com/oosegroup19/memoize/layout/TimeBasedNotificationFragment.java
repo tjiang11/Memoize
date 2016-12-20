@@ -189,7 +189,7 @@ public class TimeBasedNotificationFragment extends BaseFragment {
                         Date newDate = new Date(oldDate.getTime() + 5 * 3600 * 1000);
                         timeToSend = df.format(newDate);
                         String dateNew = timeToSend.substring(0, 10);
-                        String timeNew = timeToSend.substring(11);
+                        String timeNew = timeToSend.substring(10);
                         dateTimeNew = dateNew + "T" + timeNew;
                         Log.i("tag", dateTimeNew);
                     } catch (ParseException e) {
@@ -230,26 +230,46 @@ public class TimeBasedNotificationFragment extends BaseFragment {
                                 }
                             });
                 } else {
-                    DecimalFormat df = new DecimalFormat("#.########"); //for max 8 digit latitudes/longitudes
+                    DecimalFormat df_loc = new DecimalFormat("#.########"); //for max 8 digit latitudes/longitudes
 
                     String timeToSend = String.format("%04d-%02d-%02dT%02d:%02d:00", notificationYear, notificationMonth, notificationDay,
                             notificationHour, notificationMinute);
+                    Log.i("original time to send", timeToSend);
+                    DateFormat df_last_res = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
+                    String date = timeToSend.substring(0, 10);
+                    String time = timeToSend.substring(11);
+                    String dateTimeNew = "";
+                    String datetime = date + time;
+                    try {
+                        Date oldDate = df_last_res.parse(datetime);
+                        Log.i("tag send time", "original " + timeToSend.toString());
+                        Date newDate = new Date(oldDate.getTime() + 5 * 3600 * 1000);
+                        timeToSend = df_last_res.format(newDate);
+                        String dateNew = timeToSend.substring(0, 10);
+                        String timeNew = timeToSend.substring(10);
+                        dateTimeNew = dateNew + "T" + timeNew;
+                        Log.i("tag", dateTimeNew);
+                    } catch (ParseException e) {
+                        Log.e("tag", e.getMessage());
+                    }
 
-                    System.out.println("Time that is sent to api call: " + timeToSend);
+                    Log.i("Time to api last res", dateTimeNew);
+
+                    System.out.println("Time that is sent to api call: " + dateTimeNew.toString());
                     SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
                     //make api call to create a new event!
                     AndroidNetworking.post(HomePageActivity.baseURL + "/users/" + settings.getString("user_id", "0") + "/lastresortreminders/")
                             .addBodyParameter("name", eventNameField.getText().toString())
                             .addBodyParameter("description", eventDescriptionField.getText().toString())
                             .addBodyParameter("location_descriptor", eventLocationNameField.getText().toString())
-                            .addBodyParameter("time", timeToSend)
-                            .addBodyParameter("longitude", df.format(eventLongitude))
-                            .addBodyParameter("latitude", df.format(eventLatitude))
+                            .addBodyParameter("time", dateTimeNew)
+                            .addBodyParameter("longitude", df_loc.format(eventLongitude))
+                            .addBodyParameter("latitude", df_loc.format(eventLatitude))
                             .build()
                             .getAsJSONObject(new JSONObjectRequestListener() {
                                 @Override
                                 public void onResponse(JSONObject response) {
-                                    makeToast("Your time based notification has been successfully created!");
+                                    makeToast("Your last resort notification has been successfully created!");
                                     Log.i("tag", "Success");
                                     Log.i("tag", response.toString());
 
