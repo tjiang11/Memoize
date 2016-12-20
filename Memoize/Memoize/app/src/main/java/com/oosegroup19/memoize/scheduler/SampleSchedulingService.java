@@ -120,7 +120,8 @@ public class SampleSchedulingService extends IntentService {
                     }
                 });
 
-        AndroidNetworking.get(baseURL + "/users/" + settings.getString("user_id", "0") + "/timereminders/")
+        AndroidNetworking.get(baseURL + "/users/" + settings.getString("user_id", "0") + "/timereminders/" +
+                "?get_current")
                 .build()
                 .getAsString(new StringRequestListener() {
                     @Override
