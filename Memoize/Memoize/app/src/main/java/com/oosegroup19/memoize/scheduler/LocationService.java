@@ -4,12 +4,14 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -25,6 +27,9 @@ public class LocationService extends Service
     public LocationManager locationManager;
     public MyLocationListener listener;
     public Location previousBestLocation = null;
+
+    public static String PREFS_NAME = "myPrefs";
+    Context context;
 
     Intent intent;
     int counter = 0;
@@ -137,9 +142,14 @@ public class LocationService extends Service
 
         public void onLocationChanged(final Location loc)
         {
+            context = getApplicationContext();
+
+
             Log.i("*************", "Location changed");
             Log.i("*************", "Latitude: " + loc.getLatitude());
             Log.i("*************", "Longitude: " + loc.getLongitude());
+
+
 
             if(isBetterLocation(loc, previousBestLocation)) {
                 loc.getLatitude();
