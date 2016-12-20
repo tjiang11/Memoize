@@ -1,1 +1,1 @@
-web: gunicorn memoize.wsgi --log-file -
+web: gunicorn memoize.wsgi --log-file
