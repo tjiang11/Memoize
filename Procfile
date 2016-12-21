@@ -1,1 +1,0 @@
-web: gunicorn memoize.wsgi --log-file
