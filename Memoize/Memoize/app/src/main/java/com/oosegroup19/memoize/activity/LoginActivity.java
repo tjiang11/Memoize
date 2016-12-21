@@ -158,10 +158,4 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, HomePageActivity.class);
         startActivity(intent);
     }
-
-    /*
-    public void moveToRegister() {
-        Intent intent = new Intent(this, RegisterActivity.class);
-        startActivity(intent);
-    } */
 }
