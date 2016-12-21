@@ -40,7 +40,7 @@ INSTALLED_APPS = [ # pragma: no cover
     'memoize.app',
     'rest_framework',
     'rest_framework.authtoken',
-    'django_nose',
+#    'django_nose',
 ]
 
 MIDDLEWARE = [ # pragma: no cover
@@ -84,13 +84,13 @@ WSGI_APPLICATION = 'memoize.wsgi.application' # pragma: no cover
 #     }
 # }
 
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner' # pragma: no cover
+#TEST_RUNNER = 'django_nose.NoseTestSuiteRunner' # pragma: no cover
 
-NOSE_ARGS = [ # pragma: no cover
-    '--with-coverage',
-    '--cover-package=memoize/app',
-     '--verbosity=2',
-]
+#NOSE_ARGS = [ # pragma: no cover
+ #   '--with-coverage',
+  #  '--cover-package=memoize/app',
+   #  '--verbosity=2',
+#]
 
 
 """ Reference for local postgresql setup:

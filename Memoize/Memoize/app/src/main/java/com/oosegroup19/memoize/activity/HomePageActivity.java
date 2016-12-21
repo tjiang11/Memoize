@@ -77,7 +77,6 @@ public class HomePageActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_home_page);
 
-
         //Disables landscape mode
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -150,10 +149,6 @@ public class HomePageActivity extends AppCompatActivity {
                     baseFragment = ReminderLogFragment.newInstance(user);
                 } else if (position == 1) {
                     baseFragment = NewNotificationFragment.newInstance(user);
-//                } else if (position == 2) {
-//                    baseFragment = NewNotificationFragment.newInstance(user);
-//                } else if (position == 3) {
-//                    baseFragment = GroupFragment.newInstance(user);
                 } else {
                     baseFragment = ReminderLogFragment.newInstance(user);
                 }
@@ -176,12 +171,10 @@ public class HomePageActivity extends AppCompatActivity {
                     if (position == 0) {
                         baseFragment = ReminderLogFragment.newInstance(user);
                     } else if (position == 1) {
-                        baseFragment = HomePageFragment.newInstance(user);
-                    } else if (position == 2) {
                         baseFragment = NewNotificationFragment.newInstance(user);
-                    } /*else if (position == 3) {
-                        baseFragment = GroupFragment.newInstance(user);
-                    } */
+                    } else {
+                        baseFragment = NewNotificationFragment.newInstance(user);
+                    }
 
                     //Save Tab Position
                     peditor.putInt("TabPosition", position);
@@ -196,9 +189,6 @@ public class HomePageActivity extends AppCompatActivity {
         tabLayout.getTabAt(tabPosition).select();
 
         initiateFragment();
-
-        //replaces with lesson screen
-        //fragmentManager.beginTransaction().replace(R.id.layout, new HomePageFragment()).commit();
     }
 
     private void initiateFragment() {
@@ -214,14 +204,7 @@ public class HomePageActivity extends AppCompatActivity {
             baseFragment = NewNotificationFragment.newInstance(user);
         } else if(currentFragment.equals(GroupFragment.FRAGMENTNAME)) {
             baseFragment = GroupFragment.newInstance(user);
-        }
-
-        /*else if(currentFragment.equals(NotificationsFragment.FRAGMENTNAME)){
-            baseFragment = NotificationsFragment.newInstance(user);
-        } else if(currentFragment.equals(SettingsFragment.FRAGMENTNAME)){
-            baseFragment = SettingsFragment.newInstance(user);
-        }  */ else{
-        }
+        } else {}
 
         inflateAndCommitBaseFragment();
     }
@@ -236,9 +219,6 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     private boolean isGpsOn() {
-        // ContentResolver contentResolver = getBaseContext().getContentResolver();
-        // boolean gpsStatus = Settings.Secure.LOCATION_MODE(contentResolver, LocationManager.GPS_PROVIDER);
-
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean gpsStatus = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 

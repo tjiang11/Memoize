@@ -37,25 +37,27 @@ import java.net.URL;
 /**
  * Created by smsukardi on 11/12/16.
  */
+
+/**HomePage fragment which contains methods that ensure that
+ * API calls can be made with the server.
+ *
+ */
 public class HomePageFragment extends BaseFragment {
+
+    //Variables for moving between fragments
     public final static String FRAGMENTNAME = "HomePageFragment";
     private final String fragmentName = FRAGMENTNAME;
-
-
-    private static final String DEBUG_TAG = "HttpExample";
-
     private TextView textView;
-
-//    //Sarah's variables for moving between fragments
     private CharSequence mTitle;
 
+    //Method to retrieve the fragment name
     public String getFragmentName(){
         return this.fragmentName;
     }
 
+    //Constructor to generate a new instance of the HomePageFragment
     public static HomePageFragment newInstance(User user) {
         HomePageFragment fragment = new HomePageFragment();
-        // owner = user;
         return fragment;
     }
 
@@ -67,12 +69,15 @@ public class HomePageFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //Inflates the view
         View view = inflater.inflate(R.layout.fragment_homepage, container, false);
 
+        //Finds the TextView
         textView = (TextView) view.findViewById(R.id.textView2);
 
         AndroidNetworking.setParserFactory(new JacksonParserFactory());
 
+        //API Call to test if connected with the Django REST server
         AndroidNetworking.get(HomePageActivity.baseURL + "/hello/")
                 .build()
                 .getAsString(new StringRequestListener() {
@@ -88,7 +93,7 @@ public class HomePageFragment extends BaseFragment {
                     }
                 });
 
-        //button listener
+        //Button listener to go to the 2nd tag (index 1)
         Button button1 = (Button) view.findViewById(R.id.test_button);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +105,7 @@ public class HomePageFragment extends BaseFragment {
         return view;
     }
 
+    //Method to select a particular fragment to go to
     private void selectItem(int position) {
         // update the main content by replacing fragments
         Fragment fragment = null;
