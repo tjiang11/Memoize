@@ -1,13 +1,13 @@
-from django.contrib.auth.models import User
-from rest_framework import serializers
-from models import Event, MemGroup, TimeReminder, LocationReminder, LastResortReminder
+from django.contrib.auth.models import User # pragma: no cover
+from rest_framework import serializers # pragma: no cover
+from models import TimeReminder, LocationReminder, LastResortReminder # pragma: no cover
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'password', 'mem_groups', 'sub_groups', 'location_reminders', 'time_reminders')
+        fields = ('id', 'username', 'password', 'location_reminders', 'time_reminders')
         extra_kwargs = {'password': {'write_only': True}}
-        read_only_fields = ('location_reminders', 'time_reminders', 'mem_groups' , 'sub_groups', )
+        read_only_fields = ('location_reminders', 'time_reminders')
 
     def create(self, validated_data):
         user = User.objects.create_user(username=validated_data['username'], password=validated_data['password'])
@@ -24,14 +24,14 @@ class UserSerializer(serializers.ModelSerializer):
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'mem_groups', 'sub_groups')
+        fields = ('id', 'username')
     def update(self, instance, validated_data):
     	instance.username = validated_data['username']
-    	instance.mem_groups = validated_data['mem_groups']
-        instance.sub_groups = validated_data['sub_groups'] 
+    	#instance.mem_groups = validated_data['mem_groups']
+        #instance.sub_groups = validated_data['sub_groups'] 
     	instance.save()
     	return instance
-
+"""
 class MemGroupSerializer(serializers.ModelSerializer):
 	admins = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
 	subscribers = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
@@ -39,13 +39,14 @@ class MemGroupSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = MemGroup
 		fields = ('id', 'name', 'description', 'admins', 'subscribers', 'events')
-
+"""
+"""
 class EventSerializer(serializers.ModelSerializer):
 	group = serializers.ReadOnlyField(source='group.id')
 	class Meta:
 		model = Event
 		fields = ('name', 'description', 'location_descriptor', 'start_time', 'end_time', 'longitude', 'latitude', 'tags', 'group')
-
+"""
 class IDSerializer(serializers.Serializer):
  	group_id = serializers.IntegerField(required=True)
 

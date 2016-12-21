@@ -1,5 +1,5 @@
-from django.db import models
-from django.contrib.auth.models import User
+from django.db import models # pragma: no cover
+from django.contrib.auth.models import User # pragma: no cover
 # class Reminder(object):
 
 # 	def __init__(self, name, description):
@@ -22,7 +22,7 @@ from django.contrib.auth.models import User
 # 		super(L_reminder, self)._init_(name, description)
 # 		self.time - time
 
-class Reminder(models.Model):
+class Reminder(models.Model): # pragma: no cover
 	"""Allows user to create a reminder.
 
    	Args:
@@ -35,7 +35,7 @@ class Reminder(models.Model):
 	class Meta:
 		abstract = True
 
-class LocationReminder(Reminder):
+class LocationReminder(Reminder): # pragma: no cover
 	"""Represents a location based reminder.
 
    	Args:
@@ -56,7 +56,7 @@ class LocationReminder(Reminder):
 		default=1)
 	radius = models.IntegerField(default = 100)
 
-class TimeReminder(Reminder):
+class TimeReminder(Reminder): # pragma: no cover
 	"""Represents a time based reminder.
 
    	Args:
@@ -69,7 +69,7 @@ class TimeReminder(Reminder):
 		on_delete=models.CASCADE,
 		default=1)
 
-class LastResortReminder(Reminder):
+class LastResortReminder(Reminder): # pragma: no cover
     time = models.DateTimeField(null=False)
     latitude = models.DecimalField(max_digits=11, decimal_places=8)
     longitude = models.DecimalField(max_digits=11, decimal_places=8)
