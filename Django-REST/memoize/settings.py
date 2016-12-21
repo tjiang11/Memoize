@@ -95,13 +95,24 @@ CREATE DATABASE memoize_db;
 
 """
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'memoize_db',
+#         'USER': 'postgres',
+#         'PASSWORD': 'password',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'memoize_db',
-        'USER': 'postgres',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
+        'NAME': 'dd576sa07fofvj',
+        'USER': 'ltweclrkultwut',
+        'PASSWORD': '6b27e55ff1832c1bbef12dfd71a6029748ebd7487d13295b7829a2c1e575f48b',
+        'HOST': 'ec2-54-163-236-33.compute-1.amazonaws.com',
         'PORT': '5432',
     }
 }
