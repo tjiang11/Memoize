@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'memoize.wsgi.application' # pragma: no cover
 #     }
 # }
 
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner' # pragma: no cover
+#TEST_RUNNER = 'django_nose.NoseTestSuiteRunner' # pragma: no cover
 
 NOSE_ARGS = [ # pragma: no cover
     '--with-coverage',
