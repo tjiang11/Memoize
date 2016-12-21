@@ -239,7 +239,6 @@ class nontrivial_feature_tests(APITestCase):
 	def test_reminders_at_very_far_locations(self):
 		response = make_test_user(self)
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-		print response.content
 		time = datetime.datetime.now()
 		new_time = time + datetime.timedelta(0, 3540) #59 minutes into the future
 
@@ -261,6 +260,57 @@ class nontrivial_feature_tests(APITestCase):
 		response = self.client.get('/users/10/lastresortreminders/?latitude=50.1&longitude=50.1', {}, format='json')
 		self.assertEquals(response.content, '[]')
 		self.assertEquals(response.status_code, 200)
+
+
+class test_delete_calls(APITestCase):
+
+	def test_last_resort_delete(self):
+			response = make_test_user(self)
+			self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+			data = {"time": "1996-12-05T06:32:00", "name": "make a time reminder", "description": "this is a test description", "location_descriptor": "TEST","latitude": "50.000", "longitude": "50.000"}
+			response = self.client.post('/users/11/lastresortreminders/', data, format='json')
+			self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+			response = self.client.delete('/users/11/lastresortremindersdetail/7', {}, format='json')
+			self.assertEquals(response.status_code, 204)
+
+			#now check that it's actually not there anymore
+			response  = self.client.get('/users/11/lastresortreminders/', {}, format='json')
+			self.assertEquals(response.content, '[]')
+			self.assertEquals(response.status_code, 200)
+
+
+	def test_location_reminder_delete(self):
+			response = make_test_user(self)
+			self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+			data = {"start_time": "10:45[:0[0]]", "name": "make a location reminder", "description": "this is a test description", "location_descriptor": "test location", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00"}
+			response = self.client.post('/users/12/locationreminders/', data, format='json')
+			self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+			response = self.client.delete('/users/12/locationremindersdetail/4', {}, format='json')
+			self.assertEquals(response.status_code, 204)
+
+			#now we make sure it was actually deleted
+			response  = self.client.get('/users/12/locationreminders/', {}, format='json')
+			self.assertEquals(response.content, '[]')
+			self.assertEquals(response.status_code, 200)
+
+
+	def test_time_reminder_delete(self):
+			response = make_test_user(self)
+			self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+			data = {"time": "1996-12-05T06:32:00", "name": "make a time reminder", "description": "this is a test description", "location_descriptor": "TEST"}
+			response = self.client.post('/users/13/timereminders/', data, format='json')
+			self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+			response = self.client.delete('/users/13/timeremindersdetail/3', {}, format='json')
+			self.assertEquals(response.status_code, 204)
+
+			#now we make sure it was actually deleted
+			response  = self.client.get('/users/13/timereminders/', {}, format='json')
+			self.assertEquals(response.content, '[]')
+			self.assertEquals(response.status_code, 200)
 
 
 
