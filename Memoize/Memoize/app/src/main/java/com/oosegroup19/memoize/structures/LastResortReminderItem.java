@@ -41,12 +41,14 @@ public class LastResortReminderItem extends ReminderItem {
     /** A method to convert the time to Greenwich Mean Time.
      */
     public void convertTime() {
+        //Separates the date into date and time components
         DateFormat df = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
         String date = this.time.substring(0, 10);
         String time = this.time.substring(11);
         String datetime = date + time;
 
         try {
+            //Converts to Greenwich mean time
             Date oldDate = df.parse(datetime);
             Log.i("tag", "original " + this.time.toString());
             Date newDate = new Date(oldDate.getTime() - 5 * 3600 * 1000);
