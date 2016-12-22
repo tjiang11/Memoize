@@ -9,10 +9,9 @@
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>Reminder</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/mariyakazachkova/Documents/ooseProject/2016-group-19/Django-REST/memoize/app/models/Reminder.py">/Users/mariyakazachkova/Documents/ooseProject/2016-group-19/Django-REST/memoize/app/models/Reminder.py</a></font></td></tr></table>
-    <p><tt>#from&nbsp;django.db&nbsp;import&nbsp;models<br>
-#from&nbsp;django.contrib.auth.models&nbsp;import&nbsp;User<br>
-#&nbsp;class&nbsp;<a href="#Reminder">Reminder</a>(object):</tt></p>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/mariyakazachkova/Documents/oose/2016-group-19/Django-REST/memoize/app/models/Reminder.py">/Users/mariyakazachkova/Documents/oose/2016-group-19/Django-REST/memoize/app/models/Reminder.py</a></font></td></tr></table>
+    <p><tt>#from&nbsp;django.db&nbsp;import&nbsp;models&nbsp;#&nbsp;pragma:&nbsp;no&nbsp;cover<br>
+#from&nbsp;django.contrib.auth.models&nbsp;import&nbsp;User&nbsp;#&nbsp;pragma:&nbsp;no&nbsp;cover</tt></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
@@ -21,29 +20,40 @@
     
 <tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl>
-<dt><font face="helvetica, arial"><a href="Reminder.html#Reminder">Reminder</a>
-</font></dt><dd>
-<dl>
-<dt><font face="helvetica, arial"><a href="Reminder.html#LocationReminder">LocationReminder</a>
+<dt><font face="helvetica, arial"><a href="Reminder.html#LastResortReminder">LastResortReminder</a>
+</font></dt><dt><font face="helvetica, arial"><a href="Reminder.html#LocationReminder">LocationReminder</a>
+</font></dt><dt><font face="helvetica, arial"><a href="Reminder.html#Reminder">Reminder</a>
 </font></dt><dt><font face="helvetica, arial"><a href="Reminder.html#TimeReminder">TimeReminder</a>
 </font></dt></dl>
-</dd>
-</dl>
  <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="LocationReminder">class <strong>LocationReminder</strong></a>(<a href="Reminder.html#Reminder">Reminder</a>)</font></td></tr>
+<font color="#000000" face="helvetica, arial"><a name="LastResortReminder">class <strong>LastResortReminder</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Represents&nbsp;a&nbsp;time&nbsp;based&nbsp;reminder.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;time:&nbsp;when&nbsp;the&nbsp;event&nbsp;is.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user:&nbsp;the&nbsp;user&nbsp;that&nbsp;created&nbsp;the&nbsp;reminder.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;latitude:&nbsp;used&nbsp;for&nbsp;location&nbsp;of&nbsp;reminder.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;longitude:&nbsp;used&nbsp;for&nbsp;location&nbsp;of&nbsp;reminder.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"></td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="LocationReminder">class <strong>LocationReminder</strong></a></font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>Represents&nbsp;a&nbsp;location&nbsp;based&nbsp;reminder.<br>
 &nbsp;<br>
 Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start_time:&nbsp;when&nbsp;the&nbsp;reminder&nbsp;should&nbsp;start&nbsp;being&nbsp;tracked&nbsp;for.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end_time:&nbsp;when&nbsp;the&nbsp;reminder&nbsp;should&nbsp;no&nbsp;longer&nbsp;be&nbsp;tracked&nbsp;for.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;latitude:&nbsp;used&nbsp;for&nbsp;location&nbsp;of&nbsp;reminder.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;longitude:&nbsp;used&nbsp;for&nbsp;location&nbsp;of&nbsp;reminder.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user:&nbsp;the&nbsp;user&nbsp;that&nbsp;created&nbsp;the&nbsp;reminder.<br>&nbsp;</tt></td></tr>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user:&nbsp;the&nbsp;user&nbsp;that&nbsp;created&nbsp;the&nbsp;reminder.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;radius:&nbsp;the&nbsp;radius&nbsp;that&nbsp;the&nbsp;user&nbsp;iputs&nbsp;with&nbsp;the&nbsp;desired&nbsp;radius&nbsp;for&nbsp;being&nbsp;reminded.<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%"></td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -61,7 +71,7 @@ Args:<br>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="TimeReminder">class <strong>TimeReminder</strong></a>(<a href="Reminder.html#Reminder">Reminder</a>)</font></td></tr>
+<font color="#000000" face="helvetica, arial"><a name="TimeReminder">class <strong>TimeReminder</strong></a></font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>Represents&nbsp;a&nbsp;time&nbsp;based&nbsp;reminder.<br>

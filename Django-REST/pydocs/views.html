@@ -1,0 +1,206 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module views</title>
+<meta charset="utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>views</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/mariyakazachkova/Documents/oose/2016-group-19/Django-REST/memoize/app/views.py">/Users/mariyakazachkova/Documents/oose/2016-group-19/Django-REST/memoize/app/views.py</a></font></td></tr></table>
+    <p><tt>class&nbsp;TestView(views.APIView):&nbsp;#&nbsp;pragma:&nbsp;no&nbsp;cover<br>
+def&nbsp;get(self,&nbsp;request,&nbsp;format=None):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;Response("Hello&nbsp;REST&nbsp;World")</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="views.html#CustomObtainAuthToken">CustomObtainAuthToken</a>
+</font></dt><dt><font face="helvetica, arial"><a href="views.html#UserDetail">UserDetail</a>
+</font></dt><dt><font face="helvetica, arial"><a href="views.html#UserLastResortReminders">UserLastResortReminders</a>
+</font></dt><dt><font face="helvetica, arial"><a href="views.html#UserLastResortRemindersDetail">UserLastResortRemindersDetail</a>
+</font></dt><dt><font face="helvetica, arial"><a href="views.html#UserList">UserList</a>
+</font></dt><dt><font face="helvetica, arial"><a href="views.html#UserLocationReminders">UserLocationReminders</a>
+</font></dt><dt><font face="helvetica, arial"><a href="views.html#UserLocationRemindersDetail">UserLocationRemindersDetail</a>
+</font></dt><dt><font face="helvetica, arial"><a href="views.html#UserTimeReminders">UserTimeReminders</a>
+</font></dt><dt><font face="helvetica, arial"><a href="views.html#UserTimeRemindersDetail">UserTimeRemindersDetail</a>
+</font></dt></dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="CustomObtainAuthToken">class <strong>CustomObtainAuthToken</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Class&nbsp;for&nbsp;getting&nbsp;a&nbsp;token&nbsp;used&nbsp;for&nbsp;login.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="CustomObtainAuthToken-post"><strong>post</strong></a>(self, request, *args, **kwargs)</dt><dd><tt>Creates&nbsp;the&nbsp;token&nbsp;if&nbsp;successful.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;request:&nbsp;The&nbsp;request&nbsp;being&nbsp;made&nbsp;from&nbsp;the&nbsp;client&nbsp;to&nbsp;the&nbsp;server.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;args:&nbsp;The&nbsp;arguments&nbsp;for&nbsp;the&nbsp;user.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;kwargs:&nbsp;not&nbsp;specified.</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="UserDetail">class <strong>UserDetail</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Used&nbsp;for&nbsp;getting&nbsp;the&nbsp;detail&nbsp;of&nbsp;a&nbsp;single&nbsp;user.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"></td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="UserLastResortReminders">class <strong>UserLastResortReminders</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Class&nbsp;that&nbsp;deals&nbsp;with&nbsp;getting&nbsp;all&nbsp;of&nbsp;the&nbsp;last&nbsp;resort&nbsp;reminders.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="UserLastResortReminders-get"><strong>get</strong></a>(self, request, pk, format<font color="#909090">=None</font>)</dt><dd><tt>If&nbsp;latitude&nbsp;and&nbsp;longitude&nbsp;are&nbsp;not&nbsp;specified&nbsp;in&nbsp;the&nbsp;url,&nbsp;return&nbsp;all&nbsp;last&nbsp;resort&nbsp;reminders.<br>
+If&nbsp;they&nbsp;are&nbsp;specified,&nbsp;calculate&nbsp;the&nbsp;estimated&nbsp;travel&nbsp;distance&nbsp;and&nbsp;return&nbsp;reminders&nbsp;only&nbsp;if&nbsp;the&nbsp;estimated&nbsp;time&nbsp;is&nbsp;larger&nbsp;than&nbsp;the&nbsp;difference&nbsp;in&nbsp;time.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;request:&nbsp;The&nbsp;request&nbsp;being&nbsp;made.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;pk:&nbsp;The&nbsp;user&nbsp;who&nbsp;has&nbsp;these&nbsp;location&nbsp;based&nbsp;reminders.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;format:&nbsp;not&nbsp;specified&nbsp;here.</tt></dd></dl>
+
+<dl><dt><a name="UserLastResortReminders-post"><strong>post</strong></a>(self, request, pk, format<font color="#909090">=None</font>)</dt><dd><tt>Creates&nbsp;a&nbsp;new&nbsp;last&nbsp;resort&nbsp;reminder.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;request:&nbsp;The&nbsp;request&nbsp;being&nbsp;made&nbsp;from&nbsp;the&nbsp;client&nbsp;to&nbsp;the&nbsp;server.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;pk:&nbsp;The&nbsp;user&nbsp;who&nbsp;the&nbsp;reminders&nbsp;belong&nbsp;to.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;format:&nbsp;not&nbsp;given&nbsp;here.</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="UserLastResortRemindersDetail">class <strong>UserLastResortRemindersDetail</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Calls&nbsp;that&nbsp;deal&nbsp;with&nbsp;getting&nbsp;and&nbsp;deleting&nbsp;a&nbsp;single&nbsp;last&nbsp;resort&nbsp;reminder.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="UserLastResortRemindersDetail-delete"><strong>delete</strong></a>(self, request, pk, pk_reminder, format<font color="#909090">=None</font>)</dt><dd><tt>Deletes&nbsp;the&nbsp;specified&nbsp;reminder.<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request:&nbsp;The&nbsp;request&nbsp;being&nbsp;made&nbsp;from&nbsp;the&nbsp;client&nbsp;to&nbsp;the&nbsp;server.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk:&nbsp;The&nbsp;user&nbsp;who&nbsp;the&nbsp;reminders&nbsp;belong&nbsp;to.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk_reminder:&nbsp;The&nbsp;reminder&nbsp;being&nbsp;deleted.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;format:&nbsp;not&nbsp;given&nbsp;here.</tt></dd></dl>
+
+<dl><dt><a name="UserLastResortRemindersDetail-get_reminder"><strong>get_reminder</strong></a>(self, pk)</dt><dd><tt>Hets&nbsp;the&nbsp;specified&nbsp;last&nbsp;resort&nbsp;reminder.</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="UserList">class <strong>UserList</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Used&nbsp;for&nbsp;getting&nbsp;a&nbsp;list&nbsp;of&nbsp;users.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"></td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="UserLocationReminders">class <strong>UserLocationReminders</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Class&nbsp;that&nbsp;deals&nbsp;with&nbsp;getting&nbsp;all&nbsp;of&nbsp;the&nbsp;location&nbsp;reminders.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="UserLocationReminders-get"><strong>get</strong></a>(self)</dt><dd><tt>If&nbsp;latitude&nbsp;and&nbsp;longitude&nbsp;coordinates&nbsp;are&nbsp;not&nbsp;specified&nbsp;in&nbsp;the&nbsp;url,&nbsp;return&nbsp;all&nbsp;location&nbsp;baed&nbsp;reminders.<br>
+If&nbsp;they&nbsp;are&nbsp;specified,&nbsp;only&nbsp;return&nbsp;reminders&nbsp;within&nbsp;the&nbsp;specified&nbsp;radius.</tt></dd></dl>
+
+<dl><dt><a name="UserLocationReminders-post"><strong>post</strong></a>(self, request, pk, format<font color="#909090">=None</font>)</dt><dd><tt>Creates&nbsp;a&nbsp;new&nbsp;location&nbsp;based&nbsp;reminder.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;request:&nbsp;The&nbsp;request&nbsp;being&nbsp;made&nbsp;from&nbsp;the&nbsp;client&nbsp;to&nbsp;the&nbsp;server.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;pk:&nbsp;The&nbsp;user&nbsp;who&nbsp;the&nbsp;reminders&nbsp;belong&nbsp;to.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;format:&nbsp;not&nbsp;given&nbsp;here.</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="UserLocationRemindersDetail">class <strong>UserLocationRemindersDetail</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Calls&nbsp;that&nbsp;deal&nbsp;with&nbsp;getting&nbsp;and&nbsp;deleting&nbsp;a&nbsp;single&nbsp;location&nbsp;reminder.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="UserLocationRemindersDetail-delete"><strong>delete</strong></a>(self, request, pk, pk_reminder, format<font color="#909090">=None</font>)</dt><dd><tt>Deletes&nbsp;the&nbsp;specified&nbsp;reminder.<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request:&nbsp;The&nbsp;request&nbsp;being&nbsp;made&nbsp;from&nbsp;the&nbsp;client&nbsp;to&nbsp;the&nbsp;server.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk:&nbsp;The&nbsp;user&nbsp;who&nbsp;the&nbsp;reminders&nbsp;belong&nbsp;to.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk_reminder:&nbsp;The&nbsp;reminder&nbsp;being&nbsp;deleted.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;format:&nbsp;not&nbsp;given&nbsp;here.</tt></dd></dl>
+
+<dl><dt><a name="UserLocationRemindersDetail-get_reminder"><strong>get_reminder</strong></a>(self, pk)</dt><dd><tt>Gets&nbsp;the&nbsp;location&nbsp;reminder.</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="UserTimeReminders">class <strong>UserTimeReminders</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Calls&nbsp;dealing&nbsp;with&nbsp;getting&nbsp;all&nbsp;of&nbsp;the&nbsp;time&nbsp;reminders&nbsp;and&nbsp;creating&nbsp;new&nbsp;ones.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="UserTimeReminders-get"><strong>get</strong></a>(self, request, pk, format<font color="#909090">=None</font>)</dt><dd><tt>This&nbsp;call&nbsp;will&nbsp;return&nbsp;all&nbsp;of&nbsp;the&nbsp;time&nbsp;reminders&nbsp;if&nbsp;get_current&nbsp;is&nbsp;not&nbsp;specified&nbsp;in&nbsp;the&nbsp;url.<br>
+If&nbsp;get_current&nbsp;is&nbsp;specified&nbsp;in&nbsp;the&nbsp;url&nbsp;then&nbsp;only&nbsp;the&nbsp;reminders&nbsp;that&nbsp;need&nbsp;to&nbsp;go&nbsp;off&nbsp;at&nbsp;that&nbsp;specific&nbsp;time&nbsp;will&nbsp;be&nbsp;returned.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request:&nbsp;The&nbsp;request&nbsp;being&nbsp;made&nbsp;from&nbsp;the&nbsp;client&nbsp;to&nbsp;the&nbsp;server.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk:&nbsp;The&nbsp;user&nbsp;who&nbsp;the&nbsp;reminders&nbsp;belong&nbsp;to.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;format:&nbsp;not&nbsp;given&nbsp;here.</tt></dd></dl>
+
+<dl><dt><a name="UserTimeReminders-post"><strong>post</strong></a>(self, request, pk, format<font color="#909090">=None</font>)</dt><dd><tt>Creates&nbsp;a&nbsp;new&nbsp;time&nbsp;based&nbsp;reminder.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;request:&nbsp;The&nbsp;request&nbsp;being&nbsp;made&nbsp;from&nbsp;the&nbsp;client&nbsp;to&nbsp;the&nbsp;server.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;pk:&nbsp;The&nbsp;user&nbsp;who&nbsp;the&nbsp;reminders&nbsp;belong&nbsp;to.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;format:&nbsp;not&nbsp;given&nbsp;here.</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="UserTimeRemindersDetail">class <strong>UserTimeRemindersDetail</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Calls&nbsp;that&nbsp;deal&nbsp;with&nbsp;getting&nbsp;and&nbsp;deleting&nbsp;a&nbsp;single&nbsp;time&nbsp;reminder.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="UserTimeRemindersDetail-delete"><strong>delete</strong></a>(self, request, pk, pk_reminder, format<font color="#909090">=None</font>)</dt><dd><tt>Deletes&nbsp;the&nbsp;specified&nbsp;reminder.<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request:&nbsp;The&nbsp;request&nbsp;being&nbsp;made&nbsp;from&nbsp;the&nbsp;client&nbsp;to&nbsp;the&nbsp;server.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk:&nbsp;The&nbsp;user&nbsp;who&nbsp;the&nbsp;reminders&nbsp;belong&nbsp;to.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pk_reminder:&nbsp;The&nbsp;reminder&nbsp;being&nbsp;deleted.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;format:&nbsp;not&nbsp;given&nbsp;here.</tt></dd></dl>
+
+<dl><dt><a name="UserTimeRemindersDetail-get_reminder"><strong>get_reminder</strong></a>(self, pk)</dt><dd><tt>Get's&nbsp;the&nbsp;specified&nbsp;time&nbsp;reminder.</tt></dd></dl>
+
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-calcDistance"><strong>calcDistance</strong></a>(lat1, lon1, lat2, lon2)</dt><dd><tt>Calculate&nbsp;the&nbsp;great&nbsp;circle&nbsp;distance&nbsp;between&nbsp;two&nbsp;points&nbsp;<br>
+on&nbsp;the&nbsp;earth&nbsp;(specified&nbsp;in&nbsp;decimal&nbsp;degrees)</tt></dd></dl>
+</td></tr></table>
+</body></html>
