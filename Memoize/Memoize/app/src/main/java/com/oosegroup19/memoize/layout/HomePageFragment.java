@@ -38,9 +38,9 @@ import java.net.URL;
  * Created by smsukardi on 11/12/16.
  */
 
-/**HomePage fragment which contains methods that ensure that
+/**
+ * HomePage fragment which contains methods that ensure that
  * API calls can be made with the server.
- *
  */
 public class HomePageFragment extends BaseFragment {
 
@@ -105,7 +105,10 @@ public class HomePageFragment extends BaseFragment {
         return view;
     }
 
-    //Method to select a particular fragment to go to
+    /**
+     * Method to select a particular fragment to go to
+     * @param position The position selected
+     */
     private void selectItem(int position) {
         // update the main content by replacing fragments
         Fragment fragment = null;

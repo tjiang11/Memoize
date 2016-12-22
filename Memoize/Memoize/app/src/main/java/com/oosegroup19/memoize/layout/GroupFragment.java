@@ -32,9 +32,6 @@ import java.util.List;
 
 /**
  * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
  */
 public class GroupFragment extends BaseFragment {
     public final static String FRAGMENTNAME = "GroupFragment";

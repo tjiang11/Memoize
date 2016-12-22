@@ -47,7 +47,7 @@ public class DropPinFragment extends BaseFragment {
     private static String locationBasedEventDescription = "";
     private static int locationBasedRadius = 100;
 
-    //Instance fiels for Google maps
+    //Instance fields for Google maps
     MapView mMapView;
     private GoogleMap googleMap;
     private double finalLatitude = 0;
@@ -120,22 +120,33 @@ public class DropPinFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
     }
 
+    /** The View for DropPinFragment.
+     *
+     * @param inflater The LayoutInflater
+     * @param container The View group container
+     * @param savedInstanceState The saved instance state bundle
+     * @return The view.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflates the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_drop_pin, container, false);
 
-        //button listener
+        //Retrieves button
         Button saveLocationButton = (Button) rootView.findViewById(R.id.save_location_button);
+
+        //OnClick event for the Save Location button
         saveLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Fragment fragment;
-                Log.i("DropPinFrag", "Final latitude: " + finalLatitude + "Final longitude: " + finalLongitude);
+
+                //If the fragment is of type location, segue back to a LocationBasedNotificationFragment
                 if (returnToFrag.equals("location")) {
                     fragment = LocationBasedNotificationFragment.newInstance(locationBasedEventLocationName, finalLatitude, finalLongitude,
                             locationBasedEventName, locationBasedEventDescription, locationBasedRadius);
+                //If the fragment is of type time, segue back to a TimeBasedNotificationFragment
                 } else if (returnToFrag.equals("time")) {
                     fragment = TimeBasedNotificationFragment.newInstance(finalLatitude, finalLongitude,
                             timeBasedReminderName, timeBasedLocationDescription, timeBasedEventDescription);
@@ -143,6 +154,8 @@ public class DropPinFragment extends BaseFragment {
                     fragment = LocationBasedNotificationFragment.newInstance("", finalLatitude, finalLongitude);
                     Log.e("tag", "Error retrieving return fragment.");
                 }
+
+                //Initiate the transition back to the correct notification fragment
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame_main, fragment);
                 fragmentTransaction.addToBackStack(null);
@@ -151,6 +164,7 @@ public class DropPinFragment extends BaseFragment {
         });
 
 
+        //Find the map
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
@@ -173,7 +187,7 @@ public class DropPinFragment extends BaseFragment {
                         Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                         && ActivityCompat.checkSelfPermission(getActivity(),
                         Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    
+
                     Log.e("DropPinFragment", "Permissions for location not yet given...");
 
                     ActivityCompat.requestPermissions(getActivity(),
@@ -198,6 +212,7 @@ public class DropPinFragment extends BaseFragment {
                             .snippet("Drag the pin to set the location!")
                             .draggable(true));
 
+                    //Listener for when the marker on the Google map is dragged
                     googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
 
                         @Override
@@ -214,14 +229,11 @@ public class DropPinFragment extends BaseFragment {
                         }
 
                         @Override
-                        public void onMarkerDrag(Marker marker) {
-                            //System.out.println("Dragging");
-                        }
+                        public void onMarkerDrag(Marker marker) {}
                     });
 
                     // For zooming automatically to the location of the marker
                     CameraPosition cameraPosition = new CameraPosition.Builder().target(initialPosition).zoom(12).build();
-
                     googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 }
 

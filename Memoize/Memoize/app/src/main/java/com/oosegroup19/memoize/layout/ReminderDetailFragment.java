@@ -35,11 +35,13 @@ public class ReminderDetailFragment extends BaseFragment {
     //The ReminderItem we are showing details for.
     private static ReminderItem reminderItem;
 
-    /**ReminderDetailFragment required empty constructor.
+    /**
+     * ReminderDetailFragment required empty constructor.
      */
     public ReminderDetailFragment() {}
 
-    /**The ReminderDetailFragment constructor called.
+    /**
+     * The ReminderDetailFragment constructor called.
      *
      * @param loc The ReminderItem to be shown details of.
      * @return The ReminderDetailFragment

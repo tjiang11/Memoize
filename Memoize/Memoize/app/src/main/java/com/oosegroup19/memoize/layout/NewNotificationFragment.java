@@ -14,20 +14,22 @@ import com.oosegroup19.memoize.R;
 import com.oosegroup19.memoize.structures.User;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link NewNotificationFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link NewNotificationFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Logic for creating a New notification.
  */
 public class NewNotificationFragment extends BaseFragment {
     public final static String FRAGMENTNAME = "NewNotificationFragment";
     private final String fragmentName = FRAGMENTNAME;
 
-    //Constructor
+    /**
+     * Required public constructor.
+     */
     public NewNotificationFragment() {}
 
+    /**
+     * Constructor for a NewNotificationFragment.
+     * @param user The user associated with the fragment
+     * @return
+     */
     public static NewNotificationFragment newInstance(User user) {
         NewNotificationFragment fragment = new NewNotificationFragment();
         // owner = user;
@@ -46,9 +48,11 @@ public class NewNotificationFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_new_notification, container, false);
         getActivity().setTitle("Select Reminder Type");
 
+        //Retrieve buttons from the UI
         Button timeBasedNotifsButton = (Button) view.findViewById(R.id.time_based_button);
         Button locationBasedNotifsButton = (Button) view.findViewById(R.id.location_based_button);
 
+        // Segue to a TimeBasedNotificationFragment if the timeBasedNotifsButton is selected
         timeBasedNotifsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +64,7 @@ public class NewNotificationFragment extends BaseFragment {
             }
         });
 
+        // Segue to a LocationBasedNotificationFragment if the locationBasedNotifsButton is selected
         locationBasedNotifsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

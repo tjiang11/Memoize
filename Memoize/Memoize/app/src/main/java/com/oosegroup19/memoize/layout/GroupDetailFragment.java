@@ -17,8 +17,8 @@ import com.oosegroup19.memoize.structures.GroupItem;
  * Created by Tony on 12/11/2016.
  */
 
-/** Implementation for Groups on the app.
- *
+/**
+ * Implementation for Groups logic on the app.
  */
 public class GroupDetailFragment extends BaseFragment {
     public final static String FRAGMENTNAME = "GroupDetailFragment";

@@ -25,12 +25,7 @@ import java.util.ArrayList;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link HopkinsLocationsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link HopkinsLocationsFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Implementation for the HopkinsLocationsFragment.
  */
 public class HopkinsLocationsFragment extends BaseFragment {
     //The name of the fragment
@@ -126,10 +121,18 @@ public class HopkinsLocationsFragment extends BaseFragment {
         updateArray();
     }
 
+    /** The View for HopkinsLocationsFragment.
+     *
+     * @param inflater The LayoutInflater
+     * @param container The View group container
+     * @param savedInstanceState The saved instance state bundle
+     * @return The view.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-// Inflate the layout for this fragment
+
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_hopkins_locations, container, false);
         getActivity().setTitle("Locations");
 
@@ -146,6 +149,7 @@ public class HopkinsLocationsFragment extends BaseFragment {
 
         updateArray();
 
+        // Creates an on click listener for an item on the hopkinsLocationList.
         hopkinsLocationsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -153,9 +157,12 @@ public class HopkinsLocationsFragment extends BaseFragment {
                 HopkinsLocationItem value = (HopkinsLocationItem) parent.getItemAtPosition(position);
                 Log.i("HopkinsLocationFrag", value.getLocationName());
                 Fragment fragment;
+
+                //Transitions back to a LocationBasedNotificationFragment if returnToFrag is of type location
                 if (returnToFrag.equals("location")) {
                     fragment = LocationBasedNotificationFragment.newInstance(value.getLocationName(),
                             value.getLatitude(), value.getLongitude(), locationBasedEventName, locationBasedEventDescription, locationBasedRadius);
+                //Transitions to a TimeBasedNotificationFragment otherwise
                 } else if (returnToFrag.equals("time")) {
                     fragment = TimeBasedNotificationFragment.newInstance(value.getLatitude(),
                             value.getLongitude(), timeBasedReminderName, timeBasedLocationDescription, timeBasedEventDescription);
@@ -163,6 +170,8 @@ public class HopkinsLocationsFragment extends BaseFragment {
                     fragment = LocationBasedNotificationFragment.newInstance(value.getLocationName(), value.getLatitude(), value.getLongitude());
                     Log.e("tag", "Error retrieving return fragment.");
                 }
+
+                //Initiates the transition to the correct fragment
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame_main, fragment);
                 fragmentTransaction.addToBackStack(null);
@@ -172,8 +181,7 @@ public class HopkinsLocationsFragment extends BaseFragment {
 
 
         //now, listview is bound to user's array data
-
-        //TODO: Actually put in the correct GPS coordinates
+        //Inserts several hopkins locations
         HopkinsLocationItem item1 = new HopkinsLocationItem("AMR I", "amr1", 39.330690, -76.618441);
         HopkinsLocationItem item2 = new HopkinsLocationItem("AMR II", "amr2", 39.331494, -76.619162);
         HopkinsLocationItem item3 = new HopkinsLocationItem("Barnes and Noble", "barnesandnoble", 39.32831472, -76.61625963);
@@ -187,6 +195,7 @@ public class HopkinsLocationsFragment extends BaseFragment {
         HopkinsLocationItem item11 = new HopkinsLocationItem("Milton S. Eisenhower Library", "mse", 39.32905592, -76.61942732);
         HopkinsLocationItem item12 = new HopkinsLocationItem("Shaffer Hall", "shaffer", 39.32718033, -76.61989939);
 
+        //Adds to the adapter
         aa.add(item1);
         aa.add(item2);
         aa.add(item3);
@@ -203,8 +212,7 @@ public class HopkinsLocationsFragment extends BaseFragment {
         return view;
     }
 
-    public void updateArray() {
-    }
+    public void updateArray() {}
 
     @Override
     public void onAttach(Context context) {

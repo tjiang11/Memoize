@@ -37,8 +37,9 @@ import java.util.ArrayList;
 
 import static com.oosegroup19.memoize.activity.HomePageActivity.PREFS_NAME;
 
-/** The ReminderLogFragment class contains the logic for the log of reminders tab.
- *  Created by smsukardi on 11/12/16.
+/**
+ * The ReminderLogFragment class contains the logic for the log of reminders tab.
+ * Created by smsukardi on 11/12/16.
  */
 public class ReminderLogFragment extends BaseFragment {
     public final static String FRAGMENTNAME = "ReminderLogFragment";
@@ -52,7 +53,8 @@ public class ReminderLogFragment extends BaseFragment {
     private static Context context;
     private static Cursor curse;
 
-    /** Required empty ReminderLogFragment constructor.
+    /**
+     * Required empty ReminderLogFragment constructor.
      */
     public ReminderLogFragment() {}
 
