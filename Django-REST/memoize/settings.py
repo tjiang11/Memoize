@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os # pragma: no cover
+import sys # pragma: no cover
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) # pragma: no cover
@@ -116,6 +117,7 @@ CREATE DATABASE memoize_db;
 #     }
 # }
 
+
 DATABASES = { # pragma: no cover
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -127,6 +129,17 @@ DATABASES = { # pragma: no cover
     }
 }
 
+if 'test' in sys.argv:
+    DATABASES = { # pragma: no cover
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'memoize_db',
+            'USER': 'postgres',
+            'PASSWORD': 'password',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
