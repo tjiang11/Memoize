@@ -163,23 +163,16 @@ USE_TZ = True # pragma: no cover
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
-<<<<<<< HEAD
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
+STATIC_URL = '/static/' # pragma: no cover
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-REST_FRAMEWORK = {
-=======
- 
-STATIC_URL = '/static/' # pragma: no cover
- 
 REST_FRAMEWORK = { # pragma: no cover
->>>>>>> 6ed70fb105f7ecbcd7952e2ad67980d8e71446af
     #'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
     'PAGE_SIZE': 10,
     # 'DEFAULT_AUTHENTICATION_CLASSES': (
