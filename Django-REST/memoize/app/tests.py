@@ -44,11 +44,6 @@ class basic_creation_tests(APITestCase):
 		response = self.client.post('/users/4/timereminders/', data3, format='json')
 		self.assertEquals(response.content, '{"name":"make a time reminder","description":"this is a test description","location_descriptor":"TEST","time":"1996-12-05T06:32:00Z","id":1}')
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-		
-		#test if actually stored
-		#response = self.client.get('/users/6/timereminders/', {}, format = 'json')
-		#self.assertEqual(response.content, '[{"name":"make a time reminder","description":"this is a test description","location_descriptor":"TEST","time":"1996-12-05T06:32:00Z","id":1}]')
-		#self.assertEqual(response.status_code, 200)
 
 		#test creating reminder without a description
 		data = {"time": "1996-12-05T06:32:00", "name": "this is a reminder with no description", "description": "", "location_descriptor": "TEST"}
@@ -65,9 +60,9 @@ class basic_creation_tests(APITestCase):
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED) 
 
 		#test if actually stored
-		#response = self.client.get('/users/5/locationreminders/', {}, format = 'json')
-		#self.assertEqual(response.content, '[{"name":"make a location reminder","description":"this is a test description","location_descriptor":"test location","start_time":"10:45:00","end_time":"11:45:00","latitude":"1.00000000","longitude":"1.00000000","id":1}]')
-		#self.assertEqual(response.status_code, 200)
+		response = self.client.get('/users/3/locationreminders/', {}, format = 'json')
+		self.assertEqual(response.content, '[{"name":"make a location reminder","description":"this is a test description","location_descriptor":"test location","latitude":"1.00000000","longitude":"1.00000000","radius":100,"id":1}]')
+		self.assertEqual(response.status_code, 200)
 
 		#test creating reminder without a description
 		data = {"start_time": "10:45[:0[0]]", "name": "make a location reminder without description", "description": "", "location_descriptor": "test location", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00"}
@@ -354,6 +349,36 @@ class test_returning_specific_reminders(APITestCase):
 		response = self.client.get('/users/15/locationreminders/?latitude=50.2&longitude=50.2', {}, format='json')
 		self.assertEquals(response.content, '[]')
 		self.assertEquals(response.status_code, 200)
+
+class z_test_login(APITestCase):
+
+	def test_login_without_username_or_password(self):
+		response = self.client.post('/api-token-auth/', {}, format='json')
+		self.assertEquals(response.content,'{"username":["This field is required."],"password":["This field is required."]}')
+
+	def test_login_without_password(self):
+		data = {"username":"test.jhu.edu"}
+		response = self.client.post('/api-token-auth/', data, format='json')
+		self.assertEquals(response.content, '{"password":["This field is required."]}')
+
+	def test_login_without_username(self):
+		data = {"password":"mypassword"}
+		response = self.client.post('/api-token-auth/', data, format='json')
+		self.assertEquals(response.content, '{"username":["This field is required."]}')
+
+	def test_successful_login(self):
+		data = {"username": "myname@jhu.edu", "password": "mypassword"}
+		response = self.client.post('/users/', data, format='json')	
+		data = {"username": "myname@jhu.edu","password":"mypassword"}
+		response = self.client.post('/api-token-auth/', data, format='json')
+		self.assertEquals(response.status_code, 200)
+
+	def test_unsuccessful_login(self):
+		data = {"username": "myname@jhu.edu", "password": "mypasswordL"} #notice L
+		response = self.client.post('/users/', data, format='json')	
+		data = {"username": "myname@jhu.edu","password":"mypassword"}
+		response = self.client.post('/api-token-auth/', data, format='json')
+		self.assertEquals(response.status_code, 400) #cannot be found because password wrong
 
 
 def make_test_user(self): 
