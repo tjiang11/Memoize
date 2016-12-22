@@ -36,7 +36,7 @@ import okhttp3.Response;
 
 import static com.oosegroup19.memoize.activity.HomePageActivity.PREFS_NAME;
 
-/**
+/** The SampleSchedulingService for notifications.
  * This {@code IntentService} does the app's actual work.
  * {@code SampleAlarmReceiver} (a {@code WakefulBroadcastReceiver}) holds a
  * partial wake lock for this service while the service does its work. When the

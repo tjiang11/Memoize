@@ -1,6 +1,5 @@
 package com.oosegroup19.memoize.scheduler;
 
-import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -8,22 +7,23 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
-/**
+
+//Code from modified http://stackoverflow.com/questions/14478179/background-service-with-location-listener-in-android
+
+/**The LocationService class is a background service that updates the location.
  * Created by smsukardi on 12/19/16.
  */
+public class LocationService extends Service  {
 
-//Code from http://stackoverflow.com/questions/14478179/background-service-with-location-listener-in-android
-public class LocationService extends Service
-{
+    //Instance fields
     public static final String BROADCAST_ACTION = "Hello World";
-    private static final int MINUTE = 1000 * 1;
+    private static final int MINUTE = 1000;
     public LocationManager locationManager;
     public MyLocationListener listener;
     public Location previousBestLocation = null;
@@ -57,6 +57,12 @@ public class LocationService extends Service
         return null;
     }
 
+    /**Returns if there is a better location.
+     *
+     * @param location The location input
+     * @param currentBestLocation The current best location
+     * @return Whether one location is better
+     */
     protected boolean isBetterLocation(Location location, Location currentBestLocation) {
         if (currentBestLocation == null) {
             // A new location is always better than no location
@@ -99,17 +105,15 @@ public class LocationService extends Service
         return false;
     }
 
-
-
-    /** Checks whether two providers are the same */
+    /**
+     * Checks whether two providers are the same
+     */
     private boolean isSameProvider(String provider1, String provider2) {
         if (provider1 == null) {
             return provider2 == null;
         }
         return provider1.equals(provider2);
     }
-
-
 
     @Override
     public void onDestroy() {
@@ -134,54 +138,48 @@ public class LocationService extends Service
         return t;
     }
 
+    /**LocationListener for location updates.
+     */
+    public class MyLocationListener implements LocationListener {
 
-
-
-    public class MyLocationListener implements LocationListener
-    {
-
-        public void onLocationChanged(final Location loc)
-        {
+        public void onLocationChanged(final Location loc) {
             context = getApplicationContext();
 
-
+            //Prints the latitude and longitude of the new current location
             Log.i("*************", "Location changed");
             Log.i("*************", "Latitude: " + loc.getLatitude());
             Log.i("*************", "Longitude: " + loc.getLongitude());
 
+            //Places the current latitude and longitude to shared preferences
+            //to access in the scheduling service
             SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
             editor.putLong("current_latitude", Double.doubleToRawLongBits(loc.getLatitude()));
             editor.putLong("current_longitude", Double.doubleToRawLongBits(loc.getLongitude()));
             editor.apply();
-
-//            if(isBetterLocation(loc, previousBestLocation)) {
-//                loc.getLatitude();
-//                loc.getLongitude();
-////                intent.putExtra("current_latitude", loc.getLatitude());
-////                intent.putExtra("current_longitude", loc.getLongitude());
-////                intent.putExtra("Provider", loc.getProvider());
-////                sendBroadcast(intent);
-//
-//            }
         }
 
-        public void onProviderDisabled(String provider)
-        {
+        /**Creates a toast when the provider has been disabled.
+         * @param provider The provider.
+         */
+        public void onProviderDisabled(String provider) {
             Toast.makeText( getApplicationContext(), "Gps Disabled", Toast.LENGTH_SHORT ).show();
         }
 
-
-        public void onProviderEnabled(String provider)
-        {
+        /**Creates a toast when the provider has been enabled.
+         * @param provider The provider.
+         */
+        public void onProviderEnabled(String provider) {
             Toast.makeText( getApplicationContext(), "Gps Enabled", Toast.LENGTH_SHORT).show();
         }
 
 
-        public void onStatusChanged(String provider, int status, Bundle extras)
-        {
-
-        }
+        /**Called when the status is changed.
+         * @param provider The provider
+         * @param status The changed status
+         * @param extras A bundle containing extra information.
+         */
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
 
     }
 }
