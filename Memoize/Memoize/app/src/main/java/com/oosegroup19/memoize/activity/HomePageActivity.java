@@ -35,10 +35,15 @@ import com.oosegroup19.memoize.layout.ReminderLogFragment;
 import java.security.acl.Group;
 import java.util.List;
 
+/** The HomePageActivity that all fragments and tabs reside within.
+ */
 public class HomePageActivity extends AppCompatActivity {
+    // An AlarmReceiver
     SampleAlarmReceiver alarm = new SampleAlarmReceiver();
 
+    // The Context of the activity
     private static Context context;
+
     /*######################## Data Variables ########################*/
     private final String CURRENTFRAGMENT = "currentFragment";
     private User user;
@@ -57,12 +62,7 @@ public class HomePageActivity extends AppCompatActivity {
     double latitude;
 
     /*#################### Networking Variables #####################*/
-    public static int PORT = 8001;
-
-    //public static String baseURL = "http://10.0.2.2:" + PORT; //uncomment if you are using emulator, use 10.0.3.2 for genymotion, 10.0.2.2 if not
-    //public static String baseURL = "https://e1ad007b.ngrok.io"; //uncomment and put your ngrok url here if using ngrok tunneling
     public static String baseURL = "https://memoize.herokuapp.com";
-
     public static String PREFS_NAME = "myPrefs";
     public static Location currentLocation = null;
 
@@ -71,11 +71,17 @@ public class HomePageActivity extends AppCompatActivity {
     private static TabLayout tabLayout;
 
 
+    /** The OnCreate method for the HomePageActivity.
+     * @param savedInstanceState The saved instance state of the HomePageActivity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Sets the alarm
         alarm.setAlarm(this);
 
+        //Sets the UI to be that of the ActivityHomePage XML file.
         setContentView(R.layout.activity_home_page);
 
         //Disables landscape mode
@@ -90,41 +96,31 @@ public class HomePageActivity extends AppCompatActivity {
         AndroidNetworking.initialize(context);
         System.setProperty("http.keepAlive", "false");
 
-
-//        Intent locationServiceIntent = new Intent(context, LocationService.class);
+        //Creates an intent to start the LocationService.
         Intent locationServiceIntent = new Intent("com.oosegroup19.memoize.LONGRUNSERVICE");
         locationServiceIntent.setPackage("com.oosegroup19.memoize");
         context.startService(locationServiceIntent);
 
-
+        //Retrieves sharedpreferences.
         myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         peditor = myPrefs.edit();
 
 
-        // Get current GPS location
-        // http://rdcworld-android.blogspot.in/2012/01/get-current-location-coordinates-city.html
+        // Gets current GPS location
+        // (http://rdcworld-android.blogspot.in/2012/01/get-current-location-coordinates-city.html)
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        boolean gpsStatus = false;
-        gpsStatus = isGpsOn();
 
         if (isGpsOn()) {
-            Log.i("HomePageActivity", "Gps is on");
             locationListener = new MyLocationListener(context);
 
-            //TODO: Ask for permissions before performing this request
+            //Checks for permissions before looking for location
             if (ActivityCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     && ActivityCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
                 Log.e("HomePageActivity", "Permissions for location not yet given...");
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
+
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
                 return;
@@ -138,7 +134,7 @@ public class HomePageActivity extends AppCompatActivity {
             Log.i("HomePageActivity", "GPS is offline");
         }
 
-        //Stuff for initializing bottom bar for tabbing between fragments
+        //Initializs bottom bar for tabbing between fragments
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -154,7 +150,7 @@ public class HomePageActivity extends AppCompatActivity {
                     baseFragment = ReminderLogFragment.newInstance(user);
                 }
 
-                //Save Tab Position
+                //Saves the tab position
                 peditor.putInt("TabPosition", position);
                 peditor.commit();
 
@@ -192,9 +188,14 @@ public class HomePageActivity extends AppCompatActivity {
         initiateFragment();
     }
 
+    /**
+     * Initiates the fragment selected from the bottom tab bar.
+     */
     private void initiateFragment() {
+        //Retrieves the current fragment
         String currentFragment = myPrefs.getString(CURRENTFRAGMENT, "0");
-        Log.i("MainActivity", "Attempting to inflate: " + currentFragment);
+
+        //Goes to the appropriate fragment
         if(currentFragment.equals("0")){
             baseFragment = ReminderLogFragment.newInstance(user);
         }else if(currentFragment.equals(ReminderLogFragment.FRAGMENTNAME)){
@@ -210,6 +211,8 @@ public class HomePageActivity extends AppCompatActivity {
         inflateAndCommitBaseFragment();
     }
 
+    /**Replaces the base fragment with the fragment selected from the tab bar.
+     */
     private void inflateAndCommitBaseFragment() {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_main, baseFragment);
@@ -219,6 +222,10 @@ public class HomePageActivity extends AppCompatActivity {
         peditor.commit();
     }
 
+    /** Determines whether the GPS is on.
+     *
+     * @return Whether the GPS is on.
+     */
     private boolean isGpsOn() {
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean gpsStatus = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -226,7 +233,10 @@ public class HomePageActivity extends AppCompatActivity {
         return gpsStatus;
     }
 
-    //from http://stackoverflow.com/questions/20438627/getlastknownlocation-returns-null
+    /**Retrieves the last known location that the user was at.
+     * from http://stackoverflow.com/questions/20438627/getlastknownlocation-returns-null
+     * @return The last known location
+     */
     private Location getLastKnownLocation() {
         locationManager = (LocationManager)getApplicationContext().getSystemService(LOCATION_SERVICE);
         List<String> providers = locationManager.getProviders(true);
@@ -245,6 +255,9 @@ public class HomePageActivity extends AppCompatActivity {
         return bestLocation;
     }
 
+    /**
+     * Saves the current fragment when on pause
+     */
     @Override
     public void onPause(){
         super.onPause();
@@ -252,14 +265,18 @@ public class HomePageActivity extends AppCompatActivity {
         if(baseFragment == null){
             peditor.putString(CURRENTFRAGMENT, "0");
         }else {
-            Log.i("HomePageActivity", "onPause on fragment: "+baseFragment.getFragmentName());
             peditor.putString(CURRENTFRAGMENT, baseFragment.getFragmentName());
         }
         peditor.putInt("TabPosition", tabLayout.getSelectedTabPosition());
         peditor.commit();
     }
 
-    //for maps permissions
+    /**Requests permissions for using maps.
+     *
+     * @param requestCode The request code
+     * @param permissions The permissions requested
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.e("HomePageActivity", "onrequestpermissionsresult called");
@@ -273,14 +290,23 @@ public class HomePageActivity extends AppCompatActivity {
         }
     }
 
+    /**Retrieves the application context.
+     * @return The context.
+     */
     public static Context getContext() {
         return context;
     }
 
+    /**Retrieves the current latitude.
+     * @return The latitude.
+     */
     public double getLatitude() {
         return latitude;
     }
 
+    /**Retrieves the current longitude.
+     * @return The longitude.
+     */
     public double getLongitude() {
         return longitude;
     }

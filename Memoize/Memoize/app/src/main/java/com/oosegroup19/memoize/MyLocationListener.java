@@ -17,23 +17,34 @@ import java.util.Locale;
  * Created by smsukardi on 11/14/16.
  */
 
-/*---------- Listener class to get coordinates ------------- */
+/** Listener class to retrieve location coordinates
+ */
 public class MyLocationListener implements LocationListener {
 
+    //Instance fields
     Context context;
     public static double currLatitude;
     public static double currLongitude;
     public static boolean hasLatitude = false;
 
+    //The current best location
     private Location currentBestLocation = null;
 
+
+    /**The LocationListener constructor.
+     * @param c The context.
+     */
     public MyLocationListener(Context c) {
         this.context = c;
     }
 
+
+    /**Called whenever the location is changed.
+     * @param loc The new location changed to.
+     */
     @Override
     public void onLocationChanged(Location loc) {
-        Toast.makeText(context, "Location changed: Lat: " + loc.getLatitude() + " Lng: " + loc.getLongitude(), Toast.LENGTH_SHORT).show();
+        // Logs teh latitude and longitude
         String longitude = "Longitude: " + loc.getLongitude();
         Log.i("MyLocationListener", longitude);
         String latitude = "Latitude: " + loc.getLatitude();
@@ -43,27 +54,22 @@ public class MyLocationListener implements LocationListener {
         this.currLatitude = loc.getLatitude();
         this.currLongitude = loc.getLongitude();
 
-        /*------- To get city name from coordinates -------- */
+        //Retrieves city name from coordinates
         String cityName = null;
         Geocoder gcd = new Geocoder(context, Locale.getDefault());
         List<Address> addresses;
 
         try {
-            Log.i("MyLocationListener", "In try block 1");
             addresses = gcd.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
-            Log.i("MyLocationListener", "In try block 2");
             if (addresses.size() > 0) {
-                Log.i("MyLocationListener", "In try block 3");
                 System.out.println(addresses.get(0).getLocality());
                 cityName = addresses.get(0).getLocality();
             }
         }
         catch (IOException e) {
-            Log.i("MyLocationListener", "In catch block");
             e.printStackTrace();
         }
 
-        //Why isn't this line executing?
         String s = longitude + "\n" + latitude + "\n\nMy Current City is: " + cityName;
         Log.v("MyLocationListener", s);
     }
