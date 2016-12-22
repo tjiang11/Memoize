@@ -58,61 +58,34 @@ public class SampleSchedulingService extends IntentService {
     public static final String TAG = "Scheduling Demo";
     // An ID used to post the notification.
     public static final int NOTIFICATION_ID = 1;
-    // The string the app searches for in the Google home page content. If the app finds 
-    // the string, it indicates the presence of a doodle.  
-    public static final String SEARCH_STRING = "doodle";
-    // The Google home page URL from which the app fetches content.
-    // You can find a list of other Google domains with possible doodles here:
-    // http://en.wikipedia.org/wiki/List_of_Google_domains
-    public static final String URL = "http://www.google.com";
+
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
 
     @Override
     protected void onHandleIntent(Intent intent) {
-//        // BEGIN_INCLUDE(service_onhandle)
-//        // The URL from which to fetch content.
-//        String urlString = URL;
-//
-//        String result ="";
-//
-//        // Try to connect to the Google homepage and download content.
-//        try {
-//            result = loadFromNetwork(urlString);
-//        } catch (IOException e) {
-//            Log.i(TAG, getString(R.string.connection_error));
-//        }
-//
-//        // If the app finds the string "doodle" in the Google home page content, it
-//        // indicates the presence of a doodle. Post a "Doodle Alert" notification.
-//        if (result.indexOf(SEARCH_STRING) != -1) {
-//            sendNotification("found!");
-//            Log.i(TAG, "Found doodle!!");
-//        } else {
-//            sendNotification("Not found!");
-//            Log.i(TAG, "No doodle found. :-(");
-//        }
-//        // Release the wake lock provided by the BroadcastReceiver.
-//        SampleAlarmReceiver.completeWakefulIntent(intent);
-//        // END_INCLUDE(service_onhandle)
-//
+        //Gets the application context
         context = getApplicationContext();
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+
+        //Retrieves the latitude and longitude from SharedPreferences
         Double lat = Double.longBitsToDouble(settings.getLong("current_latitude", 10));
         Double lon = Double.longBitsToDouble(settings.getLong("current_longitude", 15));
 
+        //Makes a REST-ful API call to retrieve LocationReminders nearby
         AndroidNetworking.get(baseURL + "/users/" + settings.getString("user_id", "0")
                 + "/locationreminders/" + "?latitude=" + lat + "&longitude=" + lon)
-
                 .build()
                 .getAsString(new StringRequestListener() {
                     @Override
                     public void onResponse(String response) {
+                        //Places using GSON into array
                         Gson gson = new Gson();
                         LocationReminderItem[] myReminderItems = gson.fromJson(response, LocationReminderItem[].class);
 
+                        //Sends a notification for every LocationReminderItem and removes it from
+                        //the database
                         for (LocationReminderItem reminderItem : myReminderItems) {
-                            Log.i("ReminderLogFrag", reminderItem.toString());
                             sendNotification(reminderItem.getName(), reminderItem.getId());
                             deleteReminder("location", reminderItem.getId());
                         }
@@ -124,12 +97,15 @@ public class SampleSchedulingService extends IntentService {
                     }
                 });
 
+        //Makes a REST-ful API call to retrieve TimeReminders
         AndroidNetworking.get(baseURL + "/users/" + settings.getString("user_id", "0") + "/timereminders/" +
                 "?get_current")
                 .build()
                 .getAsString(new StringRequestListener() {
                     @Override
                     public void onResponse(String response) {
+                        //Sends a notification for every TimeReminder item and removes it
+                        //from the database
                         Gson gson = new Gson();
                         TimeReminderItem[] myReminderItems = gson.fromJson(response, TimeReminderItem[].class);
 
@@ -147,6 +123,7 @@ public class SampleSchedulingService extends IntentService {
                     }
                 });
 
+        //Makes a REST-ful API call to retrieve LastResortReminders
         AndroidNetworking.get(baseURL + "/users/" + settings.getString("user_id", "0")
                 + "/lastresortreminders/" + "?latitude=" + lat + "&longitude=" + lon)
 
@@ -157,6 +134,8 @@ public class SampleSchedulingService extends IntentService {
                         Gson gson = new Gson();
                         LastResortReminderItem[] myReminderItems = gson.fromJson(response, LastResortReminderItem[].class);
 
+                        //Sends a notification for every LastResortReminder item and removes it
+                        //from the database
                         for (LastResortReminderItem reminderItem : myReminderItems) {
                             reminderItem.convertTime();
                             Log.i("ReminderLogFrag", reminderItem.toString());
@@ -171,6 +150,8 @@ public class SampleSchedulingService extends IntentService {
                     }
                 });
 
+        //Creates an AlarmManager object and sets the next alarm (so that alarms
+        //can be set every 15 seconds)
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(context, SampleAlarmReceiver.class);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, myIntent, 0);
@@ -178,7 +159,9 @@ public class SampleSchedulingService extends IntentService {
         SampleAlarmReceiver.completeWakefulIntent(intent);
     }
     
-    // Post a notification indicating whether a doodle was found.
+    /**
+     * Posts a notification.
+     */
     private void sendNotification(String msg, int id) {
         mNotificationManager = (NotificationManager)
                this.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -198,8 +181,16 @@ public class SampleSchedulingService extends IntentService {
         mNotificationManager.notify(id, mBuilder.build());
     }
 
+
+    /**Method to delete a reminder.
+     *
+     * @param type The type of reminder it is.
+     * @param reminderId The id of the reminder.
+     */
     private void deleteReminder(String type, int reminderId) {
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+
+        //Makes the REST-ful API call to delete the reminder.
         AndroidNetworking.delete(baseURL + "/users/" + settings.getString("user_id", "0") + "/" + type + "remindersdetail/" + reminderId)
                 .build()
                 .getAsOkHttpResponse(new OkHttpResponseListener() {
@@ -217,11 +208,10 @@ public class SampleSchedulingService extends IntentService {
                 });
     }
  
-//
-// The methods below this line fetch content from the specified URL and return the
-// content as a string.
-//
-    /** Given a URL string, initiate a fetch operation. */
+
+    /**
+     * A method that, given a URL string, initiates a fetch operation.
+     */
     private String loadFromNetwork(String urlString) throws IOException {
         InputStream stream = null;
         String str ="";
@@ -274,6 +264,9 @@ public class SampleSchedulingService extends IntentService {
         return builder.toString();
     }
 
+    /**A method to make a toast.
+     * @param message The message in the toast.
+     */
     public void makeToast(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
