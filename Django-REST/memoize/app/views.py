@@ -141,12 +141,8 @@ class UserLocationReminders(views.APIView):
             lat = float(serializer.data[i]['latitude'])
             lon = float(serializer.data[i]['longitude'])
 
-            print lat
-            print lon
             distance_in_meters = calcDistance(current_lat, current_lon, lat, lon)
-            print distance_in_meters
             radius = serializer.data[i]['radius']
-            print "this is radius: " + str(radius)
             if distance_in_meters < radius:
                 nearby.append(serializer.data[i])
 
