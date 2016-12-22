@@ -214,17 +214,17 @@ class UserLastResortReminders(views.APIView):
             tdelta =  event_time - current_time
             zero_tdelta = timedelta(days=0, seconds=0, microseconds=0)
         
-            if distance_in_meters < 800:
+            if distance_in_meters < 800: #assume user is walking
                 expected_time_to_event = 10
                 expected_time_to_event += distance_in_meters * (1.0 / 80.0)
-            elif distance_in_meters < 32186.9:
+            elif distance_in_meters < 32186.9: #assume user is driving but on the street
                 expected_time_to_event = 10
-                expected_time_to_event += (distance_in_meters / 1609.34) * 4
-            else:
+                expected_time_to_event += (distance_in_meters / 1609.34) * 4 #get miles and multiply by 4
+            else: #assume user is taking the highway
                 expected_time_to_event = 10
-                expected_time_to_event += (distance_in_meters / 1609.34) * 2
+                expected_time_to_event += (distance_in_meters / 1609.34) * 2 #get miles and multiply by 2
 
-            if tdelta.total_seconds() < expected_time_to_event * 60:
+            if tdelta.total_seconds() < expected_time_to_event * 60: #decide if should send notifcation 
                 nearby.append(serializer.data[i])
 
 
