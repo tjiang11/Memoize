@@ -4,7 +4,7 @@ from models import TimeReminder, LocationReminder, LastResortReminder # pragma: 
 
 class UserSerializer(serializers.ModelSerializer):
     """
-    Serializer for our users.
+    Serializer for our users; deals with username, password, location reminders, time reminders.
     """
     class Meta:
         model = User
@@ -33,7 +33,7 @@ class IDSerializer(serializers.Serializer):
 
 class TimeReminderSerializer(serializers.ModelSerializer):
     """
-    Serializer for time reminders.
+    Serializer for time reminders: deals with name, description, location, time, and id.
     """
     class Meta:
         model = TimeReminder
@@ -42,7 +42,7 @@ class TimeReminderSerializer(serializers.ModelSerializer):
 
 class LocationReminderSerializer(serializers.ModelSerializer):
     """
-    Serializer for location reminders.
+    Serializer for location reminders: deals with name, description, location, latitude, longitude, and id.
     """
     class Meta:
         model = LocationReminder
@@ -51,7 +51,7 @@ class LocationReminderSerializer(serializers.ModelSerializer):
 
 class LastResortReminderSerializer(serializers.ModelSerializer):
     """
-    Serializer for last resort reminders.
+    Serializer for last resort reminders; deals with name, description, location, latitude, longitude, time, and id.
     """
     class Meta:
         model = LastResortReminder
