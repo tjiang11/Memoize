@@ -17,15 +17,30 @@ import java.util.ArrayList;
  * Created by smsukardi on 11/12/16.
  */
 
-//Adapter for the ListView of locations that the user has saved
+/**
+ * Adapter for the ListView of locations that the user has saved
+ */
 public class HopkinsLocationAdapter extends ArrayAdapter<HopkinsLocationItem> {
     int resource;
 
+    /** The adapter constructor.
+     *
+     * @param context The application context
+     * @param res
+     * @param items An ArrayList of HopkinsLocationItems
+     */
     public HopkinsLocationAdapter(Context context, int res, ArrayList<HopkinsLocationItem> items) {
         super(context, res, items);
         resource = res;
     }
 
+    /** Retrieves the view and sets it with HopkinsLocation information.
+     *
+     * @param position The position of the item.
+     * @param convertView
+     * @param parent The parent view of the item.
+     * @return
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LinearLayout hopkinsLocationView;
@@ -40,6 +55,7 @@ public class HopkinsLocationAdapter extends ArrayAdapter<HopkinsLocationItem> {
             hopkinsLocationView = (LinearLayout) convertView;
         }
 
+        // Retrieves UI components
         TextView locationNameView = (TextView) hopkinsLocationView.findViewById(R.id.hopkins_location_name);
         ImageView locationImageView = (ImageView) hopkinsLocationView.findViewById(R.id.hopkins_location_image);
 
