@@ -59,19 +59,20 @@ class UserTimeReminders(views.APIView):
         user = self.get_user(pk=pk)
         serializer = TimeReminderSerializer(user.time_reminders, many=True)
         
-        if 'get_current' not in request.GET: 
+        if 'get_current' not in request.GET: #this means we just want all of the time reminders
             return Response(serializer.data)
 
+        #else, we want to see if any time reminders should be going off
         time_to_display = []
         for element in serializer.data:
             reminder_time = element['time']
             curr_time = datetime.datetime.now()
 
             datetime_of_reminder = datetime.datetime.strptime(reminder_time, "%Y-%m-%dT%H:%M:00Z")
-            test = datetime_of_reminder - curr_time
+            test = datetime_of_reminder - curr_time #get time between event and now
             seconds = test.total_seconds()
             if (seconds < 35):
-                time_to_display.append(element)
+                time_to_display.append(element) #if less than 35 seconds in between, send out notification
 
         return Response(time_to_display)
 
@@ -154,11 +155,11 @@ class UserLocationReminders(views.APIView):
         """
         user = self.get_user(pk=pk)
         
-        if 'longitude' in request.GET and 'latitude' in request.GET:
-            current_lon = float(request.GET['longitude'])
+        if 'longitude' in request.GET and 'latitude' in request.GET: #this means we want to see if we are by any of the reminders
+            current_lon = float(request.GET['longitude']) #getting user's latitude and longitude
             current_lat = float(request.GET['latitude'])
 
-        else:
+        else: #this means we just want all of the reminders.
             serializer = LocationReminderSerializer(user.location_reminders, many=True)
             return Response(serializer.data)
 
@@ -167,12 +168,12 @@ class UserLocationReminders(views.APIView):
         length = len(serializer.data)
         nearby = []
         for i in range(length):
-            lat = float(serializer.data[i]['latitude'])
+            lat = float(serializer.data[i]['latitude']) #get events latitude and longitude
             lon = float(serializer.data[i]['longitude'])
 
             distance_in_meters = calcDistance(current_lat, current_lon, lat, lon)
-            radius = serializer.data[i]['radius']
-            if distance_in_meters < radius:
+            radius = serializer.data[i]['radius'] 
+            if distance_in_meters < radius: #if we are within the distance specified by the user
                 nearby.append(serializer.data[i])
 
         return Response(nearby)
@@ -243,7 +244,7 @@ class UserLastResortReminders(views.APIView):
 
         if 'longitude' in request.GET and 'latitude' in request.GET:
 
-            current_lon = float(request.GET['longitude'])
+            current_lon = float(request.GET['longitude']) #getting the user's latitiude and longitude
             current_lat = float(request.GET['latitude'])
 
         else:
@@ -254,7 +255,7 @@ class UserLastResortReminders(views.APIView):
         length = len(serializer.data)
         nearby = []
         for i in range(length):
-            lat = float(serializer.data[i]['latitude'])
+            lat = float(serializer.data[i]['latitude']) #getting the event's latitude and longitude
             lon = float(serializer.data[i]['longitude'])
             time = serializer.data[i]['time']
 
@@ -262,7 +263,7 @@ class UserLastResortReminders(views.APIView):
             event_time = datetime.datetime.strptime(time, "%Y-%m-%dT%H:%M:00Z")
             current_time = datetime.datetime.now()
             tdelta =  event_time - current_time
-            zero_tdelta = timedelta(days=0, seconds=0, microseconds=0)
+            zero_tdelta = timedelta(days=0, seconds=0, microseconds=0) #to use as a base comparison
         
             if distance_in_meters < 800: #assume user is walking
                 expected_time_to_event = 10
