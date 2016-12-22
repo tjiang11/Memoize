@@ -37,8 +37,8 @@ import java.util.ArrayList;
 
 import static com.oosegroup19.memoize.activity.HomePageActivity.PREFS_NAME;
 
-/**
- * Created by smsukardi on 11/12/16.
+/** The ReminderLogFragment class contains the logic for the log of reminders tab.
+ *  Created by smsukardi on 11/12/16.
  */
 public class ReminderLogFragment extends BaseFragment {
     public final static String FRAGMENTNAME = "ReminderLogFragment";
@@ -68,7 +68,7 @@ public class ReminderLogFragment extends BaseFragment {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         AppCompatActivity myActivity = (AppCompatActivity) getActivity();
     }
@@ -81,26 +81,28 @@ public class ReminderLogFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflate sthe layout for this fragment
         View view = inflater.inflate(R.layout.fragment_reminder_log, container, false);
         getActivity().setTitle("Reminder Log");
 
         remindersList = (ListView) view.findViewById(R.id.itemList);
 
-        // create ArrayList of courses from database
+        //Creates an ArrayList of courses from database
         reminderItems = new ArrayList<ReminderItem>();
 
-        // make array adapter to bind arraylist to listview with new custom item layout
+        //Makes array adapter to bind arraylist to listview with new custom item layout
         aa = new ReminderItemAdapter(this.getActivity(), R.layout.list_contents, reminderItems);
         remindersList.setAdapter(aa);
 
+        //Sets an OnClickListener when an item in the list if clicked
         remindersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (parent.getItemAtPosition(position) instanceof LocationReminderItem) {
                     LocationReminderItem locReminderItem = (LocationReminderItem) parent.getItemAtPosition(position);
 
-                    //TODO: Send item to ReminderDetailFragment
+                    //Segues to a ReminderDetailFragment, sending the LocationReminderItem that was
+                    //clicked on to the ReminderDetail
                     ReminderDetailFragment fragment = ReminderDetailFragment.newInstance(locReminderItem);
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.frame_main, fragment);
@@ -109,6 +111,8 @@ public class ReminderLogFragment extends BaseFragment {
                 } else { //must be a timereminderitem
                     TimeReminderItem timeReminderItem = (TimeReminderItem) parent.getItemAtPosition(position);
 
+                    //Segues to a ReminderDetailFragment, sending the TimeReminderItem that was clicked
+                    //on to the ReminderDetail
                     ReminderDetailFragment fragment = ReminderDetailFragment.newInstance(timeReminderItem);
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.frame_main, fragment);
@@ -120,10 +124,12 @@ public class ReminderLogFragment extends BaseFragment {
         });
 
 
+        //Logs for debugging
         Log.i("ReminderLogFrag", "attempting networking request...");
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
 
-        //now, listview is bound to user's array data
+        //Now, listview is bound to user's array data
+        //Creates request to REST api to retrieve LocationReminders
         AndroidNetworking.get(HomePageActivity.baseURL + "/users/" + settings.getString("user_id", "0") + "/locationreminders/")
                 .build()
                 .getAsString(new StringRequestListener() {
@@ -132,6 +138,7 @@ public class ReminderLogFragment extends BaseFragment {
                         Gson gson = new Gson();
                         LocationReminderItem[] myReminderItems = gson.fromJson(response, LocationReminderItem[].class);
 
+                        //Adds each LocationReminder to the list
                         for (LocationReminderItem reminderItem : myReminderItems) {
                             Log.i("ReminderLogFrag", reminderItem.toString());
                             aa.add(reminderItem);
@@ -145,6 +152,7 @@ public class ReminderLogFragment extends BaseFragment {
                     }
                 });
 
+        //Creates request to REST api to retrieve TimeReminders
         AndroidNetworking.get(HomePageActivity.baseURL + "/users/" + settings.getString("user_id", "0") + "/timereminders/")
                 .build()
                 .getAsString(new StringRequestListener() {
@@ -153,6 +161,7 @@ public class ReminderLogFragment extends BaseFragment {
                         Gson gson = new Gson();
                         TimeReminderItem[] myReminderItems = gson.fromJson(response, TimeReminderItem[].class);
 
+                        //Adds each TimeReminder to the list
                         for (TimeReminderItem reminderItem : myReminderItems) {
                             Log.i("ReminderLogFrag", reminderItem.toString());
                             aa.add(reminderItem);
@@ -166,6 +175,7 @@ public class ReminderLogFragment extends BaseFragment {
                     }
                 });
 
+        //Creates request to REST api to retrieve LastResortReminders
         AndroidNetworking.get(HomePageActivity.baseURL + "/users/" + settings.getString("user_id", "0") + "/lastresortreminders/")
                 .build()
                 .getAsString(new StringRequestListener() {
@@ -174,6 +184,7 @@ public class ReminderLogFragment extends BaseFragment {
                         Gson gson = new Gson();
                         LastResortReminderItem[] myReminderItems = gson.fromJson(response, LastResortReminderItem[].class);
 
+                        //Adds each LastResortReminder to the list
                         for (LastResortReminderItem reminderItem : myReminderItems) {
                             Log.i("ReminderLogFrag", reminderItem.toString());
                             aa.add(reminderItem);
