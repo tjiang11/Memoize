@@ -16,15 +16,29 @@ import java.util.ArrayList;
  * Created by smsukardi on 11/12/16.
  */
 
-//Adapter for the ListView of locations that the user has saved
+/** An Adapter for the ListView of locations that the user has saved
+ */
 public class ReminderItemAdapter extends ArrayAdapter<ReminderItem> {
     int resource;
 
+    /**Constructor for the ReminderItemAdapter.
+     *
+     * @param context The context of the adapter
+     * @param res
+     * @param items An array of ReminderItems
+     */
     public ReminderItemAdapter(Context context, int res, ArrayList<ReminderItem> items) {
         super(context, res, items);
         resource = res;
     }
 
+    /**Retrieves and populates the view.
+     *
+     * @param position The position of the ReminderItem
+     * @param convertView
+     * @param parent The parent view
+     * @return
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LinearLayout lessonView;
@@ -39,6 +53,7 @@ public class ReminderItemAdapter extends ArrayAdapter<ReminderItem> {
             lessonView = (LinearLayout) convertView;
         }
 
+        //Retrieves UI Components
         TextView taskNameView = (TextView) lessonView.findViewById(R.id.task_name);
         TextView taskLocationView = (TextView) lessonView.findViewById(R.id.task_location);
         TextView latitudeView = (TextView) lessonView.findViewById(R.id.task_latitude);
@@ -47,15 +62,15 @@ public class ReminderItemAdapter extends ArrayAdapter<ReminderItem> {
         taskNameView.setText(reminder.getName());
         taskLocationView.setText("Event Location: " + reminder.getLocationDescriptor());
 
+        //Populates the fields of the retrieved UI components depending on whether
+        //the item is a location or time reminder.
         if (reminder instanceof LocationReminderItem) {
             LocationReminderItem tempReminder = (LocationReminderItem) reminder;
             latitudeView.setText("Latitude: " + tempReminder.getLatitude());
             longitudeView.setText("Longitude: " + tempReminder.getLongitude());
-
         } else if (reminder instanceof TimeReminderItem) {
             TimeReminderItem tempReminder = (TimeReminderItem) reminder;
             latitudeView.setText("Start Time: " + tempReminder.getTime());
-            //longitudeView.setText("End Time: " + tempReminder.getEndTime());
         }
 
         return lessonView;
