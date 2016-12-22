@@ -17,7 +17,6 @@ Memoize is a Android application built for event notification and discovery. It 
 	* `python manage.py migrate`
 * Run the server.
 	* `python manage.py runserver`
-* We are currently working on an automated build setup.
 
 ## To Run:
 
