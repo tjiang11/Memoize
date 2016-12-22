@@ -25,7 +25,7 @@ The server is hosted at https://memoize.herokuapp.com but if you would like to s
 * Run the server (as shown in the installation instructions using `python manage.py runserver`). If you are using mac, make sure you have executed `postgres.app` before running the server.
 * Run the Android application by opening the `Memoize` file in Android Studio and pressing the play button (this performs an automated build, executing the gradle build program and running the application on the generic android adb emulator). It should be using the Heroku url. But if you would like to connect to a local server, then if you are using the android emulator change the string in `baseURL` to `"http://10.0.2.2:"`. If you are using genymotion, use `"http://10.0.3.2:"`. Be sure to also specify the appropriate port number if connecting locally.
 
-* NOTE: if one is using genymotion or another non-native-to-android-studio virtual machine, they MUST reference a different server in the baseURL. This was explained further above.
+* NOTE: if one is using genymotion or another non-native-to-android-studio virtual machine and connecting to a local server, they MUST reference a different address in the baseURL. This was explained further above.
 	
 ## Components:
 
