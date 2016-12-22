@@ -5,6 +5,8 @@ Memoize is a Android application built for event notification and discovery. It 
 
 ## To install and run the back-end locally:
 
+The server is hosted at https://memoize.herokuapp.com but if you would like to setup the environment locally follow these steps.
+
 * Navigate to the Django-REST folder
 * Create and activate virtual environment.
 * `brew install postgresql`
