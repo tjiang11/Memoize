@@ -5,7 +5,6 @@ from rest_framework import status
 from django.test import TestCase
 from rest_framework.test import APITestCase
 import unittest
-#import models
 from rest_framework.test import APIClient
 
 
@@ -13,7 +12,6 @@ client = APIClient()
 count = 0
 
 
-# Create your tests here.
 class basic_creation_tests(APITestCase):
 	"""TEST SUITE (for happy path tests)."""
 	
@@ -78,6 +76,7 @@ class basic_creation_tests(APITestCase):
 
 class unhappy_path_tests(APITestCase):
 	"""TEST SUITE (for unhappy path tests)"""
+
 	def test_making_user_without_username_password(self):
 		"""Tests that creating au user wothout a username or a password fails."""
 
@@ -108,8 +107,14 @@ class unhappy_path_tests(APITestCase):
 
 
 class nontrivial_feature_tests(APITestCase):
+	"""
+	Test suite for the nontrivial feature.
+	"""
 
 	def test_last_resort_reminder_creation(self):
+		"""
+		Tests for creation of the last resort reminder.
+		"""
 		response = make_test_user(self)
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -132,6 +137,9 @@ class nontrivial_feature_tests(APITestCase):
 		self.assertEqual(response.content, '[{"name":"make a last resort reminder","description":"","location_descriptor":"TEST","time":"' + t + ':00Z","latitude":"50.00000000","longitude":"50.00000000","id":1}]')
 
 	def test_not_displaying_reminders_if_nearby(self):
+		"""
+		Test that reminders display at correct times and distances.
+		"""
 		response = make_test_user(self)
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -154,6 +162,9 @@ class nontrivial_feature_tests(APITestCase):
 
 
 	def test_not_displaying_z_reminder_ahead_of_time(self):
+		"""
+		Test that notifications don't display when they're not supposed to.
+		"""
 		response = make_test_user(self)
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 		time = datetime.datetime.now()
@@ -180,6 +191,9 @@ class nontrivial_feature_tests(APITestCase):
 
 
 	def test_reminders_at_location_under_800_meters(self):
+		"""
+		Test that reminders work when assuming walking distance.
+		"""
 		response = make_test_user(self)
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 		time = datetime.datetime.now()
@@ -207,6 +221,9 @@ class nontrivial_feature_tests(APITestCase):
 		self.assertEquals(response.status_code, 200)
 
 	def test_reminders_at_location_under__32186_meters(self):
+		"""
+		Test that reminders work when assuming street driving.
+		"""
 		response = make_test_user(self)
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 		time = datetime.datetime.now()
@@ -236,6 +253,9 @@ class nontrivial_feature_tests(APITestCase):
 
 
 	def test_reminders_at_very_far_locations(self):
+		"""
+		Test that reminders work when assuming highway driving.
+		"""
 		response = make_test_user(self)
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 		time = datetime.datetime.now()
@@ -262,8 +282,14 @@ class nontrivial_feature_tests(APITestCase):
 
 
 class test_delete_calls(APITestCase):
+	"""
+	Test suite for testing delete.
+	"""
 
 	def test_last_resort_delete(self):
+		"""
+		Test that we can delete a last resort reminder.
+		"""
 		response = make_test_user(self)
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 		data = {"time": "1996-12-05T06:32:00", "name": "make a time reminder", "description": "this is a test description", "location_descriptor": "TEST","latitude": "50.000", "longitude": "50.000"}
@@ -280,6 +306,9 @@ class test_delete_calls(APITestCase):
 
 
 	def test_location_reminder_delete(self):
+		"""
+		Test that we can delete a location reminder.
+		"""
 		response = make_test_user(self)
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 		data = {"name": "make a location reminder", "description": "this is a test description", "location_descriptor": "test location", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00"}
@@ -296,6 +325,9 @@ class test_delete_calls(APITestCase):
 
 
 	def test_time_reminder_delete(self):
+		"""
+		Test that we can delete a time reminder.
+		"""
 		response = make_test_user(self)
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 		data = {"time": "1996-12-05T06:32:00", "name": "make a time reminder", "description": "this is a test description", "location_descriptor": "TEST"}
@@ -314,8 +346,14 @@ class test_delete_calls(APITestCase):
 
 
 class test_returning_specific_reminders(APITestCase):
+	"""
+	Test suite for correctly returning location and time reminders.
+	"""
 
 	def test_get_current(self):
+		"""
+		Test that we return time based reminders at correct time.
+		"""
 		response = make_test_user(self)
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 		time = datetime.datetime.now()
@@ -334,6 +372,9 @@ class test_returning_specific_reminders(APITestCase):
 		self.assertEquals(response.status_code, 200)
 
 	def test_get_reminder_at_location(self):
+		"""
+		Test that we return location based reminders at the correct location.
+		"""
 		response = make_test_user(self)
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 		data = {"name": "make a location reminder", "description": "this is a test description", "location_descriptor": "test location", "end_time": "11:45[:0[0]]", "latitude": "50.00", "longitude": "50.00", "radius": "150"}
@@ -351,22 +392,37 @@ class test_returning_specific_reminders(APITestCase):
 		self.assertEquals(response.status_code, 200)
 
 class z_test_login(APITestCase):
+	"""
+	Test suite for testing login.
+	"""
 
 	def test_login_without_username_or_password(self):
+		"""
+		Test that login without usernmame or password won't work.
+		"""
 		response = self.client.post('/api-token-auth/', {}, format='json')
 		self.assertEquals(response.content,'{"username":["This field is required."],"password":["This field is required."]}')
 
 	def test_login_without_password(self):
+		"""
+		Test that login without password won't work.
+		"""
 		data = {"username":"test.jhu.edu"}
 		response = self.client.post('/api-token-auth/', data, format='json')
 		self.assertEquals(response.content, '{"password":["This field is required."]}')
 
 	def test_login_without_username(self):
+		"""
+		Test that login without username won't work.
+		"""
 		data = {"password":"mypassword"}
 		response = self.client.post('/api-token-auth/', data, format='json')
 		self.assertEquals(response.content, '{"username":["This field is required."]}')
 
 	def test_successful_login(self):
+		"""
+		Test a successful login.
+		"""
 		data = {"username": "myname@jhu.edu", "password": "mypassword"}
 		response = self.client.post('/users/', data, format='json')	
 		data = {"username": "myname@jhu.edu","password":"mypassword"}
@@ -374,6 +430,9 @@ class z_test_login(APITestCase):
 		self.assertEquals(response.status_code, 200)
 
 	def test_unsuccessful_login(self):
+		"""
+		Test an unsuccessful login.
+		"""
 		data = {"username": "myname@jhu.edu", "password": "mypasswordL"} #notice L
 		response = self.client.post('/users/', data, format='json')	
 		data = {"username": "myname@jhu.edu","password":"mypassword"}
