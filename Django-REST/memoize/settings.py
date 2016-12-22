@@ -35,7 +35,7 @@ INSTALLED_APPS = [ # pragma: no cover
     'memoize.app',
     'rest_framework',
     'rest_framework.authtoken',
-    'django_nose',
+#    'django_nose',
 ]
 
 MIDDLEWARE = [ # pragma: no cover
