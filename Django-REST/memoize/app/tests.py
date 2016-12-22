@@ -21,18 +21,18 @@ class basic_creation_tests(APITestCase):
 		"""Tests the basic creation of a user (successful creation)."""
 		response = make_test_user(self)
 		#Test response
-		self.assertEquals(response.content, '{"id":3,"username":"test0@jhu.edu","mem_groups":[],"sub_groups":[],"location_reminders":[],"time_reminders":[]}')
+		self.assertEquals(response.content, '{"id":1,"username":"test0@jhu.edu","location_reminders":[],"time_reminders":[]}')
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 		#Test that user is actually in database
-		response = self.client.get("/users/3/")
-		self.assertEquals(response.content, '{"id":3,"username":"test0@jhu.edu","mem_groups":[],"sub_groups":[]}')
+		response = self.client.get("/users/1/")
+		self.assertEquals(response.content, '{"id":1,"username":"test0@jhu.edu"}')
 		#Test response
 		response = make_test_user(self)
-		self.assertEquals(response.content, '{"id":4,"username":"test1@jhu.edu","mem_groups":[],"sub_groups":[],"location_reminders":[],"time_reminders":[]}')
+		self.assertEquals(response.content, '{"id":2,"username":"test1@jhu.edu","location_reminders":[],"time_reminders":[]}')
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 		#Test that user is actually in database
-		response = self.client.get("/users/4/")
-		self.assertEquals(response.content, '{"id":4,"username":"test1@jhu.edu","mem_groups":[],"sub_groups":[]}')
+		response = self.client.get("/users/2/")
+		self.assertEquals(response.content, '{"id":2,"username":"test1@jhu.edu"}')
 
 		
 
@@ -41,7 +41,7 @@ class basic_creation_tests(APITestCase):
 		response = make_test_user(self)
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 		data3 = {"time": "1996-12-05T06:32:00", "name": "make a time reminder", "description": "this is a test description", "location_descriptor": "TEST"}
-		response = self.client.post('/users/6/timereminders/', data3, format='json')
+		response = self.client.post('/users/4/timereminders/', data3, format='json')
 		self.assertEquals(response.content, '{"name":"make a time reminder","description":"this is a test description","location_descriptor":"TEST","time":"1996-12-05T06:32:00Z","id":1}')
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 		
@@ -52,7 +52,7 @@ class basic_creation_tests(APITestCase):
 
 		#test creating reminder without a description
 		data = {"time": "1996-12-05T06:32:00", "name": "this is a reminder with no description", "description": "", "location_descriptor": "TEST"}
-		response = self.client.post('/users/6/timereminders/', data, format='json')
+		response = self.client.post('/users/4/timereminders/', data, format='json')
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 	def test_location_reminder(self):
@@ -60,7 +60,7 @@ class basic_creation_tests(APITestCase):
 		response = make_test_user(self)
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 		data = {"start_time": "10:45[:0[0]]", "name": "make a location reminder", "description": "this is a test description", "location_descriptor": "test location", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00"}
-		response = self.client.post('/users/5/locationreminders/', data, format='json')
+		response = self.client.post('/users/3/locationreminders/', data, format='json')
 		self.assertEqual(response.content, '{"name":"make a location reminder","description":"this is a test description","location_descriptor":"test location","latitude":"1.00000000","longitude":"1.00000000","radius":100,"id":1}')
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED) 
 
@@ -71,103 +71,14 @@ class basic_creation_tests(APITestCase):
 
 		#test creating reminder without a description
 		data = {"start_time": "10:45[:0[0]]", "name": "make a location reminder without description", "description": "", "location_descriptor": "test location", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00"}
-		response = self.client.post('/users/5/locationreminders/', data, format='json')
+		response = self.client.post('/users/3/locationreminders/', data, format='json')
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 		#test creating reminder with a radius
 		data = {"start_time": "10:45[:0[0]]", "name": "make a location reminder without description", "description": "", "location_descriptor": "test location", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00", "radius": "50"}
-		response = self.client.post('/users/5/locationreminders/', data, format='json')
+		response = self.client.post('/users/3/locationreminders/', data, format='json')
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 		self.assertEqual(response.content, '{"name":"make a location reminder without description","description":"","location_descriptor":"test location","latitude":"1.00000000","longitude":"1.00000000","radius":50,"id":3}')		
-
-	def test_group(self): #will need to be modified when we add authentication!
-		"""Tests successful creation of a group."""
-		data = {
-		    "name": "test group",
-		    "description": "this is a test group",
-		    "admins": [],
-		    "subscribers": [],
-		    "events": []
-		}
-		response = self.client.post('/groups/', data, format='json')
-		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-		self.assertEqual(response.content, '{"id":3,"name":"test group","description":"this is a test group","admins":[],"subscribers":[],"events":[]}')
-
-
-	#things to consider: when making a group I am not in the admins list for that group. Should probably be fixed
-	def test_adding_subscription_to_group(self):
-		"""Tests successful creation of a subsrcription to a group."""
-		data = {"username": "test_subscription@jhu.edu", "password": "PaSsWoRdTest",  "mem_groups": [], "sub_groups": []}
-		response = self.client.post('/users/', data, format='json')	
-		data = {
-		    "name": "group that should be added for subscription testing",
-		    "description": "this is a test group",
-		    "admins": [],
-		    "subscribers": [2],
-		    "events": []
-		}
-		response = self.client.post('/groups/', data, format='json')
-		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-		self.assertEqual(response.content, '{"id":2,"name":"group that should be added for subscription testing","description":"this is a test group","admins":[],"subscribers":[2],"events":[]}')
-
-		response = self.client.get('/users/2/', {}, format='json')
-		self.assertEqual(response.status_code, 200)
-		self.assertEqual(response.content, '{"id":2,"username":"test_subscription@jhu.edu","mem_groups":[],"sub_groups":[2]}')
-
-		response = self.client.get('/users/2/subgroups/')
-		self.assertEquals(response.content, '[{"id":2,"name":"group that should be added for subscription testing","description":"this is a test group","admins":[],"subscribers":[2],"events":[]}]')	
-
-		response.client.get('/users/2/subgroups/1/')
-		self.assertEquals(response.content, '[{"id":2,"name":"group that should be added for subscription testing","description":"this is a test group","admins":[],"subscribers":[2],"events":[]}]')
-
-	def test_adding_event_to_group(self):
-		"""Tests successful creation of an event."""
-		"""Tests successful creation of a time reminder."""
-		data = {"username": "test_subscription@jhu.edu", "password": "PaSsWoRdTest",  "mem_groups": [], "sub_groups": []}
-		response = self.client.post('/users/', data, format='json')	
-		data = {
-		    "name": "group that should be added for subscription testing",
-		    "description": "this is a test group",
-		    "admins": [],
-		    "subscribers": [1],
-		    "events": []
-		}
-		response = self.client.post('/groups/', data, format='json')
-		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-		self.assertEqual(response.content, '{"id":1,"name":"group that should be added for subscription testing","description":"this is a test group","admins":[],"subscribers":[1],"events":[]}')
-
-		response = self.client.get('/users/1/', {}, format='json')
-		self.assertEqual(response.status_code, 200)
-		self.assertEqual(response.content, '{"id":1,"username":"test_subscription@jhu.edu","mem_groups":[],"sub_groups":[1]}')
-
-		data = {
-		    "name": 
-		        "This is a test event for group 1",
-		    "tags": 
-		        "test tag",
-		    "start_time": 
-		    	"1996-12-05T06:32:00",
-		    "longitude": 
-		        "1.000",
-		    "location_descriptor": 
-		        "This is a test location",
-		    "end_time": 
-		        "1996-12-05T06:32:00",
-		    "latitude":
-		        "1.000",
-		    "description": 
-		        "This is a test description"
-		}
-
-		response = self.client.post('/groups/1/events/', data, format='json')
-		self.assertEqual(response.content, '{"name":"This is a test event for group 1","description":"This is a test description","location_descriptor":"This is a test location","start_time":"1996-12-05T06:32:00Z","end_time":"1996-12-05T06:32:00Z","longitude":"1.00000","latitude":"1.00000","tags":"test tag","group":1}')
-		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-		response = self.client.get('/events/', {}, format='json')
-		self.assertEquals(response.content, '[{"name":"This is a test event for group 1","description":"This is a test description","location_descriptor":"This is a test location","start_time":"1996-12-05T06:32:00Z","end_time":"1996-12-05T06:32:00Z","longitude":"1.00000","latitude":"1.00000","tags":"test tag","group":1}]')
-
-		response = self.client.get('/events/1/', {}, format='json')
-		self.assertEquals(response.content, '{"name":"This is a test event for group 1","description":"This is a test description","location_descriptor":"This is a test location","start_time":"1996-12-05T06:32:00Z","end_time":"1996-12-05T06:32:00Z","longitude":"1.00000","latitude":"1.00000","tags":"test tag","group":1}')
 
 
 class unhappy_path_tests(APITestCase):
@@ -193,43 +104,12 @@ class unhappy_path_tests(APITestCase):
 		self.assertEquals(response.content, '{"username":["This field may not be blank."]}') #so we may want to change this 
 		self.assertEquals(response.status_code, 400)
 
-
-	def test_z_making_group_without_name(self):
-		"""Test that making a group without a name or description or both fails."""
-		data = {
-		    "name": "",
-		    "description": "this is a test group",
-		    "admins": [],
-		    "subscribers": [],
-		    "events": []
-		}
-		response = self.client.post('/groups/', data, format='json')
-		self.assertEquals(response.content, '{"name":["This field may not be blank."]}')
-
-		data = {
-		    "name": "",
-		    "description": "",
-		    "admins": [],
-		    "subscribers": [],
-		    "events": []
-		}
-		response = self.client.post('/groups/', data, format='json')
-		self.assertEquals(response.content, '{"name":["This field may not be blank."]}')
-
 	def test_z_reminders_without_time(self):
 		"""Test that making a time reminder without a time fails."""
 		response = make_test_user(self)
 		data = {"time": "", "name": "test without time", "description": "we are testing", "location_descriptor": "Hogwarts school of oose"}
 		response = self.client.post('/users/7/timereminders/', data, format='json')
 		self.assertEquals(response.content, '{"time":["Datetime has wrong format. Use one of these formats instead: YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z]."]}')\
-
-		#data = {"start_time": "", "name": "test without start time", "description": "we are testing", "location_descriptor": "Hogwarts school of oose", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00"}
-		#response = self.client.post('/users/7/locationreminders/', data, format='json')
-		#self.assertEquals(response.content, '{"start_time":["Time has wrong format. Use one of these formats instead: hh:mm[:ss[.uuuuuu]]."]}')
-
-		#data = {"start_time": "11:45[:0[0]]", "name": "test without start time", "description": "we are testing", "location_descriptor": "Hogwarts school of oose", "end_time": "", "latitude": "1.00", "longitude": "1.00"}
-		#response = self.client.post('/users/7/locationreminders/', data, format='json')
-		#self.assertEquals(response.content, '{"end_time":["Time has wrong format. Use one of these formats instead: hh:mm[:ss[.uuuuuu]]."]}')
 
 
 class nontrivial_feature_tests(APITestCase):
@@ -245,14 +125,14 @@ class nontrivial_feature_tests(APITestCase):
 		passed_time = time_str[:-10]
 		data3 = {"time": passed_time, "name": "make a last resort reminder", "description": "", "location_descriptor": "TEST", "latitude": "50.000", "longitude": "50.000"}
 
-		response = self.client.post('/users/7/lastresortreminders/', data3, format='json')
+		response = self.client.post('/users/5/lastresortreminders/', data3, format='json')
 		t = passed_time[:10] + "T" + passed_time[11:]
 		temp = '{"name":"make a last resort reminder","description":"","location_descriptor":"TEST","time":"' + t + ':00Z","latitude":"50.00000000","longitude":"50.00000000","id":1}'
 		self.assertEqual(response.content, temp)
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
-		response = self.client.get('/users/7/lastresortreminders/?latitude=50&longitude=50', {}, format='json')
+		response = self.client.get('/users/5/lastresortreminders/?latitude=50&longitude=50', {}, format='json')
 		#should find the notification because at the correct location and 2 minutes before event
 		self.assertEqual(response.content, '[{"name":"make a last resort reminder","description":"","location_descriptor":"TEST","time":"' + t + ':00Z","latitude":"50.00000000","longitude":"50.00000000","id":1}]')
 
@@ -267,10 +147,10 @@ class nontrivial_feature_tests(APITestCase):
 		passed_time = time_str[:-10]
 		data3 = {"time": passed_time, "name": "make a last resort reminder", "description": "", "location_descriptor": "TEST", "latitude": "50.000", "longitude": "50.000"}
 
-		response = self.client.post('/users/8/lastresortreminders/', data3, format='json')
+		response = self.client.post('/users/6/lastresortreminders/', data3, format='json')
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-		response = self.client.get('/users/8/lastresortreminders/?latitude=50&longitude=50', {}, format='json')
+		response = self.client.get('/users/6/lastresortreminders/?latitude=50&longitude=50', {}, format='json')
 		self.assertEqual(response.content,'[]') #should be empty because this reminder is in the past
 
 	def test_not_displaying_z_reminder_ahead_of_time(self):
@@ -284,14 +164,14 @@ class nontrivial_feature_tests(APITestCase):
 		t = passed_time[:10] + "T" + passed_time[11:]
 		data3 = {"time": passed_time, "name": "make a last resort reminder", "description": "", "location_descriptor": "TEST", "latitude": "50.000", "longitude": "50.000"}
 
-		response = self.client.post('/users/9/lastresortreminders/', data3, format='json')
+		response = self.client.post('/users/7/lastresortreminders/', data3, format='json')
 		self.assertEquals(response.status_code, status.HTTP_201_CREATED)
 
-		response = self.client.get('/users/9/lastresortreminders/?latitude=50.5&longitude=50.5', {}, format='json')
+		response = self.client.get('/users/7/lastresortreminders/?latitude=50.5&longitude=50.5', {}, format='json')
 		self.assertEquals(response.content,'[]') 
 		#should be empty because this reminder is 2 hours into the future and only 40 miles away (which would mean notifying the user 92 minutes before the reminder time)
 
-		response = self.client.get('/users/9/lastresortreminders/?latitude=50.7&longitude=50.7', {}, format='json')
+		response = self.client.get('/users/7/lastresortreminders/?latitude=50.7&longitude=50.7', {}, format='json')
 		self.assertEquals(response.content, '[{"name":"make a last resort reminder","description":"","location_descriptor":"TEST","time":"' + t + ':00Z","latitude":"50.00000000","longitude":"50.00000000","id":3}]')
 		self.assertEquals(response.status_code, 200)
 
@@ -310,17 +190,17 @@ class nontrivial_feature_tests(APITestCase):
 		t = passed_time[:10] + "T" + passed_time[11:]
 		data = {"time": passed_time, "name": "make a last resort reminder within 800 meters", "description": "", "location_descriptor": "TEST", "latitude": "50.000", "longitude": "50.000"}
 
-		response = self.client.post('/users/10/lastresortreminders/', data, format='json')
+		response = self.client.post('/users/8/lastresortreminders/', data, format='json')
 		self.assertEquals(response.status_code, status.HTTP_201_CREATED)
 
-		response = self.client.get('/users/10/lastresortreminders/?latitude=50.0035&longitude=50.0035', {}, format='json')
+		response = self.client.get('/users/8/lastresortreminders/?latitude=50.0035&longitude=50.0035', {}, format='json')
 		#this distance calls for an estimated travel time of 5.7 minutes, and we add on our 10 minute security period, 
 		#so our response should contain the notification because the reminder is for 15 minutes from now
 		self.assertEquals(response.content, '[{"name":"make a last resort reminder within 800 meters","description":"","location_descriptor":"TEST","time":"' + t + ':00Z","latitude":"50.00000000","longitude":"50.00000000","id":4}]')
 
 
 		"""Now we want to make sure that if we are closer the notification is not shown"""
-		response = self.client.get('/users/10/lastresortreminders/?latitude=50.0004&longitude=50.00004', {}, format='json')
+		response = self.client.get('/users/8/lastresortreminders/?latitude=50.0004&longitude=50.00004', {}, format='json')
 		#now the travel time is about half a minute, so with the 10 minute security period the user only needs to be notified 
 		#11.5 minutes before the reminder is scheduled. Thus, the user should not see the reminder as it is 15 minutes away
 		self.assertEquals(response.content,'[]') 
@@ -337,10 +217,10 @@ class nontrivial_feature_tests(APITestCase):
 		t = passed_time[:10] + "T" + passed_time[11:]
 		data = {"time": passed_time, "name": "make a last resort reminder within 32186 meters", "description": "", "location_descriptor": "TEST", "latitude": "50.000", "longitude": "50.000"}
 
-		response = self.client.post('/users/11/lastresortreminders/', data, format='json')
+		response = self.client.post('/users/9/lastresortreminders/', data, format='json')
 		self.assertEquals(response.status_code, status.HTTP_201_CREATED)
 
-		response = self.client.get('/users/11/lastresortreminders/?latitude=50.095&longitude=50.095', {}, format='json')
+		response = self.client.get('/users/9/lastresortreminders/?latitude=50.095&longitude=50.095', {}, format='json')
 		#this means we are about 7.795 miles away from our event. This calls for a travel time of about 31.18 minutes. 
 		#with the 10 minute security period this means the the estimated total travel time is slightly more than 40 minutes
 		#this means our get request should return our notification to display to the user
@@ -349,7 +229,7 @@ class nontrivial_feature_tests(APITestCase):
 
 		print "*******"
 		#now we check to make sure that if you're closer the notification does not display
-		response = self.client.get('/users/11/lastresortreminders/?latitude=50.05&longitude=50.05', {}, format='json')
+		response = self.client.get('/users/9/lastresortreminders/?latitude=50.05&longitude=50.05', {}, format='json')
 		#only 4.1 miles away, which means about 16 minutes -- 26 minutes estimated time with the 10 minute security period
 		#notification should not display 
 		self.assertEquals(response.content, '[]')
@@ -359,7 +239,6 @@ class nontrivial_feature_tests(APITestCase):
 	def test_reminders_at_very_far_locations(self):
 		response = make_test_user(self)
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-		print response.content
 		time = datetime.datetime.now()
 		new_time = time + datetime.timedelta(0, 3540) #59 minutes into the future
 
@@ -368,26 +247,77 @@ class nontrivial_feature_tests(APITestCase):
 		t = passed_time[:10] + "T" + passed_time[11:]
 		data = {"time": passed_time, "name": "make a last resort reminder over 32186 meters", "description": "", "location_descriptor": "TEST", "latitude": "50.000", "longitude": "50.000"}
 
-		response = self.client.post('/users/12/lastresortreminders/', data, format='json')
+		response = self.client.post('/users/10/lastresortreminders/', data, format='json')
 		self.assertEquals(response.status_code, status.HTTP_201_CREATED)
 
-		response = self.client.get('/users/12/lastresortreminders/?latitude=50.3&longitude=50.3', {}, format='json')
+		response = self.client.get('/users/10/lastresortreminders/?latitude=50.3&longitude=50.3', {}, format='json')
 		#this means that we are currently 24.6 miles away from where our event should be. This is an estimated travel time
 		#of about 49.2 minutes, and adding the addtional 10 minute grace period causes an estimated travel time of 59.2 minutes
 		self.assertEquals(response.content, '[{"name":"make a last resort reminder over 32186 meters","description":"","location_descriptor":"TEST","time":"' + t + ':00Z","latitude":"50.00000000","longitude":"50.00000000","id":6}]')
 		self.assertEquals(response.status_code, 200)
 
 		#if we are closer then the notificiation will not go off
-		response = self.client.get('/users/12/lastresortreminders/?latitude=50.1&longitude=50.1', {}, format='json')
+		response = self.client.get('/users/10/lastresortreminders/?latitude=50.1&longitude=50.1', {}, format='json')
 		self.assertEquals(response.content, '[]')
 		self.assertEquals(response.status_code, 200)
 
 
+class test_delete_calls(APITestCase):
 
-def make_test_user(self):
+	def test_last_resort_delete(self):
+			response = make_test_user(self)
+			self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+			data = {"time": "1996-12-05T06:32:00", "name": "make a time reminder", "description": "this is a test description", "location_descriptor": "TEST","latitude": "50.000", "longitude": "50.000"}
+			response = self.client.post('/users/11/lastresortreminders/', data, format='json')
+			self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+			response = self.client.delete('/users/11/lastresortremindersdetail/7', {}, format='json')
+			self.assertEquals(response.status_code, 204)
+
+			#now check that it's actually not there anymore
+			response  = self.client.get('/users/11/lastresortreminders/', {}, format='json')
+			self.assertEquals(response.content, '[]')
+			self.assertEquals(response.status_code, 200)
+
+
+	def test_location_reminder_delete(self):
+			response = make_test_user(self)
+			self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+			data = {"start_time": "10:45[:0[0]]", "name": "make a location reminder", "description": "this is a test description", "location_descriptor": "test location", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00"}
+			response = self.client.post('/users/12/locationreminders/', data, format='json')
+			self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+			response = self.client.delete('/users/12/locationremindersdetail/4', {}, format='json')
+			self.assertEquals(response.status_code, 204)
+
+			#now we make sure it was actually deleted
+			response  = self.client.get('/users/12/locationreminders/', {}, format='json')
+			self.assertEquals(response.content, '[]')
+			self.assertEquals(response.status_code, 200)
+
+
+	def test_time_reminder_delete(self):
+			response = make_test_user(self)
+			self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+			data = {"time": "1996-12-05T06:32:00", "name": "make a time reminder", "description": "this is a test description", "location_descriptor": "TEST"}
+			response = self.client.post('/users/13/timereminders/', data, format='json')
+			self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+			response = self.client.delete('/users/13/timeremindersdetail/3', {}, format='json')
+			self.assertEquals(response.status_code, 204)
+
+			#now we make sure it was actually deleted
+			response  = self.client.get('/users/13/timereminders/', {}, format='json')
+			self.assertEquals(response.content, '[]')
+			self.assertEquals(response.status_code, 200)
+
+
+
+def make_test_user(self): 
 	"""Method to make a user in the database that is used by various other methods."""
 	global count
-	data = {"username": "test" + str(count) + "@jhu.edu", "password": "PaSsWoRd" + str(count),  "mem_groups": [], "sub_groups": []}
+	data = {"username": "test" + str(count) + "@jhu.edu", "password": "PaSsWoRd" + str(count)}
 	response = self.client.post('/users/', data, format='json')	
 	count = count + 1
 	return response

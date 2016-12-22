@@ -10,27 +10,27 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
-import os
+import os # pragma: no cover
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) # pragma: no cover
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'xrgs&v=a63bi^_ak6)k=zg+p0@)molt-w6x(76#x!8n@i9j60('
+SECRET_KEY = 'xrgs&v=a63bi^_ak6)k=zg+p0@)molt-w6x(76#x!8n@i9j60(' # pragma: no cover
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True # pragma: no cover
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [] # pragma: no cover
 
 
 # Application definition
 
-INSTALLED_APPS = [
+INSTALLED_APPS = [ # pragma: no cover
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,9 +40,10 @@ INSTALLED_APPS = [
     'memoize.app',
     'rest_framework',
     'rest_framework.authtoken',
+#    'django_nose',
 ]
 
-MIDDLEWARE = [
+MIDDLEWARE = [ # pragma: no cover
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,9 +53,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'memoize.urls'
+ROOT_URLCONF = 'memoize.urls' # pragma: no cover
 
-TEMPLATES = [
+TEMPLATES = [ # pragma: no cover
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
@@ -70,7 +71,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'memoize.wsgi.application'
+WSGI_APPLICATION = 'memoize.wsgi.application' # pragma: no cover
 
 
 # Database
@@ -82,6 +83,15 @@ WSGI_APPLICATION = 'memoize.wsgi.application'
 #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
+
+#TEST_RUNNER = 'django_nose.NoseTestSuiteRunner' # pragma: no cover
+
+#NOSE_ARGS = [ # pragma: no cover
+ #   '--with-coverage',
+  #  '--cover-package=memoize/app',
+   #  '--verbosity=2',
+#]
+
 
 """ Reference for local postgresql setup:
 https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-14-04
@@ -95,7 +105,7 @@ CREATE DATABASE memoize_db;
 
 """
 
-# DATABASES = {
+# DATABASES = { # pragma: no cover
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 #         'NAME': 'memoize_db',
@@ -106,7 +116,7 @@ CREATE DATABASE memoize_db;
 #     }
 # }
 
-DATABASES = {
+DATABASES = { # pragma: no cover
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'dd576sa07fofvj',
@@ -121,7 +131,7 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [
+AUTH_PASSWORD_VALIDATORS = [ # pragma: no cover
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
@@ -140,19 +150,20 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-us' # pragma: no cover
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'UTC' # pragma: no cover
 
-USE_I18N = True
+USE_I18N = True # pragma: no cover
 
-USE_L10N = True
+USE_L10N = True # pragma: no cover
 
-USE_TZ = True
+USE_TZ = True # pragma: no cover
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
+<<<<<<< HEAD
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
@@ -163,9 +174,19 @@ STATICFILES_DIRS = (
 )
 
 REST_FRAMEWORK = {
+=======
+ 
+STATIC_URL = '/static/' # pragma: no cover
+ 
+REST_FRAMEWORK = { # pragma: no cover
+>>>>>>> 6ed70fb105f7ecbcd7952e2ad67980d8e71446af
     #'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
     'PAGE_SIZE': 10,
     # 'DEFAULT_AUTHENTICATION_CLASSES': (
     #     'rest_framework.authentication.TokenAuthentication',
     # )
 }
+
+
+
+

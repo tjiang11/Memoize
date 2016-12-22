@@ -3,3 +3,5 @@ djangorestframework==3.5.1
 gunicorn==19.6.0
 psycopg2==2.6.2
 whitenoise==3.2.2
+django-nose==1.4
+coverage==3.7.1
