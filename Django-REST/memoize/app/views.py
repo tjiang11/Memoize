@@ -38,10 +38,17 @@ class TestView(views.APIView):
 
 
 class UserList(generics.ListCreateAPIView):
+    """
+    Used for getting a list of users.
+    """
+    
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 class UserDetail(generics.RetrieveUpdateAPIView):
+    """
+    Used for getting the detail of a single user.
+    """
     authentication_classes = (TokenAuthentication, )
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnlyUser)
     queryset = User.objects.all()
@@ -137,6 +144,9 @@ class UserTimeRemindersDetail(views.APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class UserLocationReminders(views.APIView):
+    """
+    Class that deals with getting all of the location reminders.
+    """
 
     def get_user(self, pk):
         try:
@@ -190,6 +200,9 @@ class UserLocationReminders(views.APIView):
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 class UserLocationRemindersDetail(views.APIView):
+    """
+    Calls that deal with getting, putting, and deleting a single location reminder.
+    """
     def get_reminder(self, pk):
         try:
             return LocationReminder.objects.get(pk=pk)
@@ -277,6 +290,9 @@ class UserLastResortReminders(views.APIView):
 
 
 class UserLastResortRemindersDetail(views.APIView):
+    """
+    Calls that deal with getting, putting, and deleting a single last resort reminder.
+    """
     def get_reminder(self, pk):
         try:
             return LastResortReminder.objects.get(pk=pk)
@@ -305,6 +321,9 @@ def calcDistance(lat1, lon1, lat2, lon2):
 
 
 class CustomObtainAuthToken(ObtainAuthToken):
+    """
+    Class for getting a token used for login.
+    """
     def post(self, request, *args, **kwargs):
         response = super(CustomObtainAuthToken, self).post(request, *args, **kwargs)
         token = Token.objects.get(key=response.data['token'])

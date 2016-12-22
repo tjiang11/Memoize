@@ -150,8 +150,10 @@ class nontrivial_feature_tests(APITestCase):
 		response = self.client.post('/users/6/lastresortreminders/', data3, format='json')
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+
 #		response = self.client.get('/users/6/lastresortreminders/?latitude=50&longitude=50', {}, format='json')
 #		self.assertEqual(response.content,'[]') #should be empty because this reminder is in the past
+
 
 	def test_not_displaying_z_reminder_ahead_of_time(self):
 		response = make_test_user(self)
@@ -227,7 +229,6 @@ class nontrivial_feature_tests(APITestCase):
 		self.assertEquals(response.content, '[{"name":"make a last resort reminder within 32186 meters","description":"","location_descriptor":"TEST","time":"' + t + ':00Z","latitude":"50.00000000","longitude":"50.00000000","id":5}]')
 		self.assertEquals(response.status_code, 200)
 
-		print "*******"
 		#now we check to make sure that if you're closer the notification does not display
 		response = self.client.get('/users/9/lastresortreminders/?latitude=50.05&longitude=50.05', {}, format='json')
 		#only 4.1 miles away, which means about 16 minutes -- 26 minutes estimated time with the 10 minute security period
@@ -265,53 +266,91 @@ class nontrivial_feature_tests(APITestCase):
 class test_delete_calls(APITestCase):
 
 	def test_last_resort_delete(self):
-			response = make_test_user(self)
-			self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-			data = {"time": "1996-12-05T06:32:00", "name": "make a time reminder", "description": "this is a test description", "location_descriptor": "TEST","latitude": "50.000", "longitude": "50.000"}
-			response = self.client.post('/users/11/lastresortreminders/', data, format='json')
-			self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+		response = make_test_user(self)
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+		data = {"time": "1996-12-05T06:32:00", "name": "make a time reminder", "description": "this is a test description", "location_descriptor": "TEST","latitude": "50.000", "longitude": "50.000"}
+		response = self.client.post('/users/11/lastresortreminders/', data, format='json')
+ 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+		
+		response = self.client.delete('/users/11/lastresortremindersdetail/7', {}, format='json')
+		self.assertEquals(response.status_code, 204)
 
-			response = self.client.delete('/users/11/lastresortremindersdetail/7', {}, format='json')
-			self.assertEquals(response.status_code, 204)
-
-			#now check that it's actually not there anymore
-			response  = self.client.get('/users/11/lastresortreminders/', {}, format='json')
-			self.assertEquals(response.content, '[]')
-			self.assertEquals(response.status_code, 200)
+		#now check that it's actually not there anymore
+		response  = self.client.get('/users/11/lastresortreminders/', {}, format='json')
+		self.assertEquals(response.content, '[]')
+		self.assertEquals(response.status_code, 200)
 
 
 	def test_location_reminder_delete(self):
-			response = make_test_user(self)
-			self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-			data = {"start_time": "10:45[:0[0]]", "name": "make a location reminder", "description": "this is a test description", "location_descriptor": "test location", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00"}
-			response = self.client.post('/users/12/locationreminders/', data, format='json')
-			self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+		response = make_test_user(self)
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+		data = {"name": "make a location reminder", "description": "this is a test description", "location_descriptor": "test location", "end_time": "11:45[:0[0]]", "latitude": "1.00", "longitude": "1.00"}
+		response = self.client.post('/users/12/locationreminders/', data, format='json')
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-			response = self.client.delete('/users/12/locationremindersdetail/4', {}, format='json')
-			self.assertEquals(response.status_code, 204)
+		response = self.client.delete('/users/12/locationremindersdetail/4', {}, format='json')
+		self.assertEquals(response.status_code, 204)
 
-			#now we make sure it was actually deleted
-			response  = self.client.get('/users/12/locationreminders/', {}, format='json')
-			self.assertEquals(response.content, '[]')
-			self.assertEquals(response.status_code, 200)
+		#now we make sure it was actually deleted
+		response  = self.client.get('/users/12/locationreminders/', {}, format='json')
+		self.assertEquals(response.content, '[]')
+		self.assertEquals(response.status_code, 200)
 
 
 	def test_time_reminder_delete(self):
-			response = make_test_user(self)
-			self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-			data = {"time": "1996-12-05T06:32:00", "name": "make a time reminder", "description": "this is a test description", "location_descriptor": "TEST"}
-			response = self.client.post('/users/13/timereminders/', data, format='json')
-			self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+		response = make_test_user(self)
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+		data = {"time": "1996-12-05T06:32:00", "name": "make a time reminder", "description": "this is a test description", "location_descriptor": "TEST"}
+		response = self.client.post('/users/13/timereminders/', data, format='json')
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
-			response = self.client.delete('/users/13/timeremindersdetail/3', {}, format='json')
-			self.assertEquals(response.status_code, 204)
+		response = self.client.delete('/users/13/timeremindersdetail/3', {}, format='json')
+		self.assertEquals(response.status_code, 204)
 
-			#now we make sure it was actually deleted
-			response  = self.client.get('/users/13/timereminders/', {}, format='json')
-			self.assertEquals(response.content, '[]')
-			self.assertEquals(response.status_code, 200)
+		#now we make sure it was actually deleted
+		response  = self.client.get('/users/13/timereminders/', {}, format='json')
+		self.assertEquals(response.content, '[]')
+		self.assertEquals(response.status_code, 200)
 
+
+
+class test_returning_specific_reminders(APITestCase):
+
+	def test_get_current(self):
+		response = make_test_user(self)
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+		time = datetime.datetime.now()
+		new_time = time + datetime.timedelta(0, 15) #14 seconds into the future
+
+		time_str = str(new_time)
+		passed_time = time_str[:-10]
+		t = passed_time[:10] + "T" + passed_time[11:]
+
+		data = {"time": passed_time, "name": "make a time reminder", "description": "this is a test description", "location_descriptor": "TEST"}
+		response = self.client.post('/users/14/timereminders/', data, format='json')
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+		response = self.client.get('/users/14/timereminders/?get_current', data, format='json')
+		self.assertEquals(response.content, '[{"name":"make a time reminder","description":"this is a test description","location_descriptor":"TEST","time":"' + t + ':00Z","id":4}]')
+		self.assertEquals(response.status_code, 200)
+
+	def test_get_reminder_at_location(self):
+		response = make_test_user(self)
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+		data = {"name": "make a location reminder", "description": "this is a test description", "location_descriptor": "test location", "end_time": "11:45[:0[0]]", "latitude": "50.00", "longitude": "50.00", "radius": "150"}
+		response = self.client.post('/users/15/locationreminders/', data, format='json')
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+		response = self.client.get('/users/15/locationreminders/?latitude=50.00005&longitude=50.00005', {}, format='json')
+		#since we are within the radius we will get the notification back
+		self.assertEquals(response.content, '[{"name":"make a location reminder","description":"this is a test description","location_descriptor":"test location","latitude":"50.00000000","longitude":"50.00000000","radius":150,"id":5}]')
+		self.assertEquals(response.status_code, 200)
+
+		#Now we check to make sure that if we are far away nothing is returned
+		response = self.client.get('/users/15/locationreminders/?latitude=50.2&longitude=50.2', {}, format='json')
+		self.assertEquals(response.content, '[]')
+		self.assertEquals(response.status_code, 200)
 
 
 def make_test_user(self): 
