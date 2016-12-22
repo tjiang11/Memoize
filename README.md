@@ -3,7 +3,7 @@
 ## Premise:
 Memoize is a Android application built for event notification and discovery. It contains extensive support for location-based notifications, as well as support for time-based notifications in an intuitive and secure setting. Memoize is built on a modern stack of native Android, Django, and PostgreSQL. 
 
-## To Install:
+## To install and run the back-end locally:
 
 * Navigate to the Django-REST folder
 * Create and activate virtual environment.
