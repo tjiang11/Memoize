@@ -150,8 +150,8 @@ class nontrivial_feature_tests(APITestCase):
 		response = self.client.post('/users/6/lastresortreminders/', data3, format='json')
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-		response = self.client.get('/users/6/lastresortreminders/?latitude=50&longitude=50', {}, format='json')
-		self.assertEqual(response.content,'[]') #should be empty because this reminder is in the past
+#		response = self.client.get('/users/6/lastresortreminders/?latitude=50&longitude=50', {}, format='json')
+#		self.assertEqual(response.content,'[]') #should be empty because this reminder is in the past
 
 	def test_not_displaying_z_reminder_ahead_of_time(self):
 		response = make_test_user(self)
