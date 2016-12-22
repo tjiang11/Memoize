@@ -8,8 +8,6 @@ import java.util.Map;
 /**
  * Helper class for providing sample content for user interfaces created by
  * Android template wizards.
- * <p>
- * TODO: Replace all uses of this class before publishing your app.
  */
 public class DummyContent {
 
@@ -58,6 +56,12 @@ public class DummyContent {
         public final String content;
         public final String details;
 
+        /** The DummyItem constructor.
+         *
+         * @param id The id of the dummy item
+         * @param content The contents of the item
+         * @param details Details of the item
+         */
         public DummyItem(String id, String content, String details) {
             this.id = id;
             this.content = content;

@@ -28,17 +28,14 @@ import com.oosegroup19.memoize.activity.HomePageActivity;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link DropPinFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link DropPinFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Implementation for the DropPin page on the app.
  */
 public class DropPinFragment extends BaseFragment {
+    //The name of the fragment
     public final static String FRAGMENTNAME = "DropPinFragment";
     private final String fragmentName = FRAGMENTNAME;
 
+    //Instance fields
     private static String returnToFrag = "";
 
     private static String timeBasedReminderName = "";
@@ -50,21 +47,38 @@ public class DropPinFragment extends BaseFragment {
     private static String locationBasedEventDescription = "";
     private static int locationBasedRadius = 100;
 
+    //Instance fiels for Google maps
     MapView mMapView;
     private GoogleMap googleMap;
     private double finalLatitude = 0;
     private double finalLongitude = 0;
 
-    public DropPinFragment() {
-        // Required empty public constructor
-    }
+    /**
+     * Required public constructor.
+     */
+    public DropPinFragment() {}
 
+    /**
+     * A constructor returning a new instance of a DropPinFragment.
+     * @param returnTo The fragment type, to know which fragment type to segue to.
+     * @return
+     */
     public static DropPinFragment newInstance(String returnTo) {
         DropPinFragment fragment = new DropPinFragment();
         returnToFrag = returnTo;
         return fragment;
     }
 
+    /**
+     * A constructor returning a new instance of a DropPinFragment which persists
+     * relevant information about locations.
+     *
+     * @param returnTo Which fragment type to segue back to.
+     * @param name The name of the reminder
+     * @param locDescription The location description of the reminder
+     * @param eventDescription The event description of the reminder
+     * @return A DropPinFragment
+     */
     public static DropPinFragment newInstance(String returnTo, String name,
                                               String locDescription, String eventDescription) {
         DropPinFragment fragment = new DropPinFragment();
@@ -77,6 +91,17 @@ public class DropPinFragment extends BaseFragment {
         return fragment;
     }
 
+    /**
+     * A constructor returning a new instance of a DropPinFragment which persists relevant
+     * inforamtion about time reminders.
+     *
+     * @param returnTo Which fragment type to segue back to.
+     * @param eventName The name of the event
+     * @param eventLocationName The location of the event
+     * @param eventLocationDescriptionName The location description of the event
+     * @param radius The radius associated with the event
+     * @return
+     */
     public static DropPinFragment newInstance(String returnTo, String eventName,
                                               String eventLocationName, String eventLocationDescriptionName, int radius) {
         DropPinFragment fragment = new DropPinFragment();
@@ -148,14 +173,9 @@ public class DropPinFragment extends BaseFragment {
                         Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                         && ActivityCompat.checkSelfPermission(getActivity(),
                         Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    
                     Log.e("DropPinFragment", "Permissions for location not yet given...");
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
+
                     ActivityCompat.requestPermissions(getActivity(),
                             new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
                     return;
@@ -245,6 +265,12 @@ public class DropPinFragment extends BaseFragment {
         mMapView.onLowMemory();
     }
 
+    /**
+     * Requests permissions for google maps.
+     * @param requestCode The request code.
+     * @param permissions An array of permissions requested.
+     * @param grantResults
+     */
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         Log.e("DropPinFrag", "onrequestpermissionsresult called");
         if (grantResults[0] == 0 && grantResults[1] == 0) { //permission granted

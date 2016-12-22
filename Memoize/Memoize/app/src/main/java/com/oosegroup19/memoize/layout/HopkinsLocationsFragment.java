@@ -33,9 +33,11 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class HopkinsLocationsFragment extends BaseFragment {
+    //The name of the fragment
     public final static String FRAGMENTNAME = "HopkinsLocationsFragment";
     private final String fragmentName = FRAGMENTNAME;
 
+    //Instance fields
     private static String returnToFrag = "";
 
     private static String timeBasedReminderName = "";
@@ -47,7 +49,7 @@ public class HopkinsLocationsFragment extends BaseFragment {
     private static String locationBasedEventDescription = "";
     private static int locationBasedRadius = 100;
 
-    //Instance Fields
+    //ListView instance fields
     private ListView hopkinsLocationsList;
     protected static ArrayList<HopkinsLocationItem> hopkinsLocationItems;
     protected static HopkinsLocationAdapter aa;
@@ -56,8 +58,21 @@ public class HopkinsLocationsFragment extends BaseFragment {
     private static Cursor curse;
     //protected static ListDatabaseAdapter dbAdapt;
 
+    /**
+     * Required public constructor.
+     */
     public HopkinsLocationsFragment() {}
 
+    /**
+     * Constructor returning a new instance of a HopkinsLocationFragment which persists
+     * relevant information about locations.
+     *
+     * @param returnTo
+     * @param name
+     * @param locDescription
+     * @param eventDescription
+     * @return
+     */
     public static HopkinsLocationsFragment newInstance(String returnTo, String name, String locDescription,
                                                        String eventDescription) {
         HopkinsLocationsFragment fragment = new HopkinsLocationsFragment();
@@ -70,6 +85,17 @@ public class HopkinsLocationsFragment extends BaseFragment {
         return fragment;
     }
 
+    /**
+     * A constructor returning a new instance of a HopkinsLocations fragment which persists
+     * relevant information about time reminders.
+     *
+     * @param returnTo Which fragment type to eventually segue back to.
+     * @param eventName The name of the reminder
+     * @param eventLocationName The location description of the reminder
+     * @param eventLocationDescriptionName The event description of the reminder
+     * @param radius The radius of the reminder
+     * @return
+     */
     public static HopkinsLocationsFragment newInstance(String returnTo, String eventName, String eventLocationName, String eventLocationDescriptionName, int radius) {
         HopkinsLocationsFragment fragment = new HopkinsLocationsFragment();
         returnToFrag = returnTo;
