@@ -27,7 +27,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username')
-    def update(self, instance, validated_data):
+    def update(self, instance, validated_data): 
         instance.username = validated_data['username']
         #instance.mem_groups = validated_data['mem_groups']
         #instance.sub_groups = validated_data['sub_groups'] 

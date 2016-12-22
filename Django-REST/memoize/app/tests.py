@@ -136,12 +136,12 @@ class nontrivial_feature_tests(APITestCase):
 		#should find the notification because at the correct location and 2 minutes before event
 		self.assertEqual(response.content, '[{"name":"make a last resort reminder","description":"","location_descriptor":"TEST","time":"' + t + ':00Z","latitude":"50.00000000","longitude":"50.00000000","id":1}]')
 
-	def test_not_displaying_reminders_if_passed_time(self):
+	def test_not_displaying_reminders_if_nearby(self):
 		response = make_test_user(self)
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 		time = datetime.datetime.now()
-		new_time = time + datetime.timedelta(0, -120) #2 minutes in the past
+		new_time = time + datetime.timedelta(0, 3600) #hour in the future
 
 		time_str = str(new_time)
 		passed_time = time_str[:-10]
@@ -151,8 +151,11 @@ class nontrivial_feature_tests(APITestCase):
 		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
-#		response = self.client.get('/users/6/lastresortreminders/?latitude=50&longitude=50', {}, format='json')
-#		self.assertEqual(response.content,'[]') #should be empty because this reminder is in the past
+		response = self.client.get('/users/6/lastresortreminders/?latitude=50.000001&longitude=50.000001', {}, format='json')
+		self.assertEqual(response.content,'[]') #should be empty because hour left and still very close to our location
+
+		response = self.client.get('/users/6/lastresortreminders/?latitude=50.0001&longitude=50.0001', {}, format='json')
+		self.assertEqual(response.content,'[]') #should be empty because hour left and still very close to our location
 
 
 	def test_not_displaying_z_reminder_ahead_of_time(self):
@@ -177,8 +180,8 @@ class nontrivial_feature_tests(APITestCase):
 		self.assertEquals(response.content, '[{"name":"make a last resort reminder","description":"","location_descriptor":"TEST","time":"' + t + ':00Z","latitude":"50.00000000","longitude":"50.00000000","id":3}]')
 		self.assertEquals(response.status_code, 200)
 
-		"""^now the travel time to the location of the event is estimated to be 114 minutes, and with the 10 minute grace period
-		it becomes time to notify the user of his/her event, thus the notification is displayed"""
+		#now the travel time to the location of the event is estimated to be 114 minutes, and with the 10 minute grace period
+		#it becomes time to notify the user of his/her event, thus the notification is displayed"""
 
 
 	def test_reminders_at_location_under_800_meters(self):
@@ -361,5 +364,3 @@ def make_test_user(self):
 	count = count + 1
 	return response
 
-
-	

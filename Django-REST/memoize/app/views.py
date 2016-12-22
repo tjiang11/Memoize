@@ -29,7 +29,7 @@ from datetime import timedelta # pragma: no cover
 #     serializer_class = GroupSerializer
 
 
-class TestView(views.APIView):
+class TestView(views.APIView): # pragma: no cover
     def get(self, request, format=None):
         return Response("Hello REST World")
 
