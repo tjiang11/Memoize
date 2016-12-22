@@ -13,35 +13,16 @@ from rest_framework.authtoken.models import Token # pragma: no cover
 import datetime # pragma: no cover
 from datetime import timedelta # pragma: no cover
 
-# class UserViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows users to be viewed or edited.
-#     """
-#     queryset = User.objects.all().order_by('-date_joined')
-#     serializer_class = UserSerializer
-
-
-# class GroupViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows groups to be viewed or edited.
-#     """
-#     queryset = Group.objects.all()
-#     serializer_class = GroupSerializer
-
 
 class TestView(views.APIView): # pragma: no cover
     def get(self, request, format=None):
         return Response("Hello REST World")
 
 
-#Consider using mix-ins http://www.django-rest-framework.org/tutorial/3-class-based-views/#using-mixins
-
-
 class UserList(generics.ListCreateAPIView):
     """
     Used for getting a list of users.
-    """
-    
+    """   
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -66,24 +47,14 @@ class UserTimeReminders(views.APIView):
             raise Http404
 
     def get(self, request, pk, format=None):
+        """
+        This call will return all of the time reminders if get_current is not specified in the url.
+        If get_current is specified in the url then only the reminders that need to go off at that specific time will be returned.
+        """
         user = self.get_user(pk=pk)
         serializer = TimeReminderSerializer(user.time_reminders, many=True)
         
-        if 'get_current' not in request.GET: #modify
-        #     to_be_displayed = []
-        #     for element in serializer.data:
-        #         reminder_time = element['time']
-        #         curr_time = datetime.datetime.now() 
-        #         datetime_of_reminder = datetime.datetime.strptime(reminder_time, "%Y-%m-%dT%H:%M:00Z")
-        #         time_diff = datetime_of_reminder - curr_time
-               
-        #         seconds_diff = time_diff.total_seconds()
-        #         print str(time_diff)
-        #         print str(seconds_diff)
-        #         if (seconds_diff > 0):
-        #             to_be_displayed.append(element)
-
-
+        if 'get_current' not in request.GET: 
             return Response(serializer.data)
 
         time_to_display = []
@@ -92,15 +63,10 @@ class UserTimeReminders(views.APIView):
             curr_time = datetime.datetime.now()
 
             datetime_of_reminder = datetime.datetime.strptime(reminder_time, "%Y-%m-%dT%H:%M:00Z")
-            #print str(datetime_object)
-            print "this is the time of the reminder: " + str(datetime_of_reminder)
-            print "this is the current time: " + str(curr_time)
             test = datetime_of_reminder - curr_time
-            print "total seconds of difference: " + str(test.total_seconds())
             seconds = test.total_seconds()
             if (seconds < 35):
                 time_to_display.append(element)
-
 
         return Response(time_to_display)
 
@@ -130,7 +96,6 @@ class UserTimeRemindersDetail(views.APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, pk, pk_reminder, format=None):
-        #user = self.get_user(pk=pk)
         reminder = self.get_reminder(pk=pk_reminder)
         serializer = TimeReminderSerializer(reminder, data=request.data)
         if serializer.is_valid():
@@ -147,7 +112,6 @@ class UserLocationReminders(views.APIView):
     """
     Class that deals with getting all of the location reminders.
     """
-
     def get_user(self, pk):
         try:
             return User.objects.get(pk=pk)
@@ -155,12 +119,13 @@ class UserLocationReminders(views.APIView):
             raise Http404
 
     def get(self, request, pk, format=None):
+        """
+        If latitude and longitude coordinates are not specified in the url, return all location baed reminders.
+        If they are specified, only return reminders within the specified radius.
+        """
         user = self.get_user(pk=pk)
         
         if 'longitude' in request.GET and 'latitude' in request.GET:
-            #print request.GET['longitude']
-            #print request.GET['latitude']
-
             current_lon = float(request.GET['longitude'])
             current_lat = float(request.GET['latitude'])
 
@@ -168,23 +133,16 @@ class UserLocationReminders(views.APIView):
             serializer = LocationReminderSerializer(user.location_reminders, many=True)
             return Response(serializer.data)
 
-        #print current_lat
-        #print current_lon
 
         serializer = LocationReminderSerializer(user.location_reminders, many=True)
         length = len(serializer.data)
         nearby = []
-        #print length
         for i in range(length):
             lat = float(serializer.data[i]['latitude'])
             lon = float(serializer.data[i]['longitude'])
 
-            print lat
-            print lon
             distance_in_meters = calcDistance(current_lat, current_lon, lat, lon)
-            print distance_in_meters
             radius = serializer.data[i]['radius']
-            print "this is radius: " + str(radius)
             if distance_in_meters < radius:
                 nearby.append(serializer.data[i])
 
@@ -223,13 +181,13 @@ class UserLastResortReminders(views.APIView):
             raise Http404
 
     def get(self, request, pk, format=None):
+        """
+        If latitude and longitude are not specified in the url, return all last resort reminders.
+        If they are specified, calculate the estimated travel distance and return reminders only if the estimated time is larger than the difference in time.
+        """
         user = self.get_user(pk=pk)
-        
-
 
         if 'longitude' in request.GET and 'latitude' in request.GET:
-            #print request.GET['longitude']
-            #print request.GET['latitude']
 
             current_lon = float(request.GET['longitude'])
             current_lat = float(request.GET['latitude'])
@@ -237,8 +195,6 @@ class UserLastResortReminders(views.APIView):
         else:
             serializer = LastResortReminderSerializer(user.last_resort_reminders, many=True)
             return Response(serializer.data)
-        #print current_lat
-        #print current_lon
 
         serializer = LastResortReminderSerializer(user.last_resort_reminders, many=True)
         length = len(serializer.data)
@@ -249,31 +205,22 @@ class UserLastResortReminders(views.APIView):
             time = serializer.data[i]['time']
 
             distance_in_meters = calcDistance(current_lat, current_lon, lat, lon)
-            print "serializer time: " + time
             event_time = datetime.datetime.strptime(time, "%Y-%m-%dT%H:%M:00Z")
-            print "this is event time: " + str(event_time)
             current_time = datetime.datetime.now()
             tdelta =  event_time - current_time
             zero_tdelta = timedelta(days=0, seconds=0, microseconds=0)
-            print "event time: " + str(event_time)
-            print str(distance_in_meters) + ' meters'
-            print tdelta.total_seconds()
-
-            if distance_in_meters < 800:
+        
+            if distance_in_meters < 800: #assume user is walking
                 expected_time_to_event = 10
                 expected_time_to_event += distance_in_meters * (1.0 / 80.0)
-            elif distance_in_meters < 32186.9:
+            elif distance_in_meters < 32186.9: #assume user is driving but on the street
                 expected_time_to_event = 10
-                expected_time_to_event += (distance_in_meters / 1609.34) * 4
-            else:
+                expected_time_to_event += (distance_in_meters / 1609.34) * 4 #get miles and multiply by 4
+            else: #assume user is taking the highway
                 expected_time_to_event = 10
-                expected_time_to_event += (distance_in_meters / 1609.34) * 2
+                expected_time_to_event += (distance_in_meters / 1609.34) * 2 #get miles and multiply by 2
 
-            if tdelta.total_seconds() < expected_time_to_event * 60:
-                print "adding to return with the following info:"
-                print "distance in meters: " + str(distance_in_meters) + ' meters'
-                print "diffeence between event time and now: " + str(tdelta.total_seconds()) + " seconds"
-                print "expected time to event: " + str(expected_time_to_event)
+            if tdelta.total_seconds() < expected_time_to_event * 60: #decide if should send notifcation 
                 nearby.append(serializer.data[i])
 
 
