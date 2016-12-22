@@ -1,26 +1,5 @@
 from django.db import models # pragma: no cover
 from django.contrib.auth.models import User # pragma: no cover
-# class Reminder(object):
-
-# 	def __init__(self, name, description):
-# 		self.name = name;
-# 		self.description = description
-
-
-# class L_reminder(Reminder):
-
-# 	def __init__(self, name, description, start_time, end_time, location):
-# 		super(L_reminder, self)._init_(name, description)
-# 		self.start_time = start_time
-# 		self.end_time = end_time
-# 		self.location = location
-
-
-# class T_reminder(Reminder):
-
-# 	def __init__(self, name, description, time):
-# 		super(L_reminder, self)._init_(name, description)
-# 		self.time - time
 
 class Reminder(models.Model): # pragma: no cover
 	"""Allows user to create a reminder.
@@ -39,15 +18,11 @@ class LocationReminder(Reminder): # pragma: no cover
 	"""Represents a location based reminder.
 
    	Args:
-   		start_time: when the reminder should start being tracked for.
-   		end_time: when the reminder should no longer be tracked for.
    		latitude: used for location of reminder.
    		longitude: used for location of reminder.
    		user: the user that created the reminder.
-   		radius: the radius that the user iputs with the desired radius for being reminded
+   		radius: the radius that the user iputs with the desired radius for being reminded.
    	"""
-	#start_time = models.TimeField(null=False)
-	#end_time = models.TimeField(null=False)
 	latitude = models.DecimalField(max_digits=11, decimal_places=8)
 	longitude = models.DecimalField(max_digits=11, decimal_places=8)
 	user = models.ForeignKey(User,
@@ -70,10 +45,18 @@ class TimeReminder(Reminder): # pragma: no cover
 		default=1)
 
 class LastResortReminder(Reminder): # pragma: no cover
-    time = models.DateTimeField(null=False)
-    latitude = models.DecimalField(max_digits=11, decimal_places=8)
-    longitude = models.DecimalField(max_digits=11, decimal_places=8)
-    user = models.ForeignKey(User,
+	"""Represents a time based reminder.
+
+   	Args:
+   		time: when the event is.
+   		user: the user that created the reminder.
+   		latitude: used for location of reminder.
+   		longitude: used for location of reminder.
+   	"""
+   	time = models.DateTimeField(null=False)
+   	latitude = models.DecimalField(max_digits=11, decimal_places=8)
+	longitude = models.DecimalField(max_digits=11, decimal_places=8)
+	user = models.ForeignKey(User,
         related_name='last_resort_reminders',
         on_delete=models.CASCADE,
         default=1)
